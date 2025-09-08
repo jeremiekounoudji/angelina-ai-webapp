@@ -7,13 +7,12 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "echo \"HeroUI installed with legacy peer deps\""
+    "postinstall": "echo \"Dependencies installed successfully\""
   },
   "dependencies": {
     "@heroui/react": "^2.8.3",
     "country-flag-icons": "^1.5.19",
     "framer-motion": "^12.23.12",
-    "hero-ui": "^6.0.1",
     "next": "15.5.2",
     "react": "19.1.0",
     "react-country-flag": "^3.1.0",
