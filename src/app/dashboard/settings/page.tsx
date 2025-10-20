@@ -10,6 +10,7 @@ import {
 import { useCompany } from '@/hooks/useCompany'
 import { useState } from 'react'
 import { EditCompanyModal } from '../company/components/EditCompanyModal'
+import { ConfirmationModal } from '@/components/ConfirmationModal'
 import { useDisclosure } from '@heroui/react'
 import { useTranslationNamespace } from '@/contexts/TranslationContext'
 
@@ -93,36 +94,17 @@ export default function SettingsPage() {
         })}
       </div>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="w-full max-w-md mx-4">
-            <CardHeader>
-              <h3 className="text-lg font-semibold text-red-600">{t('danger.confirmTitle')}</h3>
-            </CardHeader>
-            <CardBody>
-              <p className="text-gray-600 mb-6">
-                {t('danger.confirmMessage')}
-              </p>
-              <div className="flex gap-3 justify-end">
-                <Button
-                  variant="light"
-                  onPress={() => setShowDeleteConfirm(false)}
-                >
-                  {t('actions.cancel')}
-                </Button>
-                <Button
-                  color="danger"
-                  onPress={handleDeleteCompany}
-                  disabled={loading}
-                >
-                  {loading ? t('actions.deleting') : t('actions.delete')}
-                </Button>
-              </div>
-            </CardBody>
-          </Card>
-        </div>
-      )}
+      <ConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDeleteCompany}
+        title={t('danger.confirmTitle')}
+        message={t('danger.confirmMessage')}
+        confirmText={loading ? t('actions.deleting') : t('actions.delete')}
+        cancelText={t('actions.cancel')}
+        isLoading={loading}
+        variant="danger"
+      />
 
       {/* Edit Company Modal */}
       {company && (

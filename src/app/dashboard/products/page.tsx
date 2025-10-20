@@ -18,6 +18,7 @@ import { usePlanLimits } from '@/hooks/usePlanLimits'
 import { UpgradePrompt } from '@/components/UpgradePrompt'
 import { AddProductModal } from './components/AddProductModal'
 import { EditProductModal } from './components/EditProductModal'
+import { ConfirmationModal } from '@/components/ConfirmationModal'
 import { useTranslationNamespace } from '@/contexts/TranslationContext'
 
 export default function ProductsPage() {
@@ -29,15 +30,25 @@ export default function ProductsPage() {
 
   const addModal = useDisclosure()
   const editModal = useDisclosure()
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [productToDelete, setProductToDelete] = useState<string | null>(null)
 
   const handleEditProduct = (product: Product) => {
     setSelectedProduct(product)
     editModal.onOpen()
   }
 
-  const handleDeleteProduct = async (productId: string) => {
-    if (!confirm(t('actions.deleteProduct'))) return
-    await deleteProduct(productId)
+  const handleDeleteProduct = (productId: string) => {
+    setProductToDelete(productId)
+    setShowDeleteConfirm(true)
+  }
+
+  const confirmDeleteProduct = async () => {
+    if (productToDelete) {
+      await deleteProduct(productToDelete)
+      setProductToDelete(null)
+    }
+    setShowDeleteConfirm(false)
   }
 
   const formatPrice = (product: Product) => {
@@ -240,6 +251,17 @@ export default function ProductsPage() {
           }}
         />
       )}
+
+      <ConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={confirmDeleteProduct}
+        title={t('actions.deleteProduct')}
+        message="Are you sure you want to delete this product? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   )
 }

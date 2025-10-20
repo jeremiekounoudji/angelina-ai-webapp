@@ -19,14 +19,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Company, CompanyType } from "@/types/database";
-import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
+import { useUpload } from "@/hooks/useUpload";
+import { useCompany } from "@/hooks/useCompany";
+import { ConfirmationModal } from "@/components/ConfirmationModal";
 
 const createCompanySchema = (t: any) => z.object({
   name: z.string().min(1, t('form.nameRequired')),
-  type: z.enum(["restaurant", "shop", "retail", "service",'other']),
+  type: z.enum(["restaurant", "retail", "service", "other"]),
   address: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().email(t('form.emailInvalid')).optional().or(z.literal("")),
@@ -54,14 +56,17 @@ export function EditCompanyModal({
   company,
 }: EditCompanyModalProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [avatarUrl, setAvatarUrl] = useState(company.avatar_url || "");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
   const { t } = useTranslationNamespace('dashboard.company');
+  const { t: tCommon } = useTranslationNamespace('common');
 
   const companySchema = createCompanySchema(t);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const supabase = createClient();
   const { refreshUser } = useAuth();
+  const { upload, uploading } = useUpload();
+  const { updateCompany } = useCompany();
 
   const {
     register,
@@ -92,65 +97,53 @@ export function EditCompanyModal({
 
   ];
 
-  const handleAvatarUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleAvatarSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    try {
-      setIsLoading(true);
-      setUploadProgress(0);
-
-      // Create a unique filename
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${company.id}-${Date.now()}.${fileExt}`;
-      const filePath = `company-avatars/${fileName}`;
-
-      // Upload file to Supabase Storage
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (uploadError) throw uploadError;
-
-      // Get public URL
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("avatars").getPublicUrl(filePath);
-
-      setAvatarUrl(publicUrl);
-      setUploadProgress(100);
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-    } finally {
-      setIsLoading(false);
-      setTimeout(() => setUploadProgress(0), 1000);
-    }
+    // Store the file but don't upload yet
+    setAvatarFile(file);
+    
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarUrl(previewUrl);
   };
 
-  const onSubmit = async (data: CompanyFormData) => {
+  const onSubmit: (data: CompanyFormData) => Promise<void> = async (data) => {
     try {
       setIsLoading(true);
+
+      let finalAvatarUrl = company.avatar_url;
+
+      // Upload avatar if selected
+      if (avatarFile) {
+        const result = await upload({
+          bucket: "avatars",
+          files: [avatarFile],
+          path: "company-avatars"
+        });
+
+        if (result.success && result.urls.length > 0) {
+          finalAvatarUrl = result.urls[0];
+        }
+      }
 
       const updateData = {
         ...data,
-        avatar_url: avatarUrl || company.avatar_url,
+        avatar_url: finalAvatarUrl,
       };
 
-      const { error } = await supabase
-        .from("companies")
-        .update(updateData)
-        .eq("id", company.id);
+      const result = await updateCompany(updateData);
 
-      if (error) throw error;
-
-      await refreshUser();
-      onOpenChange(false);
-      reset(data);
+      if (result) {
+        await refreshUser();
+        onOpenChange(false);
+        reset(data);
+        // Clean up preview URL
+        if (avatarUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(avatarUrl);
+        }
+      }
     } catch (error) {
       console.error("Error updating company:", error);
     } finally {
@@ -163,12 +156,19 @@ export function EditCompanyModal({
       onOpenChange(false);
       return;
     }
+    setShowConfirmClose(true);
+  };
 
-    if (confirm("You have unsaved changes. Are you sure you want to close?")) {
-      reset();
-      setAvatarUrl(company.avatar_url || "");
-      onOpenChange(false);
+  const confirmClose = () => {
+    reset();
+    setAvatarUrl(company.avatar_url || "");
+    setAvatarFile(null);
+    // Clean up preview URL
+    if (avatarUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(avatarUrl);
     }
+    setShowConfirmClose(false);
+    onOpenChange(false);
   };
 
   return (
@@ -211,15 +211,15 @@ export function EditCompanyModal({
                         color="primary"
                         className="absolute -bottom-1 -right-1"
                         onPress={() => fileInputRef.current?.click()}
-                        isDisabled={isLoading}
+                        isDisabled={uploading}
                       >
                         <CameraIcon className="w-4 h-4" />
                       </Button>
                     </div>
 
-                    {uploadProgress > 0 && uploadProgress < 100 && (
+                    {uploading && (
                       <Progress
-                        value={uploadProgress}
+                        isIndeterminate
                         className="w-32"
                         size="sm"
                         color="primary"
@@ -230,7 +230,7 @@ export function EditCompanyModal({
                       ref={fileInputRef}
                       type="file"
                       accept="image/*"
-                      onChange={handleAvatarUpload}
+                      onChange={handleAvatarSelect}
                       className="hidden"
                     />
                   </div>
@@ -357,6 +357,17 @@ export function EditCompanyModal({
           )}
         </ModalContent>
       </Modal>
+
+      <ConfirmationModal
+        isOpen={showConfirmClose}
+        onClose={() => setShowConfirmClose(false)}
+        onConfirm={confirmClose}
+        title={tCommon("modals.unsavedChanges")}
+        message={tCommon("modals.unsavedChangesMessage")}
+        confirmText={tCommon("modals.discardChanges")}
+        cancelText={tCommon("modals.keepEditing")}
+        variant="warning"
+      />
     </>
   );
 }

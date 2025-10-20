@@ -27,6 +27,7 @@ import {
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
+import { ConfirmationModal } from "@/components/ConfirmationModal";
 
 const createProductSchema = (t: any) => z.object({
   name: z.string().min(1, t('form.nameRequired')),
@@ -61,12 +62,14 @@ export function AddProductModal({
 }: AddProductModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { upload, uploading } = useUpload();
   const { createProduct } = useProducts();
   const { company } = useAuth();
   const { limits, canAddProduct } = usePlanLimits(company?.id);
   const { t } = useTranslationNamespace('dashboard.products');
+  const { t: tCommon } = useTranslationNamespace('common');
 
   const productSchema = createProductSchema(t);
 
@@ -147,15 +150,18 @@ export function AddProductModal({
       onOpenChange(false);
       return;
     }
+    setShowConfirmClose(true);
+  };
 
-    if (confirm("You have unsaved changes. Are you sure you want to close?")) {
-      reset();
-      setImageUrl("");
-      onOpenChange(false);
-    }
+  const confirmClose = () => {
+    reset();
+    setImageUrl("");
+    setShowConfirmClose(false);
+    onOpenChange(false);
   };
 
   return (
+    <>
     <Modal
       isOpen={isOpen}
       onOpenChange={onOpenChange}
@@ -384,5 +390,17 @@ export function AddProductModal({
         )}
       </ModalContent>
     </Modal>
+
+    <ConfirmationModal
+      isOpen={showConfirmClose}
+      onClose={() => setShowConfirmClose(false)}
+      onConfirm={confirmClose}
+      title={tCommon("modals.unsavedChanges")}
+      message={tCommon("modals.unsavedChangesMessage")}
+      confirmText={tCommon("modals.discardChanges")}
+      cancelText={tCommon("modals.keepEditing")}
+      variant="warning"
+    />
+    </>
   );
 }

@@ -505,7 +505,12 @@
       "cancel": "Cancel",
       "addUser": "Add User",
       "saveChanges": "Save Changes",
-      "uploading": "Uploading..."
+      "uploading": "Uploading...",
+      "updateFailed": "Failed to update user",
+      "unsavedChanges": "Unsaved Changes",
+      "unsavedChangesMessage": "You have unsaved changes. Are you sure you want to close?",
+      "discardChanges": "Discard Changes",
+      "keepEditing": "Keep Editing"
     },
     "info": {
       "noName": "No name",

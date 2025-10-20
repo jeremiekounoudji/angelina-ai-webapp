@@ -15,7 +15,6 @@ import {
 } from "@heroui/react";
 import { SubscriptionPlan } from "@/types/database";
 import { useAuth } from "@/contexts/AuthContext";
-import { createClient } from "@/lib/supabase/client";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 
 interface PaymentModalProps {
@@ -52,7 +51,6 @@ export default function PaymentModal({
   const [errorMessage, setErrorMessage] = useState("");
   const [merchantReference, setMerchantReference] = useState("");
   const { refreshUser } = useAuth();
-  const supabase = createClient();
   const { t } = useTranslationNamespace('dashboard.payment');
 
   const calculateAmount = () => {

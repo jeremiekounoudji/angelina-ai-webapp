@@ -20,10 +20,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { createClient } from "@/lib/supabase/client";
 import { Product } from "@/types/database";
 import { useProducts } from "@/hooks/useProducts";
+import { useUpload } from "@/hooks/useUpload";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
+import { ConfirmationModal } from "@/components/ConfirmationModal";
 
 const createProductSchema = (t: any) => z
   .object({
@@ -79,13 +80,15 @@ export function EditProductModal({
   onProductUpdated,
 }: EditProductModalProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [imageUrl, setImageUrl] = useState<string>(product.image_url || "");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [error, setError] = useState("");
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const supabase = createClient();
   const { editProduct } = useProducts();
+  const { upload, uploading } = useUpload();
   const { t } = useTranslationNamespace('dashboard.products');
+  const { t: tCommon } = useTranslationNamespace('common');
 
   const productSchema = createProductSchema(t);
 
@@ -111,54 +114,49 @@ export function EditProductModal({
 
   const isPriceFixed = watch("isPriceFixed");
 
-  const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    try {
-      setIsLoading(true);
-      setUploadProgress(0);
-
-      // Only handle the first file for single image
-      const file = files[0];
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${product.id}-${Date.now()}.${fileExt}`;
-      const filePath = `product-images/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("products")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (uploadError) throw uploadError;
-
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("products").getPublicUrl(filePath);
-
-      setImageUrl(publicUrl);
-      setUploadProgress(100);
-    } catch (error) {
-      console.error("Error uploading images:", error);
-      setError("Failed to upload images");
-    } finally {
-      setIsLoading(false);
-      setTimeout(() => setUploadProgress(0), 1000);
-    }
+    // Store the file but don't upload yet
+    setImageFile(file);
+    
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setImageUrl(previewUrl);
   };
 
   const removeImage = () => {
+    // Clean up preview URL if it exists
+    if (imageUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(imageUrl);
+    }
     setImageUrl("");
+    setImageFile(null);
   };
 
   const onSubmit = async (data: ProductFormData) => {
     try {
       setIsLoading(true);
       setError("");
+
+      let finalImageUrl = product.image_url;
+
+      // Upload image if selected
+      if (imageFile) {
+        const result = await upload({
+          bucket: "products",
+          files: [imageFile],
+          path: "product-images"
+        });
+
+        if (result.success && result.urls.length > 0) {
+          finalImageUrl = result.urls[0];
+        }
+      } else if (imageUrl !== product.image_url) {
+        // Image was removed
+        finalImageUrl = undefined;
+      }
 
       const updateData = {
         name: data.name,
@@ -168,7 +166,7 @@ export function EditProductModal({
         min_price: !data.isPriceFixed ? data.minPrice : undefined,
         max_price: !data.isPriceFixed ? data.maxPrice : undefined,
         stock_quantity: data.stockQuantity,
-        image_url: imageUrl || undefined,
+        image_url: finalImageUrl,
       };
 
       const result = await editProduct(product.id, updateData);
@@ -176,10 +174,14 @@ export function EditProductModal({
       if (result) {
         onProductUpdated();
         handleClose();
+        // Clean up preview URL
+        if (imageUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(imageUrl);
+        }
       }
     } catch (error: unknown) {
       setError(
-        error instanceof Error ? error.message : "Failed to update product"
+        error instanceof Error ? error.message : tCommon("modals.updateFailed")
       );
     } finally {
       setIsLoading(false);
@@ -191,13 +193,20 @@ export function EditProductModal({
       onOpenChange(false);
       return;
     }
+    setShowConfirmClose(true);
+  };
 
-    if (confirm("You have unsaved changes. Are you sure you want to close?")) {
-      reset();
-      setImageUrl(product.image_url || "");
-      setError("");
-      onOpenChange(false);
+  const confirmClose = () => {
+    reset();
+    setImageUrl(product.image_url || "");
+    setImageFile(null);
+    setError("");
+    // Clean up preview URL
+    if (imageUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(imageUrl);
     }
+    setShowConfirmClose(false);
+    onOpenChange(false);
   };
 
   return (
@@ -264,15 +273,15 @@ export function EditProductModal({
                       variant="bordered"
                       startContent={<PlusIcon className="w-4 h-4" />}
                       onPress={() => fileInputRef.current?.click()}
-                      isDisabled={isLoading}
+                      isDisabled={uploading}
                       className="w-full border-secondary text-white hover:bg-secondary"
                     >
                       Add Images
                     </Button>
 
-                    {uploadProgress > 0 && uploadProgress < 100 && (
+                    {uploading && (
                       <Progress
-                        value={uploadProgress}
+                        isIndeterminate
                         className="mt-2"
                         size="sm"
                         color="primary"
@@ -283,8 +292,7 @@ export function EditProductModal({
                       ref={fileInputRef}
                       type="file"
                       accept="image/*"
-                      multiple
-                      onChange={handleImageUpload}
+                      onChange={handleImageSelect}
                       className="hidden"
                     />
                   </div>
@@ -425,6 +433,17 @@ export function EditProductModal({
           )}
         </ModalContent>
       </Modal>
+
+      <ConfirmationModal
+        isOpen={showConfirmClose}
+        onClose={() => setShowConfirmClose(false)}
+        onConfirm={confirmClose}
+        title={tCommon("modals.unsavedChanges")}
+        message={tCommon("modals.unsavedChangesMessage")}
+        confirmText={tCommon("modals.discardChanges")}
+        cancelText={tCommon("modals.keepEditing")}
+        variant="warning"
+      />
     </>
   );
 }

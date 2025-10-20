@@ -63,6 +63,13 @@
     "fileTooLarge": "File is too large",
     "invalidFileType": "Invalid file type"
   },
+  "modals": {
+    "unsavedChanges": "Unsaved Changes",
+    "unsavedChangesMessage": "You have unsaved changes. Are you sure you want to close?",
+    "discardChanges": "Discard Changes",
+    "keepEditing": "Keep Editing",
+    "updateFailed": "Failed to update"
+  },
   "errors": {
     "generic": "An error occurred. Please try again.",
     "networkError": "Network error. Please check your connection.",

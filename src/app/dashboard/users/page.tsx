@@ -18,6 +18,7 @@ import { usePlanLimits } from '@/hooks/usePlanLimits'
 import { UpgradePrompt } from '@/components/UpgradePrompt'
 import { AddUserModal } from './components/AddUserModal'
 import { EditUserModal } from './components/EditUserModal'
+import { ConfirmationModal } from '@/components/ConfirmationModal'
 import { useTranslationNamespace } from '@/contexts/TranslationContext'
 
 export default function UsersPage() {
@@ -29,15 +30,25 @@ export default function UsersPage() {
 
   const addModal = useDisclosure()
   const editModal = useDisclosure()
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [userToDelete, setUserToDelete] = useState<string | null>(null)
 
   const handleEditUser = (user: User) => {
     setSelectedUser(user)
     editModal.onOpen()
   }
 
-  const handleDeleteUser = async (userId: string) => {
-    if (!confirm(t('actions.deleteUser'))) return
-    await deleteUser(userId)
+  const handleDeleteUser = (userId: string) => {
+    setUserToDelete(userId)
+    setShowDeleteConfirm(true)
+  }
+
+  const confirmDeleteUser = async () => {
+    if (userToDelete) {
+      await deleteUser(userToDelete)
+      setUserToDelete(null)
+    }
+    setShowDeleteConfirm(false)
   }
 
   const getRoleColor = (role: UserRole) => {
@@ -201,6 +212,17 @@ export default function UsersPage() {
           onUserUpdated={() => {}} // Hook handles state updates automatically
         />
       )}
+
+      <ConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={confirmDeleteUser}
+        title={t('actions.deleteUser')}
+        message="Are you sure you want to delete this user? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   )
 }

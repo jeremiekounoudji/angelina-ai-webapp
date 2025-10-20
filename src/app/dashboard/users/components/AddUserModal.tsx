@@ -24,6 +24,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { CameraIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import toast from 'react-hot-toast';
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
+import { ConfirmationModal } from "@/components/ConfirmationModal";
 
 const userSchema = z.object({
   full_name: z.string().min(1, "Full name is required"),
@@ -48,12 +49,14 @@ export function AddUserModal({
   const [isLoading, setIsLoading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { upload, uploading } = useUpload();
   const { createUser } = useUsers();
   const { company } = useAuth();
   const { limits, canAddUser } = usePlanLimits(company?.id);
   const { t } = useTranslationNamespace('dashboard.users');
+  const { t: tCommon } = useTranslationNamespace('common');
 
   const {
     register,
@@ -149,20 +152,23 @@ export function AddUserModal({
       onOpenChange(false);
       return;
     }
+    setShowConfirmClose(true);
+  };
 
-    if (confirm("You have unsaved changes. Are you sure you want to close?")) {
-      reset();
-      setAvatarUrl("");
-      setAvatarFile(null);
-      // Clean up preview URL
-      if (avatarUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(avatarUrl);
-      }
-      onOpenChange(false);
+  const confirmClose = () => {
+    reset();
+    setAvatarUrl("");
+    setAvatarFile(null);
+    // Clean up preview URL
+    if (avatarUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(avatarUrl);
     }
+    setShowConfirmClose(false);
+    onOpenChange(false);
   };
 
   return (
+    <>
     <Modal
       isOpen={isOpen}
       onOpenChange={onOpenChange}
@@ -326,5 +332,17 @@ export function AddUserModal({
         )}
       </ModalContent>
     </Modal>
+
+    <ConfirmationModal
+      isOpen={showConfirmClose}
+      onClose={() => setShowConfirmClose(false)}
+      onConfirm={confirmClose}
+      title={tCommon("modals.unsavedChanges")}
+      message={tCommon("modals.unsavedChangesMessage")}
+      confirmText={tCommon("modals.discardChanges")}
+      cancelText={tCommon("modals.keepEditing")}
+      variant="warning"
+    />
+    </>
   );
 }

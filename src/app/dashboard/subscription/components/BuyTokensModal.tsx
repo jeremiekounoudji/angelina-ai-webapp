@@ -15,6 +15,7 @@ import {
 } from "@heroui/react";
 import { CpuChipIcon, CreditCardIcon } from "@heroicons/react/24/outline";
 import { tokenService } from "@/lib/tokenService";
+import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import toast from 'react-hot-toast';
 
 interface BuyTokensModalProps {
@@ -61,6 +62,7 @@ export default function BuyTokensModal({
   const [customTokens, setCustomTokens] = useState("");
   const [loading, setLoading] = useState(false);
   const [useCustom, setUseCustom] = useState(false);
+  const { t } = useTranslationNamespace('dashboard.subscription');
 
   const handlePurchase = async () => {
     if (!selectedPackage && !customTokens) return;

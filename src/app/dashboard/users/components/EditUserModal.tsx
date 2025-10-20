@@ -18,9 +18,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { CameraIcon } from "@heroicons/react/24/outline";
-import { createClient } from "@/lib/supabase/client";
 import { User, UserRole } from "@/types/database";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
+import { useUpload } from "@/hooks/useUpload";
+import { useUsers } from "@/hooks/useUsers";
+import { ConfirmationModal } from "@/components/ConfirmationModal";
 
 const userSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
@@ -45,12 +47,15 @@ export function EditUserModal({
   onUserUpdated,
 }: EditUserModalProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [avatarUrl, setAvatarUrl] = useState(user.avatar_url || "");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [error, setError] = useState("");
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const supabase = createClient();
+  const { upload, uploading } = useUpload();
+  const { editUser } = useUsers();
   const { t } = useTranslationNamespace("dashboard.users");
+  const { t: tCommon } = useTranslationNamespace("common");
 
   const {
     register,
@@ -78,42 +83,16 @@ export function EditUserModal({
     { value: "customer", label: t("roles.customer") },
   ];
 
-  const handleAvatarUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleAvatarSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    try {
-      setIsLoading(true);
-      setUploadProgress(0);
+    // Store the file but don't upload yet
+    setAvatarFile(file);
 
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-      const filePath = `user-avatars/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (uploadError) throw uploadError;
-
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("avatars").getPublicUrl(filePath);
-
-      setAvatarUrl(publicUrl);
-      setUploadProgress(100);
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-      setError("Failed to upload avatar");
-    } finally {
-      setIsLoading(false);
-      setTimeout(() => setUploadProgress(0), 1000);
-    }
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarUrl(previewUrl);
   };
 
   const onSubmit = async (data: UserFormData) => {
@@ -121,25 +100,42 @@ export function EditUserModal({
       setIsLoading(true);
       setError("");
 
+      let finalAvatarUrl = user.avatar_url;
+
+      // Upload avatar if selected
+      if (avatarFile) {
+        const result = await upload({
+          bucket: "avatars",
+          files: [avatarFile],
+          path: "user-avatars",
+        });
+
+        if (result.success && result.urls.length > 0) {
+          finalAvatarUrl = result.urls[0];
+        }
+      }
+
       const updateData = {
         full_name: data.fullName,
         email: data.email,
-        phone: data.phone || null,
+        phone: data.phone || undefined,
         role: data.role,
+        avatar_url: finalAvatarUrl,
       };
 
-      const { error } = await supabase
-        .from("users")
-        .update(updateData)
-        .eq("id", user.id);
+      const result = await editUser(user.id, updateData);
 
-      if (error) throw error;
-
-      onUserUpdated();
-      handleClose();
+      if (result) {
+        onUserUpdated();
+        handleClose();
+        // Clean up preview URL
+        if (avatarUrl.startsWith("blob:")) {
+          URL.revokeObjectURL(avatarUrl);
+        }
+      }
     } catch (error: unknown) {
       setError(
-        error instanceof Error ? error.message : "Failed to update user"
+        error instanceof Error ? error.message : tCommon("modals.updateFailed")
       );
     } finally {
       setIsLoading(false);
@@ -151,13 +147,20 @@ export function EditUserModal({
       onOpenChange(false);
       return;
     }
+    setShowConfirmClose(true);
+  };
 
-    if (confirm("You have unsaved changes. Are you sure you want to close?")) {
-      reset();
-      setAvatarUrl(user.avatar_url || "");
-      setError("");
-      onOpenChange(false);
+  const confirmClose = () => {
+    reset();
+    setAvatarUrl(user.avatar_url || "");
+    setAvatarFile(null);
+    setError("");
+    // Clean up preview URL
+    if (avatarUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(avatarUrl);
     }
+    setShowConfirmClose(false);
+    onOpenChange(false);
   };
 
   return (
@@ -204,15 +207,15 @@ export function EditUserModal({
                         color="primary"
                         className="absolute -bottom-1 -right-1"
                         onPress={() => fileInputRef.current?.click()}
-                        isDisabled={isLoading}
+                        isDisabled={uploading}
                       >
                         <CameraIcon className="w-4 h-4" />
                       </Button>
                     </div>
 
-                    {uploadProgress > 0 && uploadProgress < 100 && (
+                    {uploading && (
                       <Progress
-                        value={uploadProgress}
+                        isIndeterminate
                         className="w-32"
                         size="sm"
                         color="primary"
@@ -223,7 +226,7 @@ export function EditUserModal({
                       ref={fileInputRef}
                       type="file"
                       accept="image/*"
-                      onChange={handleAvatarUpload}
+                      onChange={handleAvatarSelect}
                       className="hidden"
                     />
                   </div>
@@ -236,7 +239,11 @@ export function EditUserModal({
                     errorMessage={errors.fullName?.message}
                     isRequired
                     variant="bordered"
-                    className="text-gray-50 "
+                    classNames={{
+                      input: "text-white",
+                      label: "text-gray-50",
+                      inputWrapper: "border-secondary bg-background",
+                    }}
                   />
 
                   <Input
@@ -248,7 +255,11 @@ export function EditUserModal({
                     errorMessage={errors.email?.message}
                     isRequired
                     variant="bordered"
-                    className="text-gray-50 "
+                    classNames={{
+                      input: "text-white",
+                      label: "text-gray-50",
+                      inputWrapper: "border-secondary bg-background",
+                    }}
                   />
 
                   <Input
@@ -259,13 +270,16 @@ export function EditUserModal({
                     errorMessage={errors.phone?.message}
                     variant="bordered"
                     isRequired
-                    className="text-gray-50 "
+                    classNames={{
+                      input: "text-white",
+                      label: "text-gray-50",
+                      inputWrapper: "border-secondary bg-background",
+                    }}
                   />
 
                   <Select
                     label={t("form.role")}
                     placeholder={t("form.selectRole")}
-                    className="text-gray-50 "
                     variant="bordered"
                     selectedKeys={selectedRole ? [selectedRole] : []}
                     onSelectionChange={(keys) => {
@@ -275,6 +289,11 @@ export function EditUserModal({
                     isInvalid={!!errors.role}
                     errorMessage={errors.role?.message}
                     isRequired
+                    classNames={{
+                      trigger: "border-secondary bg-background",
+                      label: "text-gray-50",
+                      value: "text-white",
+                    }}
                   >
                     {roles.map((role) => (
                       <SelectItem key={role.value}>{role.label}</SelectItem>
@@ -304,6 +323,17 @@ export function EditUserModal({
           )}
         </ModalContent>
       </Modal>
+
+      <ConfirmationModal
+        isOpen={showConfirmClose}
+        onClose={() => setShowConfirmClose(false)}
+        onConfirm={confirmClose}
+        title={tCommon("modals.unsavedChanges")}
+        message={tCommon("modals.unsavedChangesMessage")}
+        confirmText={tCommon("modals.discardChanges")}
+        cancelText={tCommon("modals.keepEditing")}
+        variant="warning"
+      />
     </>
   );
 }
