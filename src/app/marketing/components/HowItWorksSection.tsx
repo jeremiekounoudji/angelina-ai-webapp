@@ -1,42 +1,42 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslationNamespace } from '@/contexts/TranslationContext';
 import { fadeInUp, staggerContainer, staggerItem } from '@/utils/animations';
 
 export default function HowItWorksSection() {
-  const { t } = useTranslation();
+  const { t } = useTranslationNamespace('marketing.howItWorks');
 
   const steps = [
     {
       id: 'configure',
-      number: t('howItWorks.steps.configure.number'),
-      title: t('howItWorks.steps.configure.title'),
-      description: t('howItWorks.steps.configure.description'),
+      number: t('steps.configure.number'),
+      title: t('steps.configure.title'),
+      description: t('steps.configure.description'),
       imageUrl: '/api/placeholder/500/300',
       layout: 'right' // Image on right, content on left
     },
     {
       id: 'generate',
-      number: t('howItWorks.steps.generate.number'),
-      title: t('howItWorks.steps.generate.title'),
-      description: t('howItWorks.steps.generate.description'),
+      number: t('steps.generate.number'),
+      title: t('steps.generate.title'),
+      description: t('steps.generate.description'),
       imageUrl: '/api/placeholder/500/300',
       layout: 'left' // Image on left, content on right
     },
     {
       id: 'deploy',
-      number: t('howItWorks.steps.deploy.number'),
-      title: t('howItWorks.steps.deploy.title'),
-      description: t('howItWorks.steps.deploy.description'),
+      number: t('steps.deploy.number'),
+      title: t('steps.deploy.title'),
+      description: t('steps.deploy.description'),
       imageUrl: '/api/placeholder/500/300',
       layout: 'right' // Image on right, content on left
     },
     {
       id: 'marketplace',
-      number: t('howItWorks.steps.marketplace.number'),
-      title: t('howItWorks.steps.marketplace.title'),
-      description: t('howItWorks.steps.marketplace.description'),
+      number: t('steps.marketplace.number'),
+      title: t('steps.marketplace.title'),
+      description: t('steps.marketplace.description'),
       imageUrl: '/api/placeholder/500/300',
       layout: 'left', // Image on left, content on right
       showCta: true
@@ -63,7 +63,7 @@ export default function HowItWorksSection() {
             <div className="relative flex justify-center">
               <span className="bg-green-500 p-4 rounded-sm">
                 <h2 className="text-4xl md:text-6xl font-bold text-white">
-                  {t('howItWorks.title')}
+                  {t('title')}
                 </h2> 
               </span>
             </div>
@@ -107,7 +107,7 @@ export default function HowItWorksSection() {
                         whileTap={{ scale: 0.95 }}
                         className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500 to-green-400 text-black px-8 py-4 rounded-full font-medium text-lg shadow-lg shadow-green-500/25 hover:shadow-green-400/40 transition-all duration-300"
                       >
-                        {t('howItWorks.cta')}
+                        {t('cta')}
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>

@@ -1,0 +1,89 @@
+{
+  "buttons": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "submit": "Soumettre",
+    "reset": "Réinitialiser",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "add": "Ajouter",
+    "remove": "Retirer",
+    "upload": "Télécharger",
+    "download": "Télécharger",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "continue": "Continuer",
+    "back": "Retour",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "startFree": "Commencer gratuitement",
+    "getStarted": "Commencer",
+    "learnMore": "En savoir plus",
+    "viewAll": "Voir tout",
+    "showMore": "Afficher plus",
+    "showLess": "Afficher moins"
+  },
+  "status": {
+    "active": "Actif",
+    "inactive": "Inactif",
+    "pending": "En attente",
+    "completed": "Terminé",
+    "failed": "Échoué",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "draft": "Brouillon",
+    "published": "Publié"
+  },
+  "loading": {
+    "loading": "Chargement...",
+    "pleaseWait": "Veuillez patienter...",
+    "processing": "Traitement en cours...",
+    "saving": "Enregistrement...",
+    "updating": "Mise à jour...",
+    "deleting": "Suppression...",
+    "uploading": "Téléchargement...",
+    "downloading": "Téléchargement..."
+  },
+  "empty": {
+    "noData": "Aucune donnée disponible",
+    "noResults": "Aucun résultat trouvé",
+    "noProducts": "Aucun produit trouvé",
+    "noUsers": "Aucun utilisateur trouvé",
+    "noPaymentHistory": "Aucun historique de paiement",
+    "noNotifications": "Aucune notification"
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Veuillez saisir une adresse email valide",
+    "passwordTooWeak": "Le mot de passe est trop faible",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "invalidFormat": "Format invalide",
+    "fileTooLarge": "Le fichier est trop volumineux",
+    "invalidFileType": "Type de fichier invalide"
+  },
+  "errors": {
+    "generic": "Une erreur s'est produite. Veuillez réessayer.",
+    "networkError": "Erreur réseau. Veuillez vérifier votre connexion.",
+    "unauthorized": "Vous n'êtes pas autorisé à effectuer cette action.",
+    "notFound": "La ressource demandée n'a pas été trouvée.",
+    "serverError": "Erreur serveur. Veuillez réessayer plus tard."
+  },
+  "success": {
+    "saved": "Enregistré avec succès",
+    "updated": "Mis à jour avec succès",
+    "deleted": "Supprimé avec succès",
+    "created": "Créé avec succès",
+    "uploaded": "Téléchargé avec succès"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Dashboard",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "logout": "Déconnexion",
+    "login": "Connexion",
+    "signup": "Inscription"
+  }
+}

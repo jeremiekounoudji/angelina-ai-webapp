@@ -2,13 +2,17 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useRouter } from 'next/navigation';
+import { useTranslationNamespace } from '@/contexts/TranslationContext';
 import { fadeIn, fadeInLeft, fadeInRight } from '@/utils/animations';
-import { Popover, PopoverTrigger, PopoverContent, Button } from '@heroui/react';
+import { Popover, PopoverTrigger, PopoverContent, Button, Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@heroui/react';
 import ReactCountryFlag from 'react-country-flag';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Header() {
-  const { t, locale, changeLocale } = useTranslation();
+  const { t, locale, setLocale } = useTranslationNamespace('marketing.header');
+  const { user, company, loading, signOut } = useAuth();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -27,7 +31,7 @@ export default function Header() {
   };
 
   const handleLanguageChange = (newLocale: 'fr' | 'en') => {
-    changeLocale(newLocale);
+    setLocale(newLocale);
   };
 
   return (
@@ -45,7 +49,7 @@ export default function Header() {
             className="flex-shrink-0"
           >
             <h1 className="text-2xl font-bold text-white">
-              {t('header.logo')}
+              {t('logo')}
             </h1>
           </motion.div>
 
@@ -58,25 +62,25 @@ export default function Header() {
               onClick={() => scrollToSection('#home')}
               className="text-gray-300 hover:text-green-400 transition-all duration-300 hover:scale-105"
             >
-              {t('header.links.home')}
+              {t('links.home')}
             </button>
             <button 
               onClick={() => scrollToSection('#features')}
               className="text-gray-300 hover:text-green-400 transition-all duration-300 hover:scale-105"
             >
-              {t('header.links.features')}
+              {t('links.features')}
             </button>
             <button 
               onClick={() => scrollToSection('#how-it-works')}
               className="text-gray-300 hover:text-green-400 transition-all duration-300 hover:scale-105"
             >
-              {t('header.links.howItWorks')}
+              {t('links.howItWorks')}
             </button>
             <button 
               onClick={() => scrollToSection('#pricing')}
               className="text-gray-300 hover:text-green-400 transition-all duration-300 hover:scale-105"
             >
-              {t('header.links.pricing')}
+              {t('links.pricing')}
             </button>
             <button 
               onClick={() => scrollToSection('#contact')}
@@ -148,20 +152,53 @@ export default function Header() {
               </PopoverContent>
             </Popover>
 
-            {/* Login/Signup buttons */}
+            {/* Login/Signup buttons or User Menu */}
             <div className="hidden md:flex items-center space-x-3">
-              <a
-                href="#login"
-                className="text-gray-300 hover:text-green-400 transition-colors"
-              >
-                {t('header.links.login')}
-              </a>
-              <a
-                href="#signup"
-                className="bg-gradient-to-r from-green-500 to-green-400 text-black px-6 py-2 rounded-full hover:from-green-400 hover:to-green-300 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-green-400/40"
-              >
-                {t('header.cta')}
-              </a>
+              {loading ? (
+                <div className="w-8 h-8 animate-pulse bg-gray-600 rounded-full"></div>
+              ) : user ? (
+                <Dropdown placement="bottom-end">
+                  <DropdownTrigger>
+                    <Avatar
+                      as="button"
+                      className="transition-transform"
+                      name={user.user_metadata?.full_name || user.email || 'User'}
+                      size="sm"
+                      src={company?.avatar_url}
+                    />
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="User Actions" variant="flat">
+                    <DropdownItem key="profile" className="h-14 gap-2">
+                      <p className="font-semibold">Signed in as</p>
+                      <p className="font-semibold">{user.email}</p>
+                    </DropdownItem>
+                    <DropdownItem key="dashboard" onPress={() => router.push("/dashboard")}>
+                      Dashboard
+                    </DropdownItem>
+                    <DropdownItem key="settings" onPress={() => router.push("/dashboard/company")}>
+                      Settings
+                    </DropdownItem>
+                    <DropdownItem key="logout" color="danger" onPress={signOut}>
+                      Log Out
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              ) : (
+                <>
+                  <button
+                    onClick={() => router.push("/login")}
+                    className="text-gray-300 hover:text-green-400 transition-colors"
+                  >
+                    {t('links.login')}
+                  </button>
+                  <button
+                    onClick={() => router.push("/register")}
+                    className="bg-gradient-to-r from-green-500 to-green-400 text-black px-6 py-2 rounded-full hover:from-green-400 hover:to-green-300 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-green-400/40"
+                  >
+                    {t('cta')}
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -193,25 +230,25 @@ export default function Header() {
                 onClick={() => scrollToSection('#home')}
                 className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400 transition-all duration-300"
               >
-                {t('header.links.home')}
+                {t('links.home')}
               </button>
               <button 
                 onClick={() => scrollToSection('#features')}
                 className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400 transition-all duration-300"
               >
-                {t('header.links.features')}
+                {t('links.features')}
               </button>
               <button 
                 onClick={() => scrollToSection('#how-it-works')}
                 className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400 transition-all duration-300"
               >
-                {t('header.links.howItWorks')}
+                {t('links.howItWorks')}
               </button>
               <button 
                 onClick={() => scrollToSection('#pricing')}
                 className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400 transition-all duration-300"
               >
-                {t('header.links.pricing')}
+                {t('links.pricing')}
               </button>
               <button 
                 onClick={() => scrollToSection('#contact')}
@@ -220,18 +257,40 @@ export default function Header() {
                 Contact
               </button>
               <div className="pt-4 space-y-2">
-                <a
-                  href="#login"
-                  className="block px-3 py-2 text-gray-300 hover:text-green-400"
-                >
-                  {t('header.links.login')}
-                </a>
-                <a
-                  href="#signup"
-                  className="block mx-3 bg-gradient-to-r from-green-500 to-green-400 text-black px-6 py-2 rounded-full text-center hover:from-green-400 hover:to-green-300 transition-all duration-300 shadow-lg shadow-green-500/25"
-                >
-                  {t('header.cta')}
-                </a>
+                {user ? (
+                  <>
+                    <div className="px-3 py-2 text-gray-300 text-sm">
+                      {user.user_metadata?.full_name || user.email}
+                    </div>
+                    <button
+                      onClick={() => router.push("/dashboard")}
+                      className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400"
+                    >
+                      Dashboard
+                    </button>
+                    <button
+                      onClick={signOut}
+                      className="block mx-3 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full text-center transition-all duration-300"
+                    >
+                      Log Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => router.push("/login")}
+                      className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400"
+                    >
+                      {t('links.login')}
+                    </button>
+                    <button
+                      onClick={() => router.push("/register")}
+                      className="block mx-3 bg-gradient-to-r from-green-500 to-green-400 text-black px-6 py-2 rounded-full text-center hover:from-green-400 hover:to-green-300 transition-all duration-300 shadow-lg shadow-green-500/25"
+                    >
+                      {t('cta')}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

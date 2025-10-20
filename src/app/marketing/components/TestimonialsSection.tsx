@@ -1,59 +1,59 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslationNamespace } from '@/contexts/TranslationContext';
 import { fadeInUp, staggerContainer, staggerItem } from '@/utils/animations';
 
 export default function TestimonialsSection() {
-  const { t } = useTranslation();
+  const { t } = useTranslationNamespace('marketing.testimonials');
 
   const testimonials = [
     {
       id: 'amadou',
-      name: t('testimonials.items.amadou.name'),
-      role: t('testimonials.items.amadou.role'),
-      company: t('testimonials.items.amadou.company'),
-      content: t('testimonials.items.amadou.content'),
+      name: t('items.amadou.name'),
+      role: t('items.amadou.role'),
+      company: t('items.amadou.company'),
+      content: t('items.amadou.content'),
       rating: 5
     },
     {
       id: 'fatou',
-      name: t('testimonials.items.fatou.name'),
-      role: t('testimonials.items.fatou.role'),
-      company: t('testimonials.items.fatou.company'),
-      content: t('testimonials.items.fatou.content'),
+      name: t('items.fatou.name'),
+      role: t('items.fatou.role'),
+      company: t('items.fatou.company'),
+      content: t('items.fatou.content'),
       rating: 5
     },
     {
       id: 'jean',
-      name: t('testimonials.items.jean.name'),
-      role: t('testimonials.items.jean.role'),
-      company: t('testimonials.items.jean.company'),
-      content: t('testimonials.items.jean.content'),
+      name: t('items.jean.name'),
+      role: t('items.jean.role'),
+      company: t('items.jean.company'),
+      content: t('items.jean.content'),
       rating: 5
     },
     {
       id: 'marie',
-      name: t('testimonials.items.marie.name'),
-      role: t('testimonials.items.marie.role'),
-      company: t('testimonials.items.marie.company'),
-      content: t('testimonials.items.marie.content'),
+      name: t('items.marie.name'),
+      role: t('items.marie.role'),
+      company: t('items.marie.company'),
+      content: t('items.marie.content'),
       rating: 5
     },
     {
       id: 'kossi',
-      name: t('testimonials.items.kossi.name'),
-      role: t('testimonials.items.kossi.role'),
-      company: t('testimonials.items.kossi.company'),
-      content: t('testimonials.items.kossi.content'),
+      name: t('items.kossi.name'),
+      role: t('items.kossi.role'),
+      company: t('items.kossi.company'),
+      content: t('items.kossi.content'),
       rating: 5
     },
     {
       id: 'grace',
-      name: t('testimonials.items.grace.name'),
-      role: t('testimonials.items.grace.role'),
-      company: t('testimonials.items.grace.company'),
-      content: t('testimonials.items.grace.content'),
+      name: t('items.grace.name'),
+      role: t('items.grace.role'),
+      company: t('items.grace.company'),
+      content: t('items.grace.content'),
       rating: 5
     }
   ];
@@ -73,7 +73,7 @@ export default function TestimonialsSection() {
             variants={fadeInUp}
             className="text-4xl md:text-5xl font-bold text-white mb-6"
           >
-            {t('testimonials.title')}
+            {t('title')}
           </motion.h2>
 
           {/* Testimonials grid */}

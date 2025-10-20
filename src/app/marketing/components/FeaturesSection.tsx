@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslationNamespace } from '@/contexts/TranslationContext';
 import { fadeInUp, staggerContainer } from '@/utils/animations';
 
 interface Feature {
@@ -17,7 +17,7 @@ interface FeaturesSectionProps {
 }
 
 export default function FeaturesSection({ className = '' }: FeaturesSectionProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslationNamespace('marketing.features');
   
   const features: Feature[] = [
     {
@@ -85,14 +85,14 @@ export default function FeaturesSection({ className = '' }: FeaturesSectionProps
             variants={fadeInUp}
             className="text-4xl md:text-5xl font-bold text-white mb-6"
           >
-            {t('features.title')}
-            <span className="bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent"> {t('features.titleHighlight')}</span>
+            {t('title')}
+            <span className="bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent"> {t('titleHighlight')}</span>
           </motion.h2>
           <motion.p
             variants={fadeInUp}
             className="text-xl text-gray-300 max-w-3xl mx-auto"
           >
-            {t('features.subtitle')}
+            {t('subtitle')}
           </motion.p>
         </motion.div>
 
@@ -116,7 +116,7 @@ export default function FeaturesSection({ className = '' }: FeaturesSectionProps
             >
               {feature.highlight && (
                 <div className="absolute -top-3 -right-3 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
-                  {t('features.popular')}
+                  {t('popular')}
                 </div>
               )}
               
@@ -140,7 +140,7 @@ export default function FeaturesSection({ className = '' }: FeaturesSectionProps
         >
           <div className="inline-flex items-center space-x-2 bg-gray-800/50 px-6 py-3 rounded-full border border-gray-700">
             <span className="text-green-400">✨</span>
-            <span className="text-gray-300">{t('features.comingSoon')}</span>
+            <span className="text-gray-300">{t('comingSoon')}</span>
           </div>
         </motion.div>
       </div>

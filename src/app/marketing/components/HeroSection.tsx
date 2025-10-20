@@ -1,13 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useRouter } from 'next/navigation';
+import { useTranslationNamespace } from '@/contexts/TranslationContext';
 import { useTypingAnimation } from '@/hooks/useTypingAnimation';
 import { fadeInUp, staggerContainer, staggerItem } from '@/utils/animations';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function HeroSection() {
-  const { t } = useTranslation();
-  const animatedFunctions = t('hero.animatedFunctions') as string[];
+  const router = useRouter();
+  const { t } = useTranslationNamespace('marketing.hero');
+  const { user, loading } = useAuth();
+  const animatedFunctions = t('animatedFunctions') as string[];
   const animatedText = useTypingAnimation({
     words: animatedFunctions,
     typingSpeed: 150,
@@ -15,6 +19,14 @@ export default function HeroSection() {
     pauseTime: 2000,
     loop: true
   });
+
+  const handleCTAClick = () => {
+    if (user) {
+      router.push('/dashboard');
+    } else {
+      router.push('/register');
+    }
+  };
 
   return (
     <section id="home" className="pt-20 pb-16 min-h-screen">
@@ -32,7 +44,7 @@ export default function HeroSection() {
             className="text-4xl md:text-6xl lg:text-7xl lg:m-5 font-bold text-white mb-6 leading-tight min-h-[6rem] flex items-center justify-center flex-wrap"
           >
             <span className="text-white">
-              {t('hero.title')}{' '}
+              {t('title')}{' '}
             </span>
             <span className="text-green-400 ml-2 border-r-2 border-green-400 animate-pulse">
               {animatedText}
@@ -44,7 +56,7 @@ export default function HeroSection() {
             variants={fadeInUp}
             className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed"
           >
-            {t('hero.subtitle')}
+            {t('subtitle')}
           </motion.p>
 
           {/* CTA Button */}
@@ -52,8 +64,12 @@ export default function HeroSection() {
             variants={fadeInUp}
             className="mb-12"
           >
-            <button className="bg-gradient-to-r from-green-500 to-green-400 text-black px-8 py-4 rounded-full text-lg font-semibold hover:from-green-400 hover:to-green-300 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-500/25 hover:shadow-green-400/40">
-              {t('hero.cta')}
+            <button 
+              onClick={handleCTAClick}
+              disabled={loading}
+              className="bg-gradient-to-r from-green-500 to-green-400 text-black px-8 py-4 rounded-full text-lg font-semibold hover:from-green-400 hover:to-green-300 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-500/25 hover:shadow-green-400/40 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Loading...' : user ? 'Go to Dashboard' : t('cta')}
             </button>
           </motion.div>
 
@@ -75,7 +91,7 @@ export default function HeroSection() {
                 ))}
               </div>
               <span className="text-lg font-semibold text-white">
-                {t('hero.rating')}
+                {t('rating')}
               </span>
             </motion.div>
 
@@ -84,7 +100,7 @@ export default function HeroSection() {
               variants={staggerItem}
               className="text-lg text-gray-300"
             >
-              {t('hero.userCount')}
+              {t('userCount')}
             </motion.div>
 
             {/* User avatars */}

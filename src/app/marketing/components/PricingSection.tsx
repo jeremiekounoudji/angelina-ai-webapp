@@ -2,42 +2,53 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useRouter } from 'next/navigation';
+import { useTranslationNamespace } from '@/contexts/TranslationContext';
+import { useSubscriptionContext } from '@/contexts/SubscriptionContext';
 import { fadeInUp, staggerContainer, staggerItem } from '@/utils/animations';
+import { calculateYearlyPrice, formatPrice, getDiscountLabel } from '@/utils/pricing';
+import { Spinner } from '@heroui/react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function PricingSection() {
-  const { t } = useTranslation();
+  const router = useRouter();
+  const { t } = useTranslationNamespace('marketing.pricing');
+  const { user, loading: authLoading } = useAuth();
+  const { plans, loading } = useSubscriptionContext();
   const [isAnnual, setIsAnnual] = useState(false);
 
-  const plans = [
-    {
-      id: 'starter',
-      name: t('pricing.plans.starter.name'),
-      price: t('pricing.plans.starter.price'),
-      period: t('pricing.plans.starter.period'),
-      features: t('pricing.plans.starter.features'),
-      cta: t('pricing.plans.starter.cta'),
-      isPopular: false
-    },
-    {
-      id: 'pro',
-      name: t('pricing.plans.pro.name'),
-      price: t('pricing.plans.pro.price'),
-      period: t('pricing.plans.pro.period'),
-      features: t('pricing.plans.pro.features'),
-      cta: t('pricing.plans.pro.cta'),
-      isPopular: true
-    },
-    {
-      id: 'business',
-      name: t('pricing.plans.business.name'),
-      price: t('pricing.plans.business.price'),
-      period: t('pricing.plans.business.period'),
-      features: t('pricing.plans.business.features'),
-      cta: t('pricing.plans.business.cta'),
-      isPopular: false
+  const handlePlanSelect = () => {
+    if (user) {
+      router.push('/dashboard/subscription');
+    } else {
+      router.push('/register');
     }
-  ];
+  };
+
+  // Show loading state or fallback plans
+  if (loading || plans.length === 0) {
+    return (
+      <section id="pricing" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              {t('title')}
+            </h2>
+            {
+              loading ? (
+                <Spinner color='warning' size="lg" className='mt-6'/>
+              ) : (
+                <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+                  Pricing plans will be available soon.
+                </p>
+              )
+            }
+           
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="pricing" className="py-20">
@@ -54,14 +65,14 @@ export default function PricingSection() {
             variants={fadeInUp}
             className="text-4xl md:text-5xl font-bold text-white mb-6"
           >
-            {t('pricing.title')}
+            {t('title')}
           </motion.h2>
 
           <motion.p
             variants={fadeInUp}
             className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto"
           >
-            {t('pricing.subtitle')}
+            {t('subtitle')}
           </motion.p>
 
           {/* Annual discount banner */}
@@ -70,7 +81,7 @@ export default function PricingSection() {
             className="mb-8"
           >
             <div className="inline-flex items-center bg-green-100 text-green-800 px-6 py-3 rounded-full">
-              <span className="font-semibold">{t('pricing.annualDiscount')}</span>
+              <span className="font-semibold">{t('annualDiscount')}</span>
             </div>
           </motion.div>
 
@@ -111,10 +122,10 @@ export default function PricingSection() {
                 key={plan.id}
                 variants={staggerItem}
                 className={`relative bg-gray-900/50 backdrop-blur-sm rounded-2xl shadow-lg border-2 p-8 ${
-                  plan.isPopular ? 'border-green-500/50 scale-105 shadow-green-500/20' : 'border-gray-700'
+                  plan.yearly_discount_percent > 10 ? 'border-green-500/50 scale-105 shadow-green-500/20' : 'border-gray-700'
                 }`}
               >
-                {plan.isPopular && (
+                {plan.yearly_discount_percent > 10 && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <span className="bg-gradient-to-r from-green-500 to-green-400 text-black px-4 py-1 rounded-full text-sm font-semibold shadow-lg shadow-green-500/25">
                       Populaire
@@ -124,25 +135,35 @@ export default function PricingSection() {
 
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-white mb-4">
-                    {plan.name}
+                    {plan.title}
                   </h3>
                   
                   <div className="mb-6">
                     <span className="text-4xl font-bold text-white">
-                      {plan.price}
+                      {isAnnual 
+                        ? formatPrice(calculateYearlyPrice(plan) / 12)
+                        : formatPrice(plan.price_monthly)
+                      }
                     </span>
                     <span className="text-gray-300 ml-1">
-                      {plan.period}
+                      /{isAnnual ? 'month' : 'month'}
                     </span>
+                    {isAnnual && plan.yearly_discount_percent > 0 && (
+                      <div className="mt-2">
+                        <span className="text-green-400 text-sm font-semibold">
+                          {getDiscountLabel(plan.yearly_discount_percent)} annually
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <ul className="space-y-3 mb-8 text-left">
-                    {Array.isArray(plan.features) ? plan.features.map((feature: string, featureIndex: number) => (
+                    {plan.features && plan.features.length > 0 ? plan.features.map((feature, featureIndex: number) => (
                       <li key={featureIndex} className="flex items-center">
                         <svg className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
-                        <span className="text-gray-300">{feature}</span>
+                        <span className="text-gray-300">{feature.feature}</span>
                       </li>
                     )) : (
                       <li className="text-gray-400 text-sm">Features loading...</li>
@@ -150,13 +171,15 @@ export default function PricingSection() {
                   </ul>
 
                   <button
-                    className={`w-full py-3 px-6 rounded-full font-semibold transition-all duration-300 ${
-                      plan.isPopular
+                    onClick={handlePlanSelect}
+                    disabled={authLoading}
+                    className={`w-full py-3 px-6 rounded-full font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
+                      plan.yearly_discount_percent > 10
                         ? 'bg-gradient-to-r from-green-500 to-green-400 text-black hover:from-green-400 hover:to-green-300 shadow-lg shadow-green-500/25 hover:shadow-green-400/40'
                         : 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-600 hover:border-green-500/50'
                     }`}
                   >
-                    {plan.cta}
+                    {authLoading ? 'Loading...' : user ? 'Manage Subscription' : (t('plans.starter.cta') || 'Get Started')}
                   </button>
                 </div>
               </motion.div>

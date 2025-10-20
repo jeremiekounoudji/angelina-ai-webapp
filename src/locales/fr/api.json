@@ -1,0 +1,156 @@
+{
+  "auth": {
+    "signup": {
+      "success": {
+        "accountCreated": "Compte créé avec succès",
+        "welcomeEmailSent": "Email de bienvenue envoyé dans votre boîte de réception",
+        "verificationEmailSent": "Email de vérification envoyé"
+      },
+      "errors": {
+        "emailExists": "Un compte avec cet email existe déjà",
+        "invalidEmailFormat": "Format d'email invalide",
+        "passwordTooWeak": "Le mot de passe est trop faible. Il doit contenir au moins 8 caractères avec majuscules, minuscules et chiffres",
+        "registrationFailed": "L'inscription a échoué. Veuillez réessayer",
+        "emailSendFailed": "Échec de l'envoi de l'email de bienvenue",
+        "invalidData": "Données d'inscription invalides fournies",
+        "serverError": "Erreur serveur lors de l'inscription"
+      }
+    },
+    "login": {
+      "success": {
+        "loginSuccessful": "Connexion réussie",
+        "welcomeBack": "Bon retour !"
+      },
+      "errors": {
+        "invalidCredentials": "Email ou mot de passe invalide",
+        "accountNotFound": "Aucun compte trouvé avec cet email",
+        "accountDisabled": "Votre compte a été désactivé",
+        "tooManyAttempts": "Trop de tentatives de connexion. Veuillez réessayer dans 15 minutes",
+        "emailNotVerified": "Veuillez vérifier votre email avant de vous connecter"
+      }
+    },
+    "forgotPassword": {
+      "success": {
+        "resetEmailSent": "Email de réinitialisation du mot de passe envoyé avec succès",
+        "passwordReset": "Mot de passe réinitialisé avec succès"
+      },
+      "errors": {
+        "emailNotFound": "Aucun compte trouvé avec cette adresse email",
+        "resetFailed": "Échec de l'envoi de l'email de réinitialisation",
+        "invalidResetToken": "Token de réinitialisation invalide ou expiré"
+      }
+    }
+  },
+  "payment": {
+    "fedapay": {
+      "success": {
+        "paymentInitiated": "Paiement initié avec succès",
+        "paymentCompleted": "Paiement terminé avec succès",
+        "subscriptionUpdated": "Abonnement mis à jour après paiement réussi",
+        "invoiceGenerated": "Facture générée avec succès"
+      },
+      "errors": {
+        "paymentFailed": "Échec du traitement du paiement",
+        "invalidPaymentData": "Données de paiement invalides fournies",
+        "paymentProviderError": "Erreur du fournisseur de paiement. Veuillez réessayer",
+        "insufficientFunds": "Fonds insuffisants dans votre compte",
+        "cardDeclined": "Votre carte a été refusée",
+        "cardExpired": "Votre carte a expiré",
+        "invalidCard": "Informations de carte invalides",
+        "paymentTimeout": "Délai d'attente de la demande de paiement dépassé",
+        "currencyNotSupported": "Devise non supportée",
+        "amountTooLow": "Le montant du paiement est trop faible",
+        "amountTooHigh": "Le montant du paiement dépasse la limite"
+      }
+    },
+    "status": {
+      "success": {
+        "statusUpdated": "Statut du paiement mis à jour avec succès",
+        "paymentConfirmed": "Paiement confirmé",
+        "refundProcessed": "Remboursement traité avec succès"
+      },
+      "errors": {
+        "paymentNotFound": "Enregistrement de paiement introuvable",
+        "statusUpdateFailed": "Échec de la mise à jour du statut du paiement",
+        "invalidStatus": "Statut de paiement invalide",
+        "refundFailed": "Échec du traitement du remboursement"
+      }
+    }
+  },
+  "products": {
+    "success": {
+      "productCreated": "Produit créé avec succès",
+      "productUpdated": "Produit mis à jour avec succès",
+      "productDeleted": "Produit supprimé avec succès",
+      "stockUpdated": "Stock du produit mis à jour avec succès"
+    },
+    "errors": {
+      "productNotFound": "Produit introuvable",
+      "createFailed": "Échec de la création du produit",
+      "updateFailed": "Échec de la mise à jour du produit",
+      "deleteFailed": "Échec de la suppression du produit",
+      "invalidProductData": "Données de produit invalides",
+      "duplicateProduct": "Un produit avec ce nom existe déjà",
+      "stockUpdateFailed": "Échec de la mise à jour du stock du produit"
+    }
+  },
+  "company": {
+    "success": {
+      "companyUpdated": "Informations de l'entreprise mises à jour avec succès",
+      "logoUploaded": "Logo de l'entreprise téléchargé avec succès"
+    },
+    "errors": {
+      "companyNotFound": "Entreprise introuvable",
+      "updateFailed": "Échec de la mise à jour des informations de l'entreprise",
+      "logoUploadFailed": "Échec du téléchargement du logo de l'entreprise",
+      "invalidCompanyData": "Données d'entreprise invalides"
+    }
+  },
+  "users": {
+    "success": {
+      "userCreated": "Utilisateur créé avec succès",
+      "userUpdated": "Utilisateur mis à jour avec succès",
+      "userDeleted": "Utilisateur supprimé avec succès",
+      "roleUpdated": "Rôle de l'utilisateur mis à jour avec succès"
+    },
+    "errors": {
+      "userNotFound": "Utilisateur introuvable",
+      "createFailed": "Échec de la création de l'utilisateur",
+      "updateFailed": "Échec de la mise à jour de l'utilisateur",
+      "deleteFailed": "Échec de la suppression de l'utilisateur",
+      "emailExists": "Un utilisateur avec cet email existe déjà",
+      "invalidUserData": "Données utilisateur invalides",
+      "insufficientPermissions": "Permissions insuffisantes pour effectuer cette action"
+    }
+  },
+  "subscription": {
+    "success": {
+      "subscriptionCreated": "Abonnement créé avec succès",
+      "subscriptionUpdated": "Abonnement mis à jour avec succès",
+      "subscriptionCancelled": "Abonnement annulé avec succès",
+      "planChanged": "Plan d'abonnement changé avec succès"
+    },
+    "errors": {
+      "subscriptionNotFound": "Abonnement introuvable",
+      "createFailed": "Échec de la création de l'abonnement",
+      "updateFailed": "Échec de la mise à jour de l'abonnement",
+      "cancellationFailed": "Échec de l'annulation de l'abonnement",
+      "planChangeFailed": "Échec du changement de plan d'abonnement",
+      "invalidSubscriptionData": "Données d'abonnement invalides"
+    }
+  },
+  "general": {
+    "errors": {
+      "unauthorized": "Accès non autorisé",
+      "forbidden": "Accès interdit",
+      "notFound": "Ressource introuvable",
+      "methodNotAllowed": "Méthode non autorisée",
+      "validationError": "Erreur de validation",
+      "serverError": "Erreur interne du serveur",
+      "serviceUnavailable": "Service temporairement indisponible",
+      "rateLimitExceeded": "Limite de taux dépassée. Veuillez réessayer plus tard",
+      "invalidRequest": "Format de requête invalide",
+      "missingParameters": "Paramètres requis manquants"
+    }
+  }
+}

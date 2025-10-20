@@ -1,0 +1,111 @@
+{
+  "products": {
+    "success": {
+      "created": "Produit créé avec succès",
+      "updated": "Produit mis à jour avec succès",
+      "deleted": "Produit supprimé avec succès",
+      "stockUpdated": "Stock mis à jour avec succès",
+      "imageUploaded": "Image du produit téléchargée avec succès"
+    },
+    "errors": {
+      "createFailed": "Échec de la création du produit",
+      "updateFailed": "Échec de la mise à jour du produit",
+      "deleteFailed": "Échec de la suppression du produit",
+      "loadFailed": "Échec du chargement des produits",
+      "stockUpdateFailed": "Échec de la mise à jour du stock",
+      "imageUploadFailed": "Échec du téléchargement de l'image du produit",
+      "invalidData": "Données du produit invalides",
+      "duplicateName": "Un produit avec ce nom existe déjà",
+      "insufficientStock": "Stock insuffisant disponible"
+    }
+  },
+  "subscriptions": {
+    "success": {
+      "updated": "Abonnement mis à jour avec succès",
+      "paymentProcessed": "Paiement traité avec succès",
+      "planChanged": "Plan changé avec succès",
+      "cancelled": "Abonnement annulé avec succès",
+      "reactivated": "Abonnement réactivé avec succès"
+    },
+    "errors": {
+      "updateFailed": "Échec de la mise à jour de l'abonnement",
+      "paymentFailed": "Échec du paiement",
+      "invalidPaymentMethod": "Mode de paiement invalide",
+      "planChangeFailed": "Échec du changement de plan",
+      "cancellationFailed": "Échec de l'annulation de l'abonnement",
+      "reactivationFailed": "Échec de la réactivation de l'abonnement",
+      "insufficientFunds": "Fonds insuffisants",
+      "cardExpired": "La carte de crédit a expiré",
+      "cardDeclined": "La carte de crédit a été refusée"
+    }
+  },
+  "planLimits": {
+    "errors": {
+      "limitExceeded": "Limite du plan dépassée",
+      "upgradeRequired": "Mise à niveau requise pour accéder à cette fonctionnalité",
+      "featureNotAvailable": "Cette fonctionnalité n'est pas disponible dans votre plan actuel",
+      "orderLimitReached": "Limite mensuelle de commandes atteinte",
+      "storageLimitReached": "Limite de stockage atteinte",
+      "userLimitReached": "Limite d'utilisateurs atteinte pour votre plan"
+    },
+    "warnings": {
+      "approachingLimit": "Vous approchez de la limite de votre plan",
+      "limitWarning": "Vous avez utilisé {percentage}% de la limite de votre plan"
+    }
+  },
+  "metrics": {
+    "errors": {
+      "loadFailed": "Échec du chargement des métriques",
+      "dataUnavailable": "Les données de métriques sont actuellement indisponibles",
+      "calculationError": "Erreur de calcul des métriques",
+      "invalidDateRange": "Plage de dates sélectionnée invalide"
+    }
+  },
+  "company": {
+    "success": {
+      "updated": "Informations de l'entreprise mises à jour avec succès",
+      "logoUploaded": "Logo de l'entreprise téléchargé avec succès",
+      "settingsSaved": "Paramètres de l'entreprise enregistrés avec succès"
+    },
+    "errors": {
+      "updateFailed": "Échec de la mise à jour des informations de l'entreprise",
+      "logoUploadFailed": "Échec du téléchargement du logo de l'entreprise",
+      "settingsSaveFailed": "Échec de l'enregistrement des paramètres de l'entreprise",
+      "invalidCompanyData": "Données d'entreprise invalides fournies"
+    }
+  },
+  "users": {
+    "success": {
+      "created": "Utilisateur créé avec succès",
+      "updated": "Utilisateur mis à jour avec succès",
+      "deleted": "Utilisateur supprimé avec succès",
+      "roleChanged": "Rôle de l'utilisateur changé avec succès",
+      "statusChanged": "Statut de l'utilisateur changé avec succès"
+    },
+    "errors": {
+      "createFailed": "Échec de la création de l'utilisateur",
+      "updateFailed": "Échec de la mise à jour de l'utilisateur",
+      "deleteFailed": "Échec de la suppression de l'utilisateur",
+      "roleChangeFailed": "Échec du changement de rôle de l'utilisateur",
+      "statusChangeFailed": "Échec du changement de statut de l'utilisateur",
+      "emailExists": "Un utilisateur avec cet email existe déjà",
+      "invalidUserData": "Données utilisateur invalides fournies"
+    }
+  },
+  "auth": {
+    "success": {
+      "loginSuccess": "Connexion réussie",
+      "logoutSuccess": "Déconnexion réussie",
+      "passwordChanged": "Mot de passe changé avec succès",
+      "profileUpdated": "Profil mis à jour avec succès"
+    },
+    "errors": {
+      "loginFailed": "Échec de la connexion",
+      "logoutFailed": "Échec de la déconnexion",
+      "passwordChangeFailed": "Échec du changement de mot de passe",
+      "profileUpdateFailed": "Échec de la mise à jour du profil",
+      "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+      "accessDenied": "Accès refusé"
+    }
+  }
+}

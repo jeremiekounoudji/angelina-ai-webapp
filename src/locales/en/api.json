@@ -1,0 +1,156 @@
+{
+  "auth": {
+    "signup": {
+      "success": {
+        "accountCreated": "Account created successfully",
+        "welcomeEmailSent": "Welcome email sent to your inbox",
+        "verificationEmailSent": "Verification email sent"
+      },
+      "errors": {
+        "emailExists": "An account with this email already exists",
+        "invalidEmailFormat": "Invalid email format",
+        "passwordTooWeak": "Password is too weak. Must be at least 8 characters with uppercase, lowercase, and numbers",
+        "registrationFailed": "Registration failed. Please try again",
+        "emailSendFailed": "Failed to send welcome email",
+        "invalidData": "Invalid registration data provided",
+        "serverError": "Server error during registration"
+      }
+    },
+    "login": {
+      "success": {
+        "loginSuccessful": "Login successful",
+        "welcomeBack": "Welcome back!"
+      },
+      "errors": {
+        "invalidCredentials": "Invalid email or password",
+        "accountNotFound": "No account found with this email",
+        "accountDisabled": "Your account has been disabled",
+        "tooManyAttempts": "Too many login attempts. Please try again in 15 minutes",
+        "emailNotVerified": "Please verify your email before logging in"
+      }
+    },
+    "forgotPassword": {
+      "success": {
+        "resetEmailSent": "Password reset email sent successfully",
+        "passwordReset": "Password reset successfully"
+      },
+      "errors": {
+        "emailNotFound": "No account found with this email address",
+        "resetFailed": "Failed to send reset email",
+        "invalidResetToken": "Invalid or expired reset token"
+      }
+    }
+  },
+  "payment": {
+    "fedapay": {
+      "success": {
+        "paymentInitiated": "Payment initiated successfully",
+        "paymentCompleted": "Payment completed successfully",
+        "subscriptionUpdated": "Subscription updated after successful payment",
+        "invoiceGenerated": "Invoice generated successfully"
+      },
+      "errors": {
+        "paymentFailed": "Payment processing failed",
+        "invalidPaymentData": "Invalid payment data provided",
+        "paymentProviderError": "Payment provider error. Please try again",
+        "insufficientFunds": "Insufficient funds in your account",
+        "cardDeclined": "Your card was declined",
+        "cardExpired": "Your card has expired",
+        "invalidCard": "Invalid card information",
+        "paymentTimeout": "Payment request timed out",
+        "currencyNotSupported": "Currency not supported",
+        "amountTooLow": "Payment amount is too low",
+        "amountTooHigh": "Payment amount exceeds limit"
+      }
+    },
+    "status": {
+      "success": {
+        "statusUpdated": "Payment status updated successfully",
+        "paymentConfirmed": "Payment confirmed",
+        "refundProcessed": "Refund processed successfully"
+      },
+      "errors": {
+        "paymentNotFound": "Payment record not found",
+        "statusUpdateFailed": "Failed to update payment status",
+        "invalidStatus": "Invalid payment status",
+        "refundFailed": "Refund processing failed"
+      }
+    }
+  },
+  "products": {
+    "success": {
+      "productCreated": "Product created successfully",
+      "productUpdated": "Product updated successfully",
+      "productDeleted": "Product deleted successfully",
+      "stockUpdated": "Product stock updated successfully"
+    },
+    "errors": {
+      "productNotFound": "Product not found",
+      "createFailed": "Failed to create product",
+      "updateFailed": "Failed to update product",
+      "deleteFailed": "Failed to delete product",
+      "invalidProductData": "Invalid product data",
+      "duplicateProduct": "Product with this name already exists",
+      "stockUpdateFailed": "Failed to update product stock"
+    }
+  },
+  "company": {
+    "success": {
+      "companyUpdated": "Company information updated successfully",
+      "logoUploaded": "Company logo uploaded successfully"
+    },
+    "errors": {
+      "companyNotFound": "Company not found",
+      "updateFailed": "Failed to update company information",
+      "logoUploadFailed": "Failed to upload company logo",
+      "invalidCompanyData": "Invalid company data"
+    }
+  },
+  "users": {
+    "success": {
+      "userCreated": "User created successfully",
+      "userUpdated": "User updated successfully",
+      "userDeleted": "User deleted successfully",
+      "roleUpdated": "User role updated successfully"
+    },
+    "errors": {
+      "userNotFound": "User not found",
+      "createFailed": "Failed to create user",
+      "updateFailed": "Failed to update user",
+      "deleteFailed": "Failed to delete user",
+      "emailExists": "User with this email already exists",
+      "invalidUserData": "Invalid user data",
+      "insufficientPermissions": "Insufficient permissions to perform this action"
+    }
+  },
+  "subscription": {
+    "success": {
+      "subscriptionCreated": "Subscription created successfully",
+      "subscriptionUpdated": "Subscription updated successfully",
+      "subscriptionCancelled": "Subscription cancelled successfully",
+      "planChanged": "Subscription plan changed successfully"
+    },
+    "errors": {
+      "subscriptionNotFound": "Subscription not found",
+      "createFailed": "Failed to create subscription",
+      "updateFailed": "Failed to update subscription",
+      "cancellationFailed": "Failed to cancel subscription",
+      "planChangeFailed": "Failed to change subscription plan",
+      "invalidSubscriptionData": "Invalid subscription data"
+    }
+  },
+  "general": {
+    "errors": {
+      "unauthorized": "Unauthorized access",
+      "forbidden": "Access forbidden",
+      "notFound": "Resource not found",
+      "methodNotAllowed": "Method not allowed",
+      "validationError": "Validation error",
+      "serverError": "Internal server error",
+      "serviceUnavailable": "Service temporarily unavailable",
+      "rateLimitExceeded": "Rate limit exceeded. Please try again later",
+      "invalidRequest": "Invalid request format",
+      "missingParameters": "Required parameters missing"
+    }
+  }
+}

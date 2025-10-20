@@ -1,0 +1,111 @@
+{
+  "products": {
+    "success": {
+      "created": "Product created successfully",
+      "updated": "Product updated successfully",
+      "deleted": "Product deleted successfully",
+      "stockUpdated": "Stock updated successfully",
+      "imageUploaded": "Product image uploaded successfully"
+    },
+    "errors": {
+      "createFailed": "Failed to create product",
+      "updateFailed": "Failed to update product",
+      "deleteFailed": "Failed to delete product",
+      "loadFailed": "Failed to load products",
+      "stockUpdateFailed": "Failed to update stock",
+      "imageUploadFailed": "Failed to upload product image",
+      "invalidData": "Invalid product data",
+      "duplicateName": "A product with this name already exists",
+      "insufficientStock": "Insufficient stock available"
+    }
+  },
+  "subscriptions": {
+    "success": {
+      "updated": "Subscription updated successfully",
+      "paymentProcessed": "Payment processed successfully",
+      "planChanged": "Plan changed successfully",
+      "cancelled": "Subscription cancelled successfully",
+      "reactivated": "Subscription reactivated successfully"
+    },
+    "errors": {
+      "updateFailed": "Failed to update subscription",
+      "paymentFailed": "Payment failed",
+      "invalidPaymentMethod": "Invalid payment method",
+      "planChangeFailed": "Failed to change plan",
+      "cancellationFailed": "Failed to cancel subscription",
+      "reactivationFailed": "Failed to reactivate subscription",
+      "insufficientFunds": "Insufficient funds",
+      "cardExpired": "Credit card has expired",
+      "cardDeclined": "Credit card was declined"
+    }
+  },
+  "planLimits": {
+    "errors": {
+      "limitExceeded": "Plan limit exceeded",
+      "upgradeRequired": "Upgrade required to access this feature",
+      "featureNotAvailable": "This feature is not available in your current plan",
+      "orderLimitReached": "Monthly order limit reached",
+      "storageLimitReached": "Storage limit reached",
+      "userLimitReached": "User limit reached for your plan"
+    },
+    "warnings": {
+      "approachingLimit": "You are approaching your plan limit",
+      "limitWarning": "You have used {percentage}% of your plan limit"
+    }
+  },
+  "metrics": {
+    "errors": {
+      "loadFailed": "Failed to load metrics",
+      "dataUnavailable": "Metrics data is currently unavailable",
+      "calculationError": "Error calculating metrics",
+      "invalidDateRange": "Invalid date range selected"
+    }
+  },
+  "company": {
+    "success": {
+      "updated": "Company information updated successfully",
+      "logoUploaded": "Company logo uploaded successfully",
+      "settingsSaved": "Company settings saved successfully"
+    },
+    "errors": {
+      "updateFailed": "Failed to update company information",
+      "logoUploadFailed": "Failed to upload company logo",
+      "settingsSaveFailed": "Failed to save company settings",
+      "invalidCompanyData": "Invalid company data provided"
+    }
+  },
+  "users": {
+    "success": {
+      "created": "User created successfully",
+      "updated": "User updated successfully",
+      "deleted": "User deleted successfully",
+      "roleChanged": "User role changed successfully",
+      "statusChanged": "User status changed successfully"
+    },
+    "errors": {
+      "createFailed": "Failed to create user",
+      "updateFailed": "Failed to update user",
+      "deleteFailed": "Failed to delete user",
+      "roleChangeFailed": "Failed to change user role",
+      "statusChangeFailed": "Failed to change user status",
+      "emailExists": "A user with this email already exists",
+      "invalidUserData": "Invalid user data provided"
+    }
+  },
+  "auth": {
+    "success": {
+      "loginSuccess": "Login successful",
+      "logoutSuccess": "Logout successful",
+      "passwordChanged": "Password changed successfully",
+      "profileUpdated": "Profile updated successfully"
+    },
+    "errors": {
+      "loginFailed": "Login failed",
+      "logoutFailed": "Logout failed",
+      "passwordChangeFailed": "Failed to change password",
+      "profileUpdateFailed": "Failed to update profile",
+      "sessionExpired": "Your session has expired. Please login again.",
+      "accessDenied": "Access denied"
+    }
+  }
+}

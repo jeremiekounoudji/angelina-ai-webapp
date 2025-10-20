@@ -1,0 +1,593 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "company": "Company",
+    "products": "Products",
+    "users": "Users",
+    "subscription": "Subscription",
+    "settings": "Settings",
+    "support": "Support",
+    "logout": "Logout"
+  },
+  "header": {
+    "welcome": "Welcome back",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "overview": {
+    "title": "Dashboard Overview",
+    "subtitle": "Here's what's happening with your restaurant today",
+    "metrics": {
+      "totalOrders": "Total Orders",
+      "revenue": "Revenue",
+      "customers": "Customers",
+      "products": "Products",
+      "growth": "Growth",
+      "thisMonth": "This month",
+      "lastMonth": "Last month",
+      "vsLastMonth": "vs last month"
+    }
+  },
+  "company": {
+    "title": "Company Management",
+    "subtitle": "Manage your restaurant information and settings",
+    "form": {
+      "name": "Restaurant Name",
+      "namePlaceholder": "Enter restaurant name",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your restaurant",
+      "address": "Address",
+      "addressPlaceholder": "Enter restaurant address",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address",
+      "website": "Website",
+      "websitePlaceholder": "Enter website URL",
+      "hours": "Operating Hours",
+      "hoursPlaceholder": "e.g., Mon-Sun: 9AM-10PM",
+      "cuisine": "Cuisine Type",
+      "cuisinePlaceholder": "e.g., Italian, Chinese, etc.",
+      "logo": "Logo",
+      "uploadLogo": "Upload Logo"
+    },
+    "metrics": {
+      "totalRevenue": "Total Revenue",
+      "monthlyOrders": "Monthly Orders",
+      "activeProducts": "Active Products",
+      "customerSatisfaction": "Customer Satisfaction"
+    },
+    "actions": {
+      "edit": "Edit Company",
+      "save": "Save Changes",
+      "cancel": "Cancel"
+    },
+    "success": {
+      "updated": "Company information updated successfully",
+      "logoUploaded": "Logo uploaded successfully"
+    },
+    "errors": {
+      "updateFailed": "Failed to update company information",
+      "logoUploadFailed": "Failed to upload logo"
+    }
+  },
+  "products": {
+    "title": "Product Management",
+    "subtitle": "Manage your menu items and inventory",
+    "actions": {
+      "addProduct": "Add Product",
+      "editProduct": "Edit Product",
+      "deleteProduct": "Delete Product",
+      "viewDetails": "View Details"
+    },
+    "table": {
+      "name": "Name",
+      "category": "Category",
+      "price": "Price",
+      "stock": "Stock",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Product Name",
+      "namePlaceholder": "Enter product name",
+      "nameRequired": "Product name is required",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe the product",
+      "category": "Category",
+      "categoryPlaceholder": "Select category",
+      "price": "Price",
+      "pricePlaceholder": "Enter price",
+      "priceRequired": "Price must be positive",
+      "stock": "Stock Quantity",
+      "stockPlaceholder": "Enter stock quantity",
+      "stockRequired": "Stock quantity must be positive",
+      "image": "Product Image",
+      "uploadImage": "Upload Image",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "emailInvalid": "Invalid email address"
+    },
+    "categories": {
+      "appetizers": "Appetizers",
+      "mainCourse": "Main Course",
+      "desserts": "Desserts",
+      "beverages": "Beverages",
+      "sides": "Sides"
+    },
+    "status": {
+      "inStock": "In Stock",
+      "lowStock": "Low Stock",
+      "outOfStock": "Out of Stock"
+    },
+    "success": {
+      "created": "Product created successfully",
+      "updated": "Product updated successfully",
+      "deleted": "Product deleted successfully"
+    },
+    "errors": {
+      "createFailed": "Failed to create product",
+      "updateFailed": "Failed to update product",
+      "deleteFailed": "Failed to delete product",
+      "loadFailed": "Failed to load products"
+    },
+    "empty": {
+      "title": "No products yet",
+      "description": "Start building your product catalog by adding your first product."
+    }
+  },
+  "users": {
+    "title": "User Management",
+    "subtitle": "Manage your team members and their permissions",
+    "actions": {
+      "addUser": "Add User",
+      "editUser": "Edit User",
+      "deleteUser": "Delete User",
+      "viewProfile": "View Profile"
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "lastLogin": "Last Login",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Admin",
+      "manager": "Manager",
+      "staff": "Staff"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending"
+    },
+    "empty": {
+      "title": "No team members yet",
+      "description": "Start building your team by adding your first team member."
+    }
+  },
+  "subscription": {
+    "title": "Subscription & Billing",
+    "subtitle": "Manage your subscription plan and billing information",
+    "currentPlan": {
+      "title": "Current Plan",
+      "plan": "Plan",
+      "status": "Status",
+      "nextBilling": "Next Billing",
+      "amount": "Amount"
+    },
+    "usage": {
+      "title": "Usage This Month",
+      "orders": "Orders",
+      "storage": "Storage",
+      "apiCalls": "API Calls"
+    },
+    "paymentHistory": {
+      "title": "Payment History",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "invoice": "Invoice"
+    },
+    "actions": {
+      "upgrade": "Upgrade Plan",
+      "downgrade": "Downgrade Plan",
+      "cancelSubscription": "Cancel Subscription",
+      "updatePayment": "Update Payment Method"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and application preferences",
+    "sections": {
+      "profile": "Profile Settings",
+      "notifications": "Notification Preferences",
+      "security": "Security Settings",
+      "integrations": "Integrations",
+      "preferences": "General Preferences"
+    },
+    "profile": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "timezone": "Timezone",
+      "language": "Language"
+    },
+    "notifications": {
+      "emailNotifications": "Email Notifications",
+      "pushNotifications": "Push Notifications",
+      "orderAlerts": "Order Alerts",
+      "stockAlerts": "Stock Alerts",
+      "paymentAlerts": "Payment Alerts"
+    },
+    "security": {
+      "changePassword": "Change Password",
+      "twoFactorAuth": "Two-Factor Authentication",
+      "loginHistory": "Login History",
+      "activeSessions": "Active Sessions"
+    },
+    "actions": {
+      "edit": "Edit Details",
+      "contact": "Contact Support",
+      "delete": "Delete Account",
+      "cancel": "Cancel",
+      "deleting": "Deleting..."
+    },
+    "support": {
+      "description": "Get help with your account or report issues"
+    },
+    "danger": {
+      "description": "Permanently delete your company account and all associated data",
+      "confirmTitle": "Delete Account",
+      "confirmMessage": "Are you sure you want to delete your company account? This action cannot be undone and will permanently delete all your data."
+    }
+  },
+  "subscription": {
+    "title": "Subscription & Billing",
+    "subtitle": "Manage your subscription plan and billing information",
+    "loading": "Loading subscription data...",
+    "error": "Error Loading Data",
+    "currentPlan": {
+      "title": "Current Subscription",
+      "plan": "Plan",
+      "status": "Status",
+      "nextBilling": "Next Billing",
+      "amount": "Amount",
+      "noActivePlan": "No active plan"
+    },
+    "usage": {
+      "title": "Usage This Month",
+      "orders": "Orders",
+      "storage": "Storage",
+      "apiCalls": "API Calls"
+    },
+    "paymentHistory": {
+      "title": "Payment History",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "invoice": "Invoice"
+    },
+    "actions": {
+      "upgrade": "Upgrade Plan",
+      "downgrade": "Downgrade Plan",
+      "cancelSubscription": "Cancel Subscription",
+      "updatePayment": "Update Payment Method"
+    },
+    "billing": {
+      "monthlyCost": "Monthly Cost",
+      "status": "Status",
+      "trialMessage": "Your trial period is active. Upgrade to a paid plan to continue using all features.",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "savePercent": "Save up to 20%",
+      "yearly": "Yearly"
+    },
+    "tokens": {
+      "usage": "Token Usage",
+      "used": "Tokens Used",
+      "remaining": "Tokens Remaining",
+      "allowance": "Monthly Allowance",
+      "purchased": "Purchased",
+      "buyMore": "Buy More Tokens",
+      "loadingData": "Loading usage data...",
+      "usageProgress": "Usage Progress"
+    },
+    "plans": {
+      "choose": "Choose Your Plan",
+      "description": "Select the plan that best fits your business needs",
+      "current": "Current Plan",
+      "select": "Select Plan",
+      "mostPopular": "Most Popular",
+      "perMonth": "/month",
+      "annually": "annually"
+    }
+  },
+  "company": {
+    "title": "Company Management",
+    "subtitle": "Manage your restaurant information and settings",
+    "form": {
+      "name": "Restaurant Name",
+      "namePlaceholder": "Enter restaurant name",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your restaurant",
+      "address": "Address",
+      "addressPlaceholder": "Enter restaurant address",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address",
+      "website": "Website",
+      "websitePlaceholder": "Enter website URL",
+      "hours": "Operating Hours",
+      "hoursPlaceholder": "e.g., Mon-Sun: 9AM-10PM",
+      "cuisine": "Cuisine Type",
+      "cuisinePlaceholder": "e.g., Italian, Chinese, etc.",
+      "logo": "Logo",
+      "uploadLogo": "Upload Logo",
+      "status": "Status"
+    },
+    "metrics": {
+      "title": "Company Metrics",
+      "totalRevenue": "Total Revenue",
+      "monthlyOrders": "Monthly Orders",
+      "activeProducts": "Active Products",
+      "customerSatisfaction": "Customer Satisfaction",
+      "tokensUsed": "Tokens Used",
+      "productsCreated": "Products Created",
+      "usersCreated": "Users Created",
+      "messagesTotal": "Messages Total"
+    },
+    "actions": {
+      "edit": "Edit Company",
+      "save": "Save Changes",
+      "cancel": "Cancel"
+    },
+    "success": {
+      "updated": "Company information updated successfully",
+      "logoUploaded": "Logo uploaded successfully"
+    },
+    "errors": {
+      "updateFailed": "Failed to update company information",
+      "logoUploadFailed": "Failed to upload logo"
+    },
+    "info": {
+      "companyId": "Company ID",
+      "subscription": "Subscription",
+      "created": "Created"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and application preferences",
+    "sections": {
+      "profile": "Profile Settings",
+      "notifications": "Notification Preferences",
+      "security": "Security Settings",
+      "integrations": "Integrations",
+      "preferences": "General Preferences",
+      "support": "Support",
+      "danger": "Danger Zone"
+    },
+    "profile": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "timezone": "Timezone",
+      "language": "Language",
+      "description": "Manage your profile information and account settings"
+    },
+    "notifications": {
+      "emailNotifications": "Email Notifications",
+      "pushNotifications": "Push Notifications",
+      "orderAlerts": "Order Alerts",
+      "stockAlerts": "Stock Alerts",
+      "paymentAlerts": "Payment Alerts"
+    },
+    "security": {
+      "changePassword": "Change Password",
+      "twoFactorAuth": "Two-Factor Authentication",
+      "loginHistory": "Login History",
+      "activeSessions": "Active Sessions"
+    },
+    "actions": {
+      "edit": "Edit Details",
+      "contact": "Contact Support",
+      "delete": "Delete Account",
+      "cancel": "Cancel",
+      "deleting": "Deleting..."
+    },
+    "support": {
+      "description": "Get help with your account or report issues"
+    },
+    "danger": {
+      "description": "Permanently delete your company account and all associated data",
+      "confirmTitle": "Delete Account",
+      "confirmMessage": "Are you sure you want to delete your company account? This action cannot be undone and will permanently delete all your data."
+    }
+  },
+  "payment": {
+    "modal": {
+      "title": "Complete Payment",
+      "totalAmount": "Total Amount:",
+      "provider": "Mobile Money Provider",
+      "selectProvider": "Select your mobile money provider",
+      "phoneNumber": "Phone Number",
+      "enterPhone": "Enter your mobile money number",
+      "phoneDescription": "Enter the phone number linked to your mobile money account",
+      "note": "Note:",
+      "instructions": "You will receive a payment prompt on your phone. Please approve the transaction to complete your subscription.",
+      "cancel": "Cancel",
+      "initialize": "Initialize Payment",
+      "close": "Close",
+      "tryAgain": "Try Again"
+    },
+    "status": {
+      "initializing": "Initializing Payment...",
+      "initializingDescription": "Setting up your payment request...",
+      "initialized": "Payment Initialized!",
+      "initializedDescription": "Please check your phone and confirm the payment request",
+      "initializedInstructions": "You should receive a payment prompt on your mobile device. Please approve it to complete your subscription.",
+      "waiting": "Waiting for Confirmation...",
+      "waitingDescription": "We're waiting for you to confirm the payment on your phone",
+      "waitingInstructions": "Please check your phone and approve the payment request from your mobile money provider.",
+      "confirmed": "Payment Confirmed!",
+      "confirmedDescription": "Your subscription has been activated successfully. Refreshing page...",
+      "failed": "Payment Failed"
+    },
+    "history": {
+      "title": "Payment History",
+      "noPayments": "No payments found",
+      "noPaymentsDescription": "Your payment history will appear here once you make a payment",
+      "total": "total",
+      "payment": "payment",
+      "payments": "payments",
+      "unknownPlan": "Unknown Plan",
+      "completed": "Completed",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "billing": {
+      "saveDiscount": "Save {percent}% with yearly billing"
+    }
+  },
+  "users": {
+    "title": "User Management",
+    "subtitle": "Manage your team members and their permissions",
+    "actions": {
+      "addUser": "Add User",
+      "editUser": "Edit User",
+      "deleteUser": "Delete User",
+      "viewProfile": "View Profile"
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "lastLogin": "Last Login",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Admin",
+      "manager": "Manager",
+      "staff": "Staff",
+      "customer": "Customer"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending"
+    },
+    "empty": {
+      "title": "No team members yet",
+      "description": "Start building your team by adding your first team member."
+    },
+    "form": {
+      "addTitle": "Add New User",
+      "editTitle": "Edit User",
+      "fullName": "Full Name",
+      "enterFullName": "Enter full name",
+      "email": "Email",
+      "enterEmail": "Enter email address",
+      "phone": "Phone Number",
+      "enterPhone": "Enter phone number",
+      "role": "Role",
+      "selectRole": "Select user role",
+      "avatar": "Click the camera icon to select an avatar",
+      "cancel": "Cancel",
+      "addUser": "Add User",
+      "saveChanges": "Save Changes",
+      "uploading": "Uploading..."
+    },
+    "info": {
+      "noName": "No name",
+      "phone": "Phone",
+      "joined": "Joined",
+      "users": "users"
+    },
+    "limits": {
+      "reached": "User Limit Reached",
+      "message": "You have reached the maximum number of users for your current plan. Please upgrade your plan to add more users."
+    }
+  },
+  "products": {
+    "title": "Product Management",
+    "subtitle": "Manage your menu items and inventory",
+    "actions": {
+      "addProduct": "Add Product",
+      "editProduct": "Edit Product",
+      "deleteProduct": "Delete Product",
+      "viewDetails": "View Details"
+    },
+    "table": {
+      "name": "Name",
+      "category": "Category",
+      "price": "Price",
+      "stock": "Stock",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Product Name",
+      "namePlaceholder": "Enter product name",
+      "nameRequired": "Product name is required",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe the product",
+      "category": "Category",
+      "categoryPlaceholder": "Select category",
+      "price": "Price",
+      "pricePlaceholder": "Enter price",
+      "priceRequired": "Price must be positive",
+      "stock": "Stock Quantity",
+      "stockPlaceholder": "Enter stock quantity",
+      "stockRequired": "Stock quantity must be positive",
+      "image": "Product Image",
+      "uploadImage": "Upload Image",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "emailInvalid": "Invalid email address"
+    },
+    "categories": {
+      "appetizers": "Appetizers",
+      "mainCourse": "Main Course",
+      "desserts": "Desserts",
+      "beverages": "Beverages",
+      "sides": "Sides"
+    },
+    "status": {
+      "inStock": "In Stock",
+      "lowStock": "Low Stock",
+      "outOfStock": "Out of Stock"
+    },
+    "success": {
+      "created": "Product created successfully",
+      "updated": "Product updated successfully",
+      "deleted": "Product deleted successfully"
+    },
+    "errors": {
+      "createFailed": "Failed to create product",
+      "updateFailed": "Failed to update product",
+      "deleteFailed": "Failed to delete product",
+      "loadFailed": "Failed to load products"
+    },
+    "empty": {
+      "title": "No products yet",
+      "description": "Start building your product catalog by adding your first product."
+    },
+    "info": {
+      "price": "Price",
+      "stock": "Stock",
+      "units": "units",
+      "added": "Added"
+    }
+  }
+}

@@ -2,33 +2,33 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslationNamespace } from '@/contexts/TranslationContext';
 import { fadeInUp, staggerContainer, staggerItem } from '@/utils/animations';
 
 export default function FAQSection() {
-  const { t } = useTranslation();
+  const { t } = useTranslationNamespace('marketing.faq');
   const [openItems, setOpenItems] = useState<Set<string>>(new Set());
 
   const faqItems = [
     {
       id: 'orders',
-      question: t('faq.items.orders.question'),
-      answer: t('faq.items.orders.answer')
+      question: t('items.orders.question'),
+      answer: t('items.orders.answer')
     },
     {
       id: 'stocks',
-      question: t('faq.items.stocks.question'),
-      answer: t('faq.items.stocks.answer')
+      question: t('items.stocks.question'),
+      answer: t('items.stocks.answer')
     },
     {
       id: 'complaints',
-      question: t('faq.items.complaints.question'),
-      answer: t('faq.items.complaints.answer')
+      question: t('items.complaints.question'),
+      answer: t('items.complaints.answer')
     },
     {
       id: 'marketplace',
-      question: t('faq.items.marketplace.question'),
-      answer: t('faq.items.marketplace.answer')
+      question: t('items.marketplace.question'),
+      answer: t('items.marketplace.answer')
     }
   ];
 
@@ -57,7 +57,7 @@ export default function FAQSection() {
             variants={fadeInUp}
             className="text-4xl md:text-5xl font-bold text-white mb-6"
           >
-            {t('faq.title')}
+            {t('title')}
           </motion.h2>
 
           {/* FAQ Items */}

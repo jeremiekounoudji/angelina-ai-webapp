@@ -2,21 +2,28 @@
 'use client'
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function Home() {
   const router = useRouter();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
-    // Redirect to the marketing page
-    router.push("/marketing");
-  }, [router]);
+    if (!loading) {
+      // If user is authenticated and has completed setup, go to dashboard
+      // Otherwise, go to marketing page
+      if (user) {
+        router.push("/dashboard");
+      } else {
+        router.push("/marketing");
+      }
+    }
+  }, [user, loading, router]);
 
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mx-auto"></div>
-        <p className="mt-4 text-gray-400">Redirecting to AngelinaAI...</p>
-      </div>
-    </div>
-  );
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  return <LoadingScreen />;
 }

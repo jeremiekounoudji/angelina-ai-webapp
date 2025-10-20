@@ -1,11 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslationNamespace } from '@/contexts/TranslationContext';
 import { staggerContainer, staggerItem } from '@/utils/animations';
 
 export default function Footer() {
-  const { t } = useTranslation();
+  const { t } = useTranslationNamespace('marketing.footer');
 
   return (
     <footer className="text-white py-16">
@@ -24,7 +24,7 @@ export default function Footer() {
             {/* Company info */}
           <div className="md:col-span-2">
               <h3 className="text-2xl font-bold mb-4">
-                {t('header.logo')}
+                {t('company')}
               </h3>
               <p className="text-gray-400 mb-6 max-w-md">
                 L&apos;agent IA qui transforme votre WhatsApp en assistant commercial. 
@@ -89,12 +89,12 @@ export default function Footer() {
             className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center"
           >
             <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              {t('footer.copyright')}
+              {t('copyright')}
             </div>
             
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                {t('footer.rgpd')}
+                {t('rgpd')}
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 Conditions d&apos;utilisation

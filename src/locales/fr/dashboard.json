@@ -1,0 +1,593 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "company": "Entreprise",
+    "products": "Produits",
+    "users": "Utilisateurs",
+    "subscription": "Abonnement",
+    "settings": "Paramètres",
+    "support": "Support",
+    "logout": "Déconnexion"
+  },
+  "header": {
+    "welcome": "Bon retour",
+    "notifications": "Notifications",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
+  },
+  "overview": {
+    "title": "Aperçu du Dashboard",
+    "subtitle": "Voici ce qui se passe dans votre restaurant aujourd'hui",
+    "metrics": {
+      "totalOrders": "Commandes Totales",
+      "revenue": "Chiffre d'Affaires",
+      "customers": "Clients",
+      "products": "Produits",
+      "growth": "Croissance",
+      "thisMonth": "Ce mois-ci",
+      "lastMonth": "Le mois dernier",
+      "vsLastMonth": "vs le mois dernier"
+    }
+  },
+  "company": {
+    "title": "Gestion de l'Entreprise",
+    "subtitle": "Gérez les informations et paramètres de votre restaurant",
+    "form": {
+      "name": "Nom du Restaurant",
+      "namePlaceholder": "Saisissez le nom du restaurant",
+      "description": "Description",
+      "descriptionPlaceholder": "Décrivez votre restaurant",
+      "address": "Adresse",
+      "addressPlaceholder": "Saisissez l'adresse du restaurant",
+      "phone": "Numéro de Téléphone",
+      "phonePlaceholder": "Saisissez le numéro de téléphone",
+      "email": "Email",
+      "emailPlaceholder": "Saisissez l'adresse email",
+      "website": "Site Web",
+      "websitePlaceholder": "Saisissez l'URL du site web",
+      "hours": "Heures d'Ouverture",
+      "hoursPlaceholder": "ex: Lun-Dim: 9h-22h",
+      "cuisine": "Type de Cuisine",
+      "cuisinePlaceholder": "ex: Italien, Chinois, etc.",
+      "logo": "Logo",
+      "uploadLogo": "Télécharger le Logo"
+    },
+    "metrics": {
+      "totalRevenue": "Chiffre d'Affaires Total",
+      "monthlyOrders": "Commandes Mensuelles",
+      "activeProducts": "Produits Actifs",
+      "customerSatisfaction": "Satisfaction Client"
+    },
+    "actions": {
+      "edit": "Modifier l'Entreprise",
+      "save": "Enregistrer les Modifications",
+      "cancel": "Annuler"
+    },
+    "success": {
+      "updated": "Informations de l'entreprise mises à jour avec succès",
+      "logoUploaded": "Logo téléchargé avec succès"
+    },
+    "errors": {
+      "updateFailed": "Échec de la mise à jour des informations de l'entreprise",
+      "logoUploadFailed": "Échec du téléchargement du logo"
+    }
+  },
+  "products": {
+    "title": "Gestion des Produits",
+    "subtitle": "Gérez vos articles de menu et votre inventaire",
+    "actions": {
+      "addProduct": "Ajouter un Produit",
+      "editProduct": "Modifier le Produit",
+      "deleteProduct": "Supprimer le Produit",
+      "viewDetails": "Voir les Détails"
+    },
+    "table": {
+      "name": "Nom",
+      "category": "Catégorie",
+      "price": "Prix",
+      "stock": "Stock",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Nom du Produit",
+      "namePlaceholder": "Saisissez le nom du produit",
+      "nameRequired": "Le nom du produit est requis",
+      "description": "Description",
+      "descriptionPlaceholder": "Décrivez le produit",
+      "category": "Catégorie",
+      "categoryPlaceholder": "Sélectionnez une catégorie",
+      "price": "Prix",
+      "pricePlaceholder": "Saisissez le prix",
+      "priceRequired": "Le prix doit être positif",
+      "stock": "Quantité en Stock",
+      "stockPlaceholder": "Saisissez la quantité en stock",
+      "stockRequired": "La quantité en stock doit être positive",
+      "image": "Image du Produit",
+      "uploadImage": "Télécharger une Image",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "emailInvalid": "Adresse email invalide"
+    },
+    "categories": {
+      "appetizers": "Entrées",
+      "mainCourse": "Plats Principaux",
+      "desserts": "Desserts",
+      "beverages": "Boissons",
+      "sides": "Accompagnements"
+    },
+    "status": {
+      "inStock": "En Stock",
+      "lowStock": "Stock Faible",
+      "outOfStock": "Rupture de Stock"
+    },
+    "success": {
+      "created": "Produit créé avec succès",
+      "updated": "Produit mis à jour avec succès",
+      "deleted": "Produit supprimé avec succès"
+    },
+    "errors": {
+      "createFailed": "Échec de la création du produit",
+      "updateFailed": "Échec de la mise à jour du produit",
+      "deleteFailed": "Échec de la suppression du produit",
+      "loadFailed": "Échec du chargement des produits"
+    },
+    "empty": {
+      "title": "Aucun produit pour le moment",
+      "description": "Commencez à construire votre catalogue de produits en ajoutant votre premier produit."
+    }
+  },
+  "users": {
+    "title": "Gestion des Utilisateurs",
+    "subtitle": "Gérez les membres de votre équipe et leurs permissions",
+    "actions": {
+      "addUser": "Ajouter un Utilisateur",
+      "editUser": "Modifier l'Utilisateur",
+      "deleteUser": "Supprimer l'Utilisateur",
+      "viewProfile": "Voir le Profil"
+    },
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle",
+      "status": "Statut",
+      "lastLogin": "Dernière Connexion",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Administrateur",
+      "manager": "Manager",
+      "staff": "Personnel"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "pending": "En Attente"
+    },
+    "empty": {
+      "title": "Aucun membre d'équipe pour le moment",
+      "description": "Commencez à construire votre équipe en ajoutant votre premier membre d'équipe."
+    }
+  },
+  "subscription": {
+    "title": "Abonnement et Facturation",
+    "subtitle": "Gérez votre plan d'abonnement et vos informations de facturation",
+    "currentPlan": {
+      "title": "Plan Actuel",
+      "plan": "Plan",
+      "status": "Statut",
+      "nextBilling": "Prochaine Facturation",
+      "amount": "Montant"
+    },
+    "usage": {
+      "title": "Utilisation Ce Mois-ci",
+      "orders": "Commandes",
+      "storage": "Stockage",
+      "apiCalls": "Appels API"
+    },
+    "paymentHistory": {
+      "title": "Historique des Paiements",
+      "date": "Date",
+      "amount": "Montant",
+      "status": "Statut",
+      "invoice": "Facture"
+    },
+    "actions": {
+      "upgrade": "Mettre à Niveau le Plan",
+      "downgrade": "Rétrograder le Plan",
+      "cancelSubscription": "Annuler l'Abonnement",
+      "updatePayment": "Mettre à Jour le Mode de Paiement"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérez votre compte et les préférences de l'application",
+    "sections": {
+      "profile": "Paramètres du Profil",
+      "notifications": "Préférences de Notification",
+      "security": "Paramètres de Sécurité",
+      "integrations": "Intégrations",
+      "preferences": "Préférences Générales"
+    },
+    "profile": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Adresse Email",
+      "phone": "Numéro de Téléphone",
+      "timezone": "Fuseau Horaire",
+      "language": "Langue"
+    },
+    "notifications": {
+      "emailNotifications": "Notifications Email",
+      "pushNotifications": "Notifications Push",
+      "orderAlerts": "Alertes de Commande",
+      "stockAlerts": "Alertes de Stock",
+      "paymentAlerts": "Alertes de Paiement"
+    },
+    "security": {
+      "changePassword": "Changer le Mot de Passe",
+      "twoFactorAuth": "Authentification à Deux Facteurs",
+      "loginHistory": "Historique de Connexion",
+      "activeSessions": "Sessions Actives"
+    },
+    "actions": {
+      "edit": "Modifier les Détails",
+      "contact": "Contacter le Support",
+      "delete": "Supprimer le Compte",
+      "cancel": "Annuler",
+      "deleting": "Suppression..."
+    },
+    "support": {
+      "description": "Obtenez de l'aide avec votre compte ou signalez des problèmes"
+    },
+    "danger": {
+      "description": "Supprimer définitivement votre compte d'entreprise et toutes les données associées",
+      "confirmTitle": "Supprimer le Compte",
+      "confirmMessage": "Êtes-vous sûr de vouloir supprimer votre compte d'entreprise ? Cette action ne peut pas être annulée et supprimera définitivement toutes vos données."
+    }
+  },
+  "subscription": {
+    "title": "Abonnement et Facturation",
+    "subtitle": "Gérez votre plan d'abonnement et vos informations de facturation",
+    "loading": "Chargement des données d'abonnement...",
+    "error": "Erreur de Chargement des Données",
+    "currentPlan": {
+      "title": "Abonnement Actuel",
+      "plan": "Plan",
+      "status": "Statut",
+      "nextBilling": "Prochaine Facturation",
+      "amount": "Montant",
+      "noActivePlan": "Aucun plan actif"
+    },
+    "usage": {
+      "title": "Utilisation Ce Mois-ci",
+      "orders": "Commandes",
+      "storage": "Stockage",
+      "apiCalls": "Appels API"
+    },
+    "paymentHistory": {
+      "title": "Historique des Paiements",
+      "date": "Date",
+      "amount": "Montant",
+      "status": "Statut",
+      "invoice": "Facture"
+    },
+    "actions": {
+      "upgrade": "Mettre à Niveau le Plan",
+      "downgrade": "Rétrograder le Plan",
+      "cancelSubscription": "Annuler l'Abonnement",
+      "updatePayment": "Mettre à Jour le Mode de Paiement"
+    },
+    "billing": {
+      "monthlyCost": "Coût Mensuel",
+      "status": "Statut",
+      "trialMessage": "Votre période d'essai est active. Passez à un plan payant pour continuer à utiliser toutes les fonctionnalités.",
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "savePercent": "Économisez jusqu'à 20%",
+      "yearly": "Annuel"
+    },
+    "tokens": {
+      "usage": "Utilisation des Tokens",
+      "used": "Tokens Utilisés",
+      "remaining": "Tokens Restants",
+      "allowance": "Allocation Mensuelle",
+      "purchased": "Achetés",
+      "buyMore": "Acheter Plus de Tokens",
+      "loadingData": "Chargement des données d'utilisation...",
+      "usageProgress": "Progression de l'Utilisation"
+    },
+    "plans": {
+      "choose": "Choisissez Votre Plan",
+      "description": "Sélectionnez le plan qui correspond le mieux aux besoins de votre entreprise",
+      "current": "Plan Actuel",
+      "select": "Sélectionner le Plan",
+      "mostPopular": "Le Plus Populaire",
+      "perMonth": "/mois",
+      "annually": "annuellement"
+    }
+  },
+  "company": {
+    "title": "Gestion de l'Entreprise",
+    "subtitle": "Gérez les informations et paramètres de votre restaurant",
+    "form": {
+      "name": "Nom du Restaurant",
+      "namePlaceholder": "Saisissez le nom du restaurant",
+      "description": "Description",
+      "descriptionPlaceholder": "Décrivez votre restaurant",
+      "address": "Adresse",
+      "addressPlaceholder": "Saisissez l'adresse du restaurant",
+      "phone": "Numéro de Téléphone",
+      "phonePlaceholder": "Saisissez le numéro de téléphone",
+      "email": "Email",
+      "emailPlaceholder": "Saisissez l'adresse email",
+      "website": "Site Web",
+      "websitePlaceholder": "Saisissez l'URL du site web",
+      "hours": "Heures d'Ouverture",
+      "hoursPlaceholder": "ex: Lun-Dim: 9h-22h",
+      "cuisine": "Type de Cuisine",
+      "cuisinePlaceholder": "ex: Italien, Chinois, etc.",
+      "logo": "Logo",
+      "uploadLogo": "Télécharger le Logo",
+      "status": "Statut"
+    },
+    "metrics": {
+      "title": "Métriques de l'Entreprise",
+      "totalRevenue": "Chiffre d'Affaires Total",
+      "monthlyOrders": "Commandes Mensuelles",
+      "activeProducts": "Produits Actifs",
+      "customerSatisfaction": "Satisfaction Client",
+      "tokensUsed": "Tokens Utilisés",
+      "productsCreated": "Produits Créés",
+      "usersCreated": "Utilisateurs Créés",
+      "messagesTotal": "Messages Total"
+    },
+    "actions": {
+      "edit": "Modifier l'Entreprise",
+      "save": "Enregistrer les Modifications",
+      "cancel": "Annuler"
+    },
+    "success": {
+      "updated": "Informations de l'entreprise mises à jour avec succès",
+      "logoUploaded": "Logo téléchargé avec succès"
+    },
+    "errors": {
+      "updateFailed": "Échec de la mise à jour des informations de l'entreprise",
+      "logoUploadFailed": "Échec du téléchargement du logo"
+    },
+    "info": {
+      "companyId": "ID de l'Entreprise",
+      "subscription": "Abonnement",
+      "created": "Créé"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérez votre compte et les préférences de l'application",
+    "sections": {
+      "profile": "Paramètres du Profil",
+      "notifications": "Préférences de Notification",
+      "security": "Paramètres de Sécurité",
+      "integrations": "Intégrations",
+      "preferences": "Préférences Générales",
+      "support": "Support",
+      "danger": "Zone de Danger"
+    },
+    "profile": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Adresse Email",
+      "phone": "Numéro de Téléphone",
+      "timezone": "Fuseau Horaire",
+      "language": "Langue",
+      "description": "Gérez vos informations de profil et paramètres de compte"
+    },
+    "notifications": {
+      "emailNotifications": "Notifications Email",
+      "pushNotifications": "Notifications Push",
+      "orderAlerts": "Alertes de Commande",
+      "stockAlerts": "Alertes de Stock",
+      "paymentAlerts": "Alertes de Paiement"
+    },
+    "security": {
+      "changePassword": "Changer le Mot de Passe",
+      "twoFactorAuth": "Authentification à Deux Facteurs",
+      "loginHistory": "Historique de Connexion",
+      "activeSessions": "Sessions Actives"
+    },
+    "actions": {
+      "edit": "Modifier les Détails",
+      "contact": "Contacter le Support",
+      "delete": "Supprimer le Compte",
+      "cancel": "Annuler",
+      "deleting": "Suppression..."
+    },
+    "support": {
+      "description": "Obtenez de l'aide avec votre compte ou signalez des problèmes"
+    },
+    "danger": {
+      "description": "Supprimer définitivement votre compte d'entreprise et toutes les données associées",
+      "confirmTitle": "Supprimer le Compte",
+      "confirmMessage": "Êtes-vous sûr de vouloir supprimer votre compte d'entreprise ? Cette action ne peut pas être annulée et supprimera définitivement toutes vos données."
+    }
+  },
+  "payment": {
+    "modal": {
+      "title": "Finaliser le Paiement",
+      "totalAmount": "Montant Total:",
+      "provider": "Fournisseur Mobile Money",
+      "selectProvider": "Sélectionnez votre fournisseur mobile money",
+      "phoneNumber": "Numéro de Téléphone",
+      "enterPhone": "Saisissez votre numéro mobile money",
+      "phoneDescription": "Saisissez le numéro de téléphone lié à votre compte mobile money",
+      "note": "Note:",
+      "instructions": "Vous recevrez une demande de paiement sur votre téléphone. Veuillez approuver la transaction pour finaliser votre abonnement.",
+      "cancel": "Annuler",
+      "initialize": "Initialiser le Paiement",
+      "close": "Fermer",
+      "tryAgain": "Réessayer"
+    },
+    "status": {
+      "initializing": "Initialisation du Paiement...",
+      "initializingDescription": "Configuration de votre demande de paiement...",
+      "initialized": "Paiement Initialisé!",
+      "initializedDescription": "Veuillez vérifier votre téléphone et confirmer la demande de paiement",
+      "initializedInstructions": "Vous devriez recevoir une demande de paiement sur votre appareil mobile. Veuillez l'approuver pour finaliser votre abonnement.",
+      "waiting": "En Attente de Confirmation...",
+      "waitingDescription": "Nous attendons que vous confirmiez le paiement sur votre téléphone",
+      "waitingInstructions": "Veuillez vérifier votre téléphone et approuver la demande de paiement de votre fournisseur mobile money.",
+      "confirmed": "Paiement Confirmé!",
+      "confirmedDescription": "Votre abonnement a été activé avec succès. Actualisation de la page...",
+      "failed": "Échec du Paiement"
+    },
+    "history": {
+      "title": "Historique des Paiements",
+      "noPayments": "Aucun paiement trouvé",
+      "noPaymentsDescription": "Votre historique de paiements apparaîtra ici une fois que vous effectuerez un paiement",
+      "total": "total",
+      "payment": "paiement",
+      "payments": "paiements",
+      "unknownPlan": "Plan Inconnu",
+      "completed": "Terminé",
+      "pending": "En Attente",
+      "failed": "Échoué"
+    },
+    "billing": {
+      "saveDiscount": "Économisez {percent}% avec la facturation annuelle"
+    }
+  },
+  "users": {
+    "title": "Gestion des Utilisateurs",
+    "subtitle": "Gérez les membres de votre équipe et leurs permissions",
+    "actions": {
+      "addUser": "Ajouter un Utilisateur",
+      "editUser": "Modifier l'Utilisateur",
+      "deleteUser": "Supprimer l'Utilisateur",
+      "viewProfile": "Voir le Profil"
+    },
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle",
+      "status": "Statut",
+      "lastLogin": "Dernière Connexion",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Administrateur",
+      "manager": "Manager",
+      "staff": "Personnel",
+      "customer": "Client"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "pending": "En Attente"
+    },
+    "empty": {
+      "title": "Aucun membre d'équipe pour le moment",
+      "description": "Commencez à construire votre équipe en ajoutant votre premier membre d'équipe."
+    },
+    "form": {
+      "addTitle": "Ajouter un Nouvel Utilisateur",
+      "editTitle": "Modifier l'Utilisateur",
+      "fullName": "Nom Complet",
+      "enterFullName": "Saisissez le nom complet",
+      "email": "Email",
+      "enterEmail": "Saisissez l'adresse email",
+      "phone": "Numéro de Téléphone",
+      "enterPhone": "Saisissez le numéro de téléphone",
+      "role": "Rôle",
+      "selectRole": "Sélectionnez le rôle utilisateur",
+      "avatar": "Cliquez sur l'icône de l'appareil photo pour sélectionner un avatar",
+      "cancel": "Annuler",
+      "addUser": "Ajouter l'Utilisateur",
+      "saveChanges": "Enregistrer les Modifications",
+      "uploading": "Téléchargement..."
+    },
+    "info": {
+      "noName": "Aucun nom",
+      "phone": "Téléphone",
+      "joined": "Rejoint",
+      "users": "utilisateurs"
+    },
+    "limits": {
+      "reached": "Limite d'Utilisateurs Atteinte",
+      "message": "Vous avez atteint le nombre maximum d'utilisateurs pour votre plan actuel. Veuillez mettre à niveau votre plan pour ajouter plus d'utilisateurs."
+    }
+  },
+  "products": {
+    "title": "Gestion des Produits",
+    "subtitle": "Gérez vos articles de menu et votre inventaire",
+    "actions": {
+      "addProduct": "Ajouter un Produit",
+      "editProduct": "Modifier le Produit",
+      "deleteProduct": "Supprimer le Produit",
+      "viewDetails": "Voir les Détails"
+    },
+    "table": {
+      "name": "Nom",
+      "category": "Catégorie",
+      "price": "Prix",
+      "stock": "Stock",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Nom du Produit",
+      "namePlaceholder": "Saisissez le nom du produit",
+      "nameRequired": "Le nom du produit est requis",
+      "description": "Description",
+      "descriptionPlaceholder": "Décrivez le produit",
+      "category": "Catégorie",
+      "categoryPlaceholder": "Sélectionnez une catégorie",
+      "price": "Prix",
+      "pricePlaceholder": "Saisissez le prix",
+      "priceRequired": "Le prix doit être positif",
+      "stock": "Quantité en Stock",
+      "stockPlaceholder": "Saisissez la quantité en stock",
+      "stockRequired": "La quantité en stock doit être positive",
+      "image": "Image du Produit",
+      "uploadImage": "Télécharger une Image",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "emailInvalid": "Adresse email invalide"
+    },
+    "categories": {
+      "appetizers": "Entrées",
+      "mainCourse": "Plats Principaux",
+      "desserts": "Desserts",
+      "beverages": "Boissons",
+      "sides": "Accompagnements"
+    },
+    "status": {
+      "inStock": "En Stock",
+      "lowStock": "Stock Faible",
+      "outOfStock": "Rupture de Stock"
+    },
+    "success": {
+      "created": "Produit créé avec succès",
+      "updated": "Produit mis à jour avec succès",
+      "deleted": "Produit supprimé avec succès"
+    },
+    "errors": {
+      "createFailed": "Échec de la création du produit",
+      "updateFailed": "Échec de la mise à jour du produit",
+      "deleteFailed": "Échec de la suppression du produit",
+      "loadFailed": "Échec du chargement des produits"
+    },
+    "empty": {
+      "title": "Aucun produit pour le moment",
+      "description": "Commencez à construire votre catalogue de produits en ajoutant votre premier produit."
+    },
+    "info": {
+      "price": "Prix",
+      "stock": "Stock",
+      "units": "unités",
+      "added": "Ajouté"
+    }
+  }
+}
