@@ -25,8 +25,9 @@ import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { useUpload } from "@/hooks/useUpload";
 import { useCompany } from "@/hooks/useCompany";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
+import { TranslationFunction } from "@/locales";
 
-const createCompanySchema = (t: any) => z.object({
+const createCompanySchema = (t: TranslationFunction) => z.object({
   name: z.string().min(1, t('form.nameRequired')),
   type: z.enum(["restaurant", "retail", "service", "other"]),
   address: z.string().optional(),

@@ -18,7 +18,6 @@ import {
   EyeSlashIcon,
   ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
-import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -27,8 +26,9 @@ import { useAuthActions } from "@/hooks/useAuth";
 import { useAppStore } from "@/store";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { TranslationFunction } from "@/locales";
 
-const createStep1Schema = (t: any) => z
+const createStep1Schema = (t: TranslationFunction) => z
   .object({
     firstName: z.string().min(1, t('errors.weakPassword')),
     lastName: z.string().min(1, t('errors.weakPassword')),
@@ -42,7 +42,7 @@ const createStep1Schema = (t: any) => z
     path: ["confirmPassword"],
   });
 
-const createStep2Schema = (t: any) => z.object({
+const createStep2Schema = (t: TranslationFunction) => z.object({
   companyName: z.string().min(1, t('errors.registrationFailed')),
   companyType: z.enum(["restaurant", "retail", "service", "other"]),
   address: z.string().optional(),
@@ -82,7 +82,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const { signUp } = useAuthActions();
   const { loading } = useAppStore();
-  const { t, locale } = useTranslationNamespace('auth.register');
+  const { t } = useTranslationNamespace('auth.register');
   const { user, loading: authLoading } = useAuth();
 
   // Redirect authenticated users to dashboard
@@ -92,8 +92,8 @@ export default function RegisterPage() {
     }
   }, [user, authLoading, router]);
 
-  const step1Schema = useMemo(() => createStep1Schema(t), [locale]);
-  const step2Schema = useMemo(() => createStep2Schema(t), [locale]);
+  const step1Schema = useMemo(() => createStep1Schema(t), [t]);
+  const step2Schema = useMemo(() => createStep2Schema(t), [t]);
 
   const step1Form = useForm<Step1FormData>({
     resolver: zodResolver(step1Schema),

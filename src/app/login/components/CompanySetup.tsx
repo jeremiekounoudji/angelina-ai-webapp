@@ -6,11 +6,10 @@ import { createClient } from '@/lib/supabase/client'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { CompanyType } from '@/types/database'
 
 const companySchema = z.object({
   name: z.string().min(1, 'Company name is required'),
-  type: z.enum(['restaurant', 'shop', 'retail', 'service']),
+  type: z.enum(['restaurant', 'retail', 'service', 'other']),
   address: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().email().optional().or(z.literal('')),
@@ -26,9 +25,9 @@ interface CompanySetupProps {
 
 const companyTypes = [
   { key: 'restaurant', label: 'Restaurant' },
-  { key: 'shop', label: 'Shop' },
   { key: 'retail', label: 'Retail' },
   { key: 'service', label: 'Service' },
+  { key: 'other', label: 'Other' },
 ]
 
 export function CompanySetup({ userId, onComplete }: CompanySetupProps) {
@@ -94,7 +93,7 @@ export function CompanySetup({ userId, onComplete }: CompanySetupProps) {
       }
 
       onComplete()
-    } catch (error) {
+    } catch {
       setError('root', { message: 'An unexpected error occurred' })
     } finally {
       setLoading(false)
@@ -125,7 +124,7 @@ export function CompanySetup({ userId, onComplete }: CompanySetupProps) {
               placeholder="Select your business type"
               selectedKeys={selectedType ? [selectedType] : []}
               onSelectionChange={(keys) => {
-                const selected = Array.from(keys)[0] as CompanyType
+                const selected = Array.from(keys)[0] as "restaurant" | "retail" | "service" | "other"
                 setValue('type', selected)
               }}
               isRequired

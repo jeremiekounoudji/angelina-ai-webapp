@@ -1,15 +1,12 @@
 'use client'
 
-import { useAuth } from '@/contexts/AuthContext'
 import { DashboardSidebar } from './components/DashboardSidebar'
-import { DashboardHeader } from './components/DashboardHeader'
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { loading } = useAuth()
 
   // if (loading) {
   //   return (

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input, Select, SelectItem, Spinner } from '@heroui/react';
 import { SubscriptionPlan } from '@/types/database';
-import { useAuth } from '@/contexts/AuthContext';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -27,7 +26,6 @@ export default function PaymentModal({ isOpen, onClose, plan, billingInterval, c
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const { user } = useAuth();
 
   const calculateAmount = () => {
     if (!plan) return 0;
@@ -182,7 +180,7 @@ export default function PaymentModal({ isOpen, onClose, plan, billingInterval, c
                 isRequired
               >
                 {mobileProviders.map((prov) => (
-                  <SelectItem key={prov.key} value={prov.key}>
+                  <SelectItem key={prov.key}>
                     {prov.label}
                   </SelectItem>
                 ))}

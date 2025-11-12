@@ -61,7 +61,7 @@ export function useProducts() {
         setLoading("products", false);
       }
     },
-    []
+    [company?.id, products, setError, setLoading, setProducts, supabase, t]
   );
 
   const createProduct = useCallback(
@@ -94,7 +94,7 @@ export function useProducts() {
         return null;
       }
     },
-    []
+    [addProduct, company?.id, supabase, t]
   );
 
   const editProduct = useCallback(
@@ -119,7 +119,7 @@ export function useProducts() {
         return null;
       }
     },
-    []
+    [supabase, t, updateProduct]
   );
 
   const deleteProduct = useCallback(
@@ -142,7 +142,7 @@ export function useProducts() {
         return false;
       }
     },
-    []
+    [removeProduct, supabase, t]
   );
 
   // Simple effect that only runs when company changes
@@ -150,7 +150,7 @@ export function useProducts() {
     if (company?.id && fetchedCompanyId.current !== company.id) {
       fetchProducts();
     }
-  }, [company?.id]);
+  }, [company?.id, fetchProducts]);
 
   return {
     products,

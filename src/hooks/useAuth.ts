@@ -57,7 +57,7 @@ export function useAuthActions() {
       toast.success('Successfully signed in!');
       router.push("/dashboard");
       return { success: true };
-    } catch (err) {
+    } catch {
       const errorMessage = "An unexpected error occurred";
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
@@ -174,7 +174,7 @@ export function useAuthActions() {
       toast.success('Successfully signed out');
       router.push("/login");
       return { success: true };
-    } catch (err) {
+    } catch {
       const errorMessage = "An unexpected error occurred during sign out";
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
@@ -199,7 +199,7 @@ export function useAuthActions() {
 
       toast.success('Password reset email sent!');
       return { success: true };
-    } catch (err) {
+    } catch {
       const errorMessage = "Failed to send password reset email";
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
@@ -224,7 +224,7 @@ export function useAuthActions() {
 
       toast.success('Password updated successfully!');
       return { success: true };
-    } catch (err) {
+    } catch {
       const errorMessage = "Failed to update password";
       toast.error(errorMessage);
       return { success: false, error: errorMessage };

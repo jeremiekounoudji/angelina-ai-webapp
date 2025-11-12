@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Payment } from '@/types/database'
+import { Payment, SubscriptionPlan } from '@/types/database'
 import { useAuth } from '@/contexts/AuthContext'
 
 export function usePayments() {
@@ -38,7 +38,7 @@ export function usePayments() {
       if (paymentsError) throw paymentsError
 
       // Transform the data to match our interface
-      const transformedPayments: Payment[] = paymentsData?.map(payment => ({
+      const transformedPayments: Payment[] = paymentsData?.map((payment: Payment & { subscription_plans?: SubscriptionPlan }) => ({
         ...payment,
         plan: payment.subscription_plans
       })) || []

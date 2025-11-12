@@ -48,7 +48,7 @@
 //   return { authUrl };
 // };
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback } from "react";
 
 interface UseWhatsAppConnectProps {
   /** The internal ID of your user */
@@ -65,12 +65,10 @@ export const useWhatsAppConnect = (
 ): UseWhatsAppConnectReturn => {
   const { userId } = props;
   const clientId = process.env.NEXT_PUBLIC_META_APP_ID;
-  const appSecret = process.env.NEXT_PUBLIC_META_APP_SECRET;
-  const n8nWebhookUrl = process.env.NEXT_PUBLIC_N8N_REDIRECT_URL; // used as redirect for wa_onboarding
-  const [authUrl, setAuthUrl] = useState<string | null>(null);
+  const n8nWebhookUrl = process.env.NEXT_PUBLIC_N8N_REDIRECT_URL;
 
-  // Step 1: Build OAuth URL
-  const oauthUrl = useCallback(() => {
+  // Build OAuth URL
+  const authUrl = useCallback(() => {
     if (!clientId || !userId || !n8nWebhookUrl) return null;
 
     const scopes = [
@@ -85,10 +83,9 @@ export const useWhatsAppConnect = (
     url.searchParams.set("response_type", "code");
     url.searchParams.set("scope", scopes);
     url.searchParams.set("state", userId);
-    console.log("*******************step 1**************");
 
     return url.toString();
-  }, [clientId, n8nWebhookUrl, userId]);
+  }, [clientId, n8nWebhookUrl, userId])();
 
   return { authUrl };
 };

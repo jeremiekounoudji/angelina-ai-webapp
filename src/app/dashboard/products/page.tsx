@@ -24,7 +24,7 @@ import { useTranslationNamespace } from '@/contexts/TranslationContext'
 export default function ProductsPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const { company } = useAuth()
-  const { products, loading, deleteProduct, refetch } = useProducts()
+  const { products, loading, deleteProduct } = useProducts()
   const { limits } = usePlanLimits(company?.id)
   const { t } = useTranslationNamespace('dashboard.products')
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useMemo } from "react";
+import { createContext, useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 import { Company } from "@/types/database";
@@ -12,6 +12,7 @@ interface AuthContextType {
   loading: boolean;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  setCompany: (company: Company | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,7 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = useMemo(() => createClient(), []);
   const { clearAll } = useAppStore();
 
-  const fetchUserCompany = async (userId: string) => {
+  const fetchUserCompany = useCallback(async (userId: string) => {
     try {
       const { data: companyData, error: companyError } = await supabase
         .from("companies")
@@ -31,16 +32,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .eq("user_id", userId)
         .single();
 
-      console.log('Company data:', companyData, 'Error:', companyError);
-      
+      console.log("Company data:", companyData, "Error:", companyError);
+
       if (companyData) {
         setCompany(companyData);
       }
     } catch (error) {
-      console.error('Error fetching user company:', error);
+      console.error("Error fetching user company:", error);
       setCompany(null);
     }
-  };
+  }, [supabase]);
 
   const refreshUser = async () => {
     const {
@@ -60,13 +61,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const {
           data: { user },
         } = await supabase.auth.getUser();
-        console.log(user,'user log');
+        console.log(user, "user log");
         setUser(user);
         if (user) {
           await fetchUserCompany(user.id);
         }
       } catch (error) {
-        console.error('Error getting user:', error);
+        console.error("Error getting user:", error);
       } finally {
         setLoading(false);
       }
@@ -76,24 +77,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event: any, session: any) => {
-      console.log('Auth state change:', event, session?.user?.id);
-      setUser(session?.user ?? null);
-      
-      if (event === 'SIGNED_IN' && session?.user) {
-        setLoading(true);
-        await fetchUserCompany(session.user.id);
-        setLoading(false);
-      } else if (event === 'SIGNED_OUT') {
-        setCompany(null);
-        setLoading(false);
-        // Clear all cached data when user signs out
-        clearAll();
+    } = supabase.auth.onAuthStateChange(
+      async (event: string, session: { user: User } | null) => {
+        console.log("Auth state change:", event, session?.user?.id);
+        setUser(session?.user ?? null);
+
+        if (event === "SIGNED_IN" && session?.user) {
+          setLoading(true);
+          await fetchUserCompany(session.user.id);
+          setLoading(false);
+        } else if (event === "SIGNED_OUT") {
+          setCompany(null);
+          setLoading(false);
+          // Clear all cached data when user signs out
+          clearAll();
+        }
       }
-    });
+    );
 
     return () => subscription.unsubscribe();
-  }, [supabase]);
+  }, [supabase, clearAll, fetchUserCompany]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -104,7 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, company, loading, signOut, refreshUser }}
+      value={{ user, company, loading, signOut, refreshUser, setCompany }}
     >
       {children}
     </AuthContext.Provider>

@@ -25,8 +25,9 @@ import { useProducts } from "@/hooks/useProducts";
 import { useUpload } from "@/hooks/useUpload";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
+import { TranslationFunction } from "@/locales";
 
-const createProductSchema = (t: any) => z
+const createProductSchema = (t: TranslationFunction) => z
   .object({
     name: z.string().min(1, t('form.nameRequired')),
     description: z.string().optional(),

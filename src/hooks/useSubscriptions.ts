@@ -6,12 +6,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useAppStore } from "@/store";
 import { SubscriptionPlan, Payment } from "@/types/database";
 import toast from 'react-hot-toast';
-import { useTranslationNamespace } from "@/contexts/TranslationContext";
 
 export function useSubscriptions() {
   const supabase = useMemo(() => createClient(), []);
   const { company } = useAuth();
-  const { t } = useTranslationNamespace('hooks.subscriptions');
   
   const {
     subscriptionPlans,
@@ -54,7 +52,7 @@ export function useSubscriptions() {
 
       // Transform the data to match our interface
       const transformedPlans: SubscriptionPlan[] =
-        plansData?.map((plan: any) => ({
+        plansData?.map((plan: SubscriptionPlan & { subscription_features?: string[] }) => ({
           ...plan,
           features: plan.subscription_features || [],
         })) || [];
@@ -75,7 +73,7 @@ export function useSubscriptions() {
     } finally {
       setLoading('subscriptionPlans', false);
     }
-  }, [subscriptionPlans.length, setSubscriptionPlans, setLoading, setError]);
+  }, [subscriptionPlans, setSubscriptionPlans, setLoading, setError, supabase]);
 
   const fetchPayments = useCallback(async (forceRefresh = false) => {
     if (!company?.id) return;
@@ -104,7 +102,7 @@ export function useSubscriptions() {
 
       if (paymentsError) throw paymentsError;
 
-      const transformedPayments: Payment[] = paymentsData?.map((payment: any) => ({
+      const transformedPayments: Payment[] = paymentsData?.map((payment: Payment & { subscription_plans?: SubscriptionPlan }) => ({
         ...payment,
         plan: payment.subscription_plans,
       })) || [];
@@ -119,7 +117,7 @@ export function useSubscriptions() {
     } finally {
       setLoading('payments', false);
     }
-  }, [company?.id, payments.length, setPayments, setLoading, setError]);
+  }, [company?.id, payments, setPayments, setLoading, setError, supabase]);
 
   // Auto-fetch on mount if no data
   useEffect(() => {
@@ -128,14 +126,14 @@ export function useSubscriptions() {
 
       fetchPlans();
     }
-  }, [subscriptionPlans.length, loading.subscriptionPlans]);
+  }, [subscriptionPlans, loading.subscriptionPlans, fetchPlans]);
 
   useEffect(() => {
     if (company?.id && payments.length === 0 && !loading.payments) {
       console.log("Fetching payments for company:", company.id);
       fetchPayments();
     }
-  }, [company?.id, payments.length, loading.payments]);
+  }, [company?.id, payments.length, loading.payments, fetchPayments]);
 
   return {
     plans: subscriptionPlans,

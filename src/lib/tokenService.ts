@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/client';
-import toast from 'react-hot-toast';
 
 export class TokenService {
   private supabase = createClient();

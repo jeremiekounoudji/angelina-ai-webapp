@@ -16,7 +16,7 @@ import {
   BanknotesIcon,
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, } from "@/contexts/AuthContext";
 import { useSubscriptionContext } from "@/contexts/SubscriptionContext";
 import PaymentModal from "./components/PaymentModal";
 import BuyTokensModal from "./components/BuyTokensModal";
@@ -37,8 +37,8 @@ export default function SubscriptionPage() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isBuyTokensOpen, setIsBuyTokensOpen] = useState<boolean>(false);
   const [isAnnual, setIsAnnual] = useState(false);
-  const { company, user } = useAuth();
-  const { plans, payments, loading, error } = useSubscriptionContext();
+  const { company,user } = useAuth();
+  const { plans, loading, error } = useSubscriptionContext();
   const { usage, loading: tokenLoading } = useTokenUsage(company?.id);
   const { t } = useTranslationNamespace("dashboard.subscription");
   // const { isOpen, onOpen, onOpenChange } = useDisclosure();

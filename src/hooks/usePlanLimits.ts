@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAppStore } from "@/store";
-import { PlanLimits } from "@/types/database";
 import toast from 'react-hot-toast';
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 
@@ -53,7 +52,7 @@ export function usePlanLimits(companyId?: string) {
     } finally {
       setLoading('planLimits', false);
     }
-  }, [companyId, planLimits, setPlanLimits, setLoading, setError, t]);
+  }, [companyId, planLimits, setPlanLimits, setLoading, setError, t, supabase]);
 
   const canAddUser = useCallback(async (): Promise<boolean> => {
     if (!companyId) return false;
@@ -72,7 +71,7 @@ export function usePlanLimits(companyId?: string) {
       toast.error(errorMessage);
       return false;
     }
-  }, [companyId, t]);
+  }, [companyId, t, supabase]);
 
   const canAddProduct = useCallback(async (): Promise<boolean> => {
     if (!companyId) return false;
@@ -91,14 +90,14 @@ export function usePlanLimits(companyId?: string) {
       toast.error(errorMessage);
       return false;
     }
-  }, [companyId, t]);
+  }, [companyId, t, supabase]);
 
   // Auto-fetch on mount if no data
   useEffect(() => {
     if (companyId && !planLimits && !loading.planLimits) {
       fetchLimits();
     }
-  }, [companyId, planLimits, loading.planLimits]);
+  }, [companyId, planLimits, loading.planLimits, fetchLimits]);
 
   return {
     limits: planLimits,

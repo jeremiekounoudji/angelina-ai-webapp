@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button } from "@heroui/react";
 import { fadeInUp } from "@/utils/animations";
 
 interface DemoSectionProps {

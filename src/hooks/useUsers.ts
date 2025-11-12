@@ -53,7 +53,7 @@ export function useUsers() {
     } finally {
       setLoading('users', false);
     }
-  }, [company?.id, users.length, supabase, setUsers, setLoading, setError]);
+  }, [company?.id, users, supabase, setUsers, setLoading, setError]);
 
   const createUser = useCallback(async (userData: Omit<User, 'id' | 'created_at' | 'company_id'>) => {
     if (!company?.id) {

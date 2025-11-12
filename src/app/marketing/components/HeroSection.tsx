@@ -11,7 +11,7 @@ export default function HeroSection() {
   const router = useRouter();
   const { t } = useTranslationNamespace('marketing.hero');
   const { user, loading } = useAuth();
-  const animatedFunctions = t('animatedFunctions') as string[];
+  const animatedFunctions = ['ordering', 'inventory', 'complaints']; // Fallback to hardcoded values since t() returns string
   const animatedText = useTypingAnimation({
     words: animatedFunctions,
     typingSpeed: 150,

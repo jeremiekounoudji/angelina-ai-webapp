@@ -28,8 +28,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
+import { TranslationFunction } from "@/locales";
 
-const createProductSchema = (t: any) => z.object({
+const createProductSchema = (t: TranslationFunction) => z.object({
   name: z.string().min(1, t('form.nameRequired')),
   description: z.string().optional(),
   is_price_fixed: z.boolean(),

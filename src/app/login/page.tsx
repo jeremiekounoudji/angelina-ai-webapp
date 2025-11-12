@@ -11,8 +11,9 @@ import { useAuthActions } from "@/hooks/useAuth";
 import { useAppStore } from "@/store";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { TranslationFunction } from "@/locales";
 
-const createLoginSchema = (t: any) => z.object({
+const createLoginSchema = (t: TranslationFunction) => z.object({
   email: z.string().email(t('errors.invalidCredentials')),
   password: z.string().min(6, t('errors.invalidCredentials')),
 });
@@ -27,7 +28,7 @@ export default function LoginPage() {
   const router = useRouter();
   const { signIn } = useAuthActions();
   const { loading } = useAppStore();
-  const { t, locale } = useTranslationNamespace('auth.login');
+  const { t } = useTranslationNamespace('auth.login');
   const { user, loading: authLoading } = useAuth();
 
   // Redirect authenticated users to dashboard
@@ -37,7 +38,7 @@ export default function LoginPage() {
     }
   }, [user, authLoading, router]);
 
-  const loginSchema = useMemo(() => createLoginSchema(t), [locale]);
+  const loginSchema = useMemo(() => createLoginSchema(t), [t]);
   
   const {
     register,

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardBody, CardHeader, Chip, Pagination, Spinner } from '@heroui/react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscriptions } from '@/hooks/useSubscriptions';
-import { Payment } from '@/types/database';
 import { useTranslationNamespace } from '@/contexts/TranslationContext';
+import { TranslationFunction } from '@/locales';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -22,7 +22,7 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const getStatusLabel = (status: string, t: any) => {
+const getStatusLabel = (status: string, t: TranslationFunction) => {
   switch (status) {
     case 'completed':
       return t('history.completed');

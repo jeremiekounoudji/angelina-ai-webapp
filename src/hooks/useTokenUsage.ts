@@ -3,7 +3,6 @@
 import { useCallback, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAppStore } from "@/store";
-import { TokenUsage, TokenPurchase } from "@/types/database";
 import toast from 'react-hot-toast';
 
 export function useTokenUsage(companyId?: string) {
@@ -72,7 +71,7 @@ export function useTokenUsage(companyId?: string) {
     } finally {
       setLoading('tokenUsage', false);
     }
-  }, [companyId, tokenUsage, tokenPurchases.length, supabase, setTokenUsage, setTokenPurchases, setLoading, setError]);
+  }, [companyId, tokenUsage, tokenPurchases, supabase, setTokenUsage, setTokenPurchases, setLoading, setError]);
 
   const consumeTokens = useCallback(async (tokensToConsume: number) => {
     if (!companyId) return false;

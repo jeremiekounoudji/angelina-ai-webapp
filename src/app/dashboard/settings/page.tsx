@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardBody, CardHeader, Button } from '@heroui/react'
+import { Card, CardHeader, Button } from '@heroui/react'
 import { 
   CogIcon, 
   TrashIcon, 

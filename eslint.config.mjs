@@ -20,6 +20,15 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
+  {
+    rules: {
+      // Treat these warnings as errors
+      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-explicit-any": "error",
+      "react-hooks/exhaustive-deps": "error",
+      "@next/next/no-img-element": "warn", // Keep this as warning since it's not critical
+    },
+  },
 ];
 
 export default eslintConfig;

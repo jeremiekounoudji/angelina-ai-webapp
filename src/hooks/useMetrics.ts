@@ -55,7 +55,7 @@ export function useMetrics() {
     } finally {
       setLoading('metrics', false);
     }
-  }, [company?.id, metrics, setMetrics, setLoading, setError, t]);
+  }, [company?.id, metrics, setMetrics, setLoading, setError, t, supabase]);
 
   const updateMetrics = useCallback(async (companyId: string, updates: Partial<Metrics>) => {
     try {
@@ -76,7 +76,7 @@ export function useMetrics() {
       toast.error(errorMessage);
       return null;
     }
-  }, [setMetrics]);
+  }, [setMetrics, supabase]);
 
   const incrementMetric = useCallback(async (
     companyId: string, 
@@ -100,14 +100,14 @@ export function useMetrics() {
       toast.error(errorMessage);
       return false;
     }
-  }, [fetchMetrics]);
+  }, [fetchMetrics, supabase]);
 
   // Auto-fetch on mount if no data
   useEffect(() => {
     if (company?.id && !metrics && !loading.metrics) {
       fetchMetrics();
     }
-  }, [company?.id, metrics, loading.metrics]);
+  }, [company?.id, metrics, loading.metrics, fetchMetrics]);
 
   return {
     metrics,

@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
     console.error('Payment API error:', error);
     isSent=false
     return NextResponse.json({ 
-      error: t('api.general.errors.serverError'),
+      error: 'Server error occurred',
       details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }

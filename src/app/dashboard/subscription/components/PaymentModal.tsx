@@ -97,7 +97,7 @@ export default function PaymentModal({
         setPaymentStatus("initialized");
         setMerchantReference(data.merchant_reference);
         // Start polling payment status from database
-        pollPaymentStatusFromDB(data.merchant_reference);
+        pollPaymentStatusFromDB(merchantReference);
       }
     } catch (error) {
       console.error("Payment error:", error);

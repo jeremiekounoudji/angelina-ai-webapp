@@ -16,7 +16,6 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { User, UserRole } from "@/types/database";
 import { useUpload } from "@/hooks/useUpload";
 import { useUsers } from "@/hooks/useUsers";
 import { usePlanLimits } from "@/hooks/usePlanLimits";
@@ -25,6 +24,7 @@ import { CameraIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline
 import toast from 'react-hot-toast';
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
+import { UserRole } from "@/types/database";
 
 const userSchema = z.object({
   full_name: z.string().min(1, "Full name is required"),
@@ -291,7 +291,7 @@ export function AddUserModal({
                 placeholder={t('form.selectRole')}
                 selectedKeys={userRole ? [userRole] : []}
                 onSelectionChange={(keys) => {
-                  const selectedRole = Array.from(keys)[0] as UserRole;
+                  const selectedRole = Array.from(keys)[0] as "customer" | "manager" | "staff";
                   setValue("role", selectedRole, { shouldDirty: true });
                 }}
                 isInvalid={!!errors.role}
