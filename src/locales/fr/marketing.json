@@ -193,6 +193,76 @@
       "linkedin": "LinkedIn",
       "facebook": "Facebook"
     },
-    "copyright": "© 2024 Angelina AI. Tous droits réservés."
+    "copyright": "© 2024 Angelina AI. Tous droits réservés.",
+    "links": {
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions générales"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "lastUpdated": "Dernière mise à jour : 12 novembre 2025",
+      "sections": {
+        "intro": {
+          "title": "Introduction",
+          "content": "Chez Angelina AI, nous nous engageons à protéger votre vie privée et à assurer la sécurité de vos informations personnelles. Cette Politique de confidentialité explique comment nous collectons, utilisons, divulguons et protégeons vos données lorsque vous utilisez notre service d'agent IA WhatsApp pour la gestion de restaurant."
+        },
+        "dataCollection": {
+          "title": "Informations que nous collectons",
+          "content": "Nous collectons les informations que vous nous fournissez directement, y compris les détails du restaurant, les informations du menu, les données d'inventaire, les commandes clients et les données de communication WhatsApp. Nous collectons également automatiquement les données d'utilisation, les informations sur l'appareil et les analyses pour améliorer notre service."
+        },
+        "dataUsage": {
+          "title": "Comment nous utilisons vos informations",
+          "content": "Nous utilisons vos informations pour fournir et maintenir notre service d'agent IA, traiter les commandes, gérer l'inventaire, traiter les plaintes des clients, coordonner les livraisons et améliorer notre plateforme. Nous utilisons également les données pour les analyses, le support client et pour nous conformer aux obligations légales."
+        },
+        "dataSecurity": {
+          "title": "Sécurité des données",
+          "content": "Nous mettons en œuvre des mesures de sécurité standard de l'industrie pour protéger vos données, y compris le chiffrement, les serveurs sécurisés et les contrôles d'accès. Vos données sont stockées en toute sécurité et nous maintenons un SLA de 99,9% avec une surveillance 24h/24 et 7j/7. Nous sommes conformes au RGPD et suivons les réglementations internationales sur la protection des données."
+        },
+        "userRights": {
+          "title": "Vos droits",
+          "content": "Vous avez le droit d'accéder, de corriger ou de supprimer vos informations personnelles. Vous pouvez demander la portabilité des données, vous opposer au traitement et retirer votre consentement à tout moment. Pour exercer ces droits, veuillez contacter notre équipe de support."
+        },
+        "contact": {
+          "title": "Nous contacter",
+          "content": "Si vous avez des questions concernant cette Politique de confidentialité ou nos pratiques en matière de données, veuillez nous contacter à privacy@angelina-ai.com ou via nos canaux de support."
+        }
+      }
+    },
+    "terms": {
+      "title": "Conditions générales",
+      "lastUpdated": "Dernière mise à jour : 12 novembre 2025",
+      "sections": {
+        "intro": {
+          "title": "Acceptation des conditions",
+          "content": "En accédant et en utilisant le service d'agent IA WhatsApp d'Angelina AI, vous acceptez d'être lié par ces Conditions générales. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre service."
+        },
+        "serviceDescription": {
+          "title": "Description du service",
+          "content": "Angelina AI fournit un agent IA intelligent basé sur WhatsApp qui automatise les opérations de restaurant, y compris la prise de commandes, la gestion des stocks, le traitement des plaintes et la coordination des livraisons. Nous proposons différents plans d'abonnement avec différentes fonctionnalités et limites d'utilisation."
+        },
+        "userObligations": {
+          "title": "Obligations de l'utilisateur",
+          "content": "Vous acceptez de fournir des informations précises sur le restaurant, de maintenir la sécurité de vos identifiants de compte, d'utiliser le service conformément aux lois applicables et de ne pas abuser ou tenter de perturber notre plateforme. Vous êtes responsable de toutes les activités sous votre compte."
+        },
+        "payment": {
+          "title": "Conditions de paiement",
+          "content": "Les frais d'abonnement sont facturés mensuellement ou annuellement en fonction du plan choisi. Les paiements sont traités en toute sécurité via nos partenaires de paiement. Vous pouvez mettre à niveau, rétrograder ou annuler votre abonnement à tout moment. Les remboursements sont fournis selon notre politique de remboursement."
+        },
+        "liability": {
+          "title": "Limitation de responsabilité",
+          "content": "Angelina AI est fourni 'tel quel' sans garantie d'aucune sorte. Nous ne sommes pas responsables des dommages indirects, accessoires ou consécutifs. Notre responsabilité totale est limitée au montant que vous avez payé pour le service au cours des 12 derniers mois."
+        },
+        "termination": {
+          "title": "Résiliation",
+          "content": "Nous nous réservons le droit de suspendre ou de résilier votre compte en cas de violation de ces conditions, de non-paiement ou d'utilisation abusive du service. Vous pouvez annuler votre abonnement à tout moment. Lors de la résiliation, votre accès au service cessera."
+        },
+        "contact": {
+          "title": "Informations de contact",
+          "content": "Pour toute question concernant ces Conditions générales, veuillez nous contacter à legal@angelina-ai.com ou via nos canaux de support."
+        }
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardBody, CardHeader, Button, Input, Link } from "@heroui/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
@@ -10,6 +10,7 @@ import { z } from "zod";
 import { useAuthActions } from "@/hooks/useAuth";
 import { useAppStore } from "@/store";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const createLoginSchema = (t: any) => z.object({
   email: z.string().email(t('errors.invalidCredentials')),
@@ -26,9 +27,17 @@ export default function LoginPage() {
   const router = useRouter();
   const { signIn } = useAuthActions();
   const { loading } = useAppStore();
-  const { t } = useTranslationNamespace('auth.login');
+  const { t, locale } = useTranslationNamespace('auth.login');
+  const { user, loading: authLoading } = useAuth();
 
-  const loginSchema = createLoginSchema(t);
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace("/dashboard");
+    }
+  }, [user, authLoading, router]);
+
+  const loginSchema = useMemo(() => createLoginSchema(t), [locale]);
   
   const {
     register,

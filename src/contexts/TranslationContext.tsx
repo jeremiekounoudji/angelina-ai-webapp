@@ -82,14 +82,15 @@ export function useTranslation(): TranslationContextType {
 
 // Hook for specific translation namespaces
 export function useTranslationNamespace(namespace: string) {
-  const { t, ...rest } = useTranslation();
+  const { t, locale, ...rest } = useTranslation();
   
-  const namespacedT: TranslationFunction = (key: string, params?: Record<string, string | number>) => {
+  const namespacedT: TranslationFunction = React.useCallback((key: string, params?: Record<string, string | number>) => {
     return t(`${namespace}.${key}`, params);
-  };
+  }, [t, namespace]);
   
   return {
     t: namespacedT,
+    locale,
     ...rest,
   };
 }

@@ -14,11 +14,13 @@ import { PencilIcon, MapPinIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/reac
 import { EditCompanyModal } from './components/EditCompanyModal'
 import { MetricsCards } from './components/MetricsCards'
 import { useTranslationNamespace } from '@/contexts/TranslationContext'
+import { useWhatsAppConnect } from "@/hooks/useWhatsAppConnect";
 
 export default function CompanyPage() {
-  const { company } = useAuth()
+  const { company,user } = useAuth()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { t } = useTranslationNamespace('dashboard.company')
+  const { authUrl } = useWhatsAppConnect({ userId:user?.id });
 
   const getStatusColor = (status?: string) => {
     switch (status) {
@@ -111,6 +113,20 @@ export default function CompanyPage() {
                     <span className="text-gray-50">{company.email}</span>
                   </div>
                 )}
+
+                {/* sethup wahtsapp btn */}
+                <Button
+                  className="bg-background border border-secondary text-white hover:bg-secondary shadow-lg shadow-secondary/20"
+                  startContent={<PencilIcon className="w-4 h-4" />}
+                  onPress={()=>{
+                    if(authUrl){
+                      window.open(authUrl, '_blank');
+                    }
+                  }
+                  }
+                >
+                  {t('actions.connectWhatsapp')}
+                </Button>
               </div>
             </CardBody>
           </Card>

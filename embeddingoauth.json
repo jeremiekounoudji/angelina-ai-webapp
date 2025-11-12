@@ -1,0 +1,312 @@
+{
+  "name": "WhatsApp - OAuth Callback",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "whatsapp-auth",
+        "options": {}
+      },
+      "id": "5174092b-3127-4a0b-93f5-19f9571d227b",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        860,
+        500
+      ],
+      "webhookId": "your-webhook-id"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "{{ $json.query.error }}",
+              "operation": "isEmpty"
+            }
+          ]
+        }
+      },
+      "id": "e5192348-1854-469b-90f7-b4d081f95d88",
+      "name": "User Approved?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://graph.facebook.com/v19.0/oauth/access_token",
+        "options": {},
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "client_id",
+              "value": "{{ $env.META_APP_ID }}"
+            },
+            {
+              "name": "client_secret",
+              "value": "{{ $env.META_APP_SECRET }}"
+            },
+            {
+              "name": "redirect_uri",
+              "value": "{{ $env.N8N_REDIRECT_URL }}"
+            },
+            {
+              "name": "code",
+              "value": "{{ $json.query.code }}"
+            }
+          ]
+        },
+        "queryParameters": {},
+        "headerParameters": {}
+      },
+      "id": "ab66f365-5c1a-4649-8c90-044733e8a342",
+      "name": "1. Exchange Code for Token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1340,
+        400
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "responseCode": 302,
+        "options": {
+          "redirectUrl": "={{ $env.FRONTEND_APP_URL }}/dashboard?success=false&error={{ $json.query.error_description }}"
+        }
+      },
+      "id": "50d85908-65ab-4c3e-a74e-7b79d201b1b4",
+      "name": "Redirect: Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.facebook.com/v19.0/me/whatsapp_business_accounts",
+        "options": {},
+        "queryParameters": {},
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.access_token }}"
+            }
+          ]
+        }
+      },
+      "id": "060d4da1-7b98-4b71-b6a4-6b94101e4277",
+      "name": "2. Get WABA ID",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1580,
+        400
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.facebook.com/v19.0/{{ $json.data[0].id }}/phone_numbers",
+        "options": {},
+        "queryParameters": {},
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $items('1. Exchange Code for Token')[0].json.access_token }}"
+            }
+          ]
+        }
+      },
+      "id": "c85d7756-3392-498c-85a7-961476d05f23",
+      "name": "3. Get Phone Number ID",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1820,
+        400
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "user_id_from_state",
+              "value": "{{ $webhook.query.state }}"
+            },
+            {
+              "name": "access_token",
+              "value": "{{ $items('1. Exchange Code for Token')[0].json.access_token }}"
+            },
+            {
+              "name": "waba_id",
+              "value": "{{ $items('2. Get WABA ID')[0].json.data[0].id }}"
+            },
+            {
+              "name": "phone_number_id",
+              "value": "{{ $json.data[0].id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "95a53907-7b8c-4a1e-8bc3-3d07e5c54c30",
+      "name": "Data to Save",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2.1,
+      "position": [
+        2060,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "responseCode": 302,
+        "options": {
+          "redirectUrl": "={{ $env.FRONTEND_APP_URL }}/dashboard?success=true"
+        }
+      },
+      "id": "84319088-9275-470a-8a5e-1763a152e424",
+      "name": "Redirect: Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        2500,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "public",
+        "table": "whatsapp_credentials",
+        "columns": "user_id,access_token,waba_id,phone_number_id",
+        "options": {}
+      },
+      "id": "c1619888-2ffc-469b-980b-226be009e863",
+      "name": "4. Save to Database",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 6,
+      "position": [
+        2280,
+        400
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_DB_CREDENTIAL_ID",
+          "name": "Your Database"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "id": "e5192348-1854-469b-90f7-b4d081f95d88",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Approved?": {
+      "main": [
+        [
+          {
+            "id": "ab66f365-5c1a-4649-8c90-044733e8a342",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "id": "50d85908-65ab-4c3e-a74e-7b79d201b1b4",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "1. Exchange Code for Token": {
+      "main": [
+        [
+          {
+            "id": "060d4da1-7b98-4b71-b6a4-6b94101e4277",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "060d4da1-7b98-4b71-b6a4-6b94101e4277": {
+      "main": [
+        [
+          {
+            "id": "c85d7756-3392-498c-85a7-961476d05f23",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "c85d7756-3392-498c-85a7-961476d05f23": {
+      "main": [
+        [
+          {
+            "id": "95a53907-7b8c-4a1e-8bc3-3d07e5c54c30",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "95a53907-7b8c-4a1e-8bc3-3d07e5c54c30": {
+      "main": [
+        [
+          {
+            "id": "c1619888-2ffc-469b-980b-226be009e863",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "c1619888-2ffc-469b-980b-226be009e863": {
+      "main": [
+        [
+          {
+            "id": "84319088-9275-470a-8a5e-1763a152e424",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "webhook": {
+      "5174092b-3127-4a0b-93f5-19f9571d227b": {
+        "webhookId": "2f0c0587-f836-4d2d-8b01-9f5b616a2414",
+        "webhookUrl": "https://unterminative-eladia-nongenuinely.ngrok-free.dev/webhook-test/799bca55-90a2-42c0-bb8d-6ad5f04d09fe/webhook",
+        "httpMethod": "GET"
+      }
+    }
+  }
+}

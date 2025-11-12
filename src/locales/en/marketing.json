@@ -193,6 +193,76 @@
       "linkedin": "LinkedIn",
       "facebook": "Facebook"
     },
-    "copyright": "© 2024 Angelina AI. All rights reserved."
+    "copyright": "© 2024 Angelina AI. All rights reserved.",
+    "links": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms & Conditions"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: November 12, 2025",
+      "sections": {
+        "intro": {
+          "title": "Introduction",
+          "content": "At Angelina AI, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your data when you use our WhatsApp AI agent service for restaurant management."
+        },
+        "dataCollection": {
+          "title": "Information We Collect",
+          "content": "We collect information that you provide directly to us, including restaurant details, menu information, inventory data, customer orders, and WhatsApp communication data. We also automatically collect usage data, device information, and analytics to improve our service."
+        },
+        "dataUsage": {
+          "title": "How We Use Your Information",
+          "content": "We use your information to provide and maintain our AI agent service, process orders, manage inventory, handle customer complaints, coordinate deliveries, and improve our platform. We also use data for analytics, customer support, and to comply with legal obligations."
+        },
+        "dataSecurity": {
+          "title": "Data Security",
+          "content": "We implement industry-standard security measures to protect your data, including encryption, secure servers, and access controls. Your data is stored securely and we maintain a 99.9% SLA with 24/7 monitoring. We are GDPR compliant and follow international data protection regulations."
+        },
+        "userRights": {
+          "title": "Your Rights",
+          "content": "You have the right to access, correct, or delete your personal information. You can request data portability, object to processing, and withdraw consent at any time. To exercise these rights, please contact our support team."
+        },
+        "contact": {
+          "title": "Contact Us",
+          "content": "If you have any questions about this Privacy Policy or our data practices, please contact us at privacy@angelina-ai.com or through our support channels."
+        }
+      }
+    },
+    "terms": {
+      "title": "Terms & Conditions",
+      "lastUpdated": "Last updated: November 12, 2025",
+      "sections": {
+        "intro": {
+          "title": "Agreement to Terms",
+          "content": "By accessing and using Angelina AI's WhatsApp AI agent service, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our service."
+        },
+        "serviceDescription": {
+          "title": "Service Description",
+          "content": "Angelina AI provides an intelligent WhatsApp-based AI agent that automates restaurant operations including order taking, inventory management, complaint handling, and delivery coordination. We offer various subscription plans with different features and usage limits."
+        },
+        "userObligations": {
+          "title": "User Obligations",
+          "content": "You agree to provide accurate restaurant information, maintain the security of your account credentials, use the service in compliance with applicable laws, and not misuse or attempt to disrupt our platform. You are responsible for all activities under your account."
+        },
+        "payment": {
+          "title": "Payment Terms",
+          "content": "Subscription fees are billed monthly or annually based on your chosen plan. Payments are processed securely through our payment partners. You can upgrade, downgrade, or cancel your subscription at any time. Refunds are provided according to our refund policy."
+        },
+        "liability": {
+          "title": "Limitation of Liability",
+          "content": "Angelina AI is provided 'as is' without warranties of any kind. We are not liable for indirect, incidental, or consequential damages. Our total liability is limited to the amount you paid for the service in the past 12 months."
+        },
+        "termination": {
+          "title": "Termination",
+          "content": "We reserve the right to suspend or terminate your account for violation of these terms, non-payment, or misuse of the service. You may cancel your subscription at any time. Upon termination, your access to the service will cease."
+        },
+        "contact": {
+          "title": "Contact Information",
+          "content": "For questions about these Terms & Conditions, please contact us at legal@angelina-ai.com or through our support channels."
+        }
+      }
+    }
   }
 }

@@ -1,0 +1,135 @@
+{
+  "id": "g5EamBB0OXRHQQm9",
+  "name": "My workflow 3",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('WhatsApp Trigger').item.json.messages[0].text.body }}",
+        "options": {
+          "systemMessage": "\n **Rôle général**\n> Tu es **Angelina AI**, l’assistante intelligente officielle du réseau de restaurants, de commerces et de services partenaires.\n> Tu es **capable d’adapter ton comportement et tes réponses** en fonction :\n\n* du **mode** (Marketplace vs Entreprise individuelle),\n* du **type d’entreprise** (restaurant, boutique, service…).\n\n---\n\n### 🎭 **Modes et Adaptation**\n\n1. **Mode Marketplace (multi-entreprises)**\n   * Tu agis comme **assistante globale** permettant aux clients de chercher des produits, plats ou services parmi toutes les entreprises enregistrées.\n   * Tu présentes les résultats avec filtres, prix, disponibilités.\n   * Tu gères la mise en relation avec les agents IA de chaque entreprise.\n   * Ton ton est **assistant shopping neutre** et **guide**.\n\n2. **Mode Entreprise individuelle**\n   * Tu agis comme **assistante** de l’entreprise spécifique.\n   * Tu adaptes ton ton et tes réponses selon le **type d’entreprise** :\n     * **Restaurant** : mets l’accent sur plats, boissons, menus.\n     * **Boutique** : mets l’accent sur produits électroniques, vêtements, accessoires…\n     * **Service** : mets l’accent sur réservation, disponibilité…\n   * Tu gères : commandes, produits, stocks, plaintes, utilisateurs, livraisons, négociation.\n\n---\n\n### 🛠️ **Fonctionnement Général**\n#### 1. Gestion des utilisateurs\n* Vérifie si l’utilisateur existe déjà en base à chaque nouveau message.\n* Si non, enregistre-le (WhatsApp phone = identifiant principal).\n* Mets à jour les infos profil si besoin.\n\n#### 2. Rôles et permissions\n* **Client** : consulter catalogue, commander, négocier.\n* **Staff** : suivre commandes et plaintes.\n* **Manager** : ajouter/modifier produits, gérer stocks, recevoir plaintes complexes.\n* Tout doit être **contrôlé par rôle**.\n\n---\n\n### **Négociation et Vente Psychologique**\n* Si un produit **n’a pas de prix fixe** :\n  * Montre la **fourchette de prix** (min/max).\n  * Essaie toujours de vendre au **prix le plus élevé possible** dans la fourchette.\n  * **Ne descends jamais** en dessous du **prix minimum**.\n  * Sois **conversationnel et fun**.\n  * Gère la négociation comme un **jeu gagnant-gagnant**.\n\n---\n\n### **Catalogue visuel dynamique**\n* Utilise l’outil **generate_catalog_poster** pour créer une **affiche visuelle** du catalogue produits/menu.\n* Régénère le catalogue **dès qu’un produit est ajouté, modifié ou supprimé**.\n\n---\n\n### **Facturation automatique**\n* Utilise l’outil **generate_invoice** après chaque commande confirmée.\n* La facture doit inclure : produits, quantités, prix, remises, total TTC.\n\n---\n\n### **Gestion des commandes**\n* **Restaurant** : plats, boissons, menus.\n* **Boutique** : produits physiques.\n* Confirme toujours la commande avant validation.\n* Mets à jour stocks après chaque commande.\n\n---\n\n### **Plaintes**\n* Sois empathique.\n* Analyse la plainte.\n* Propose solution immédiate ou escalade au manager.\n\n---\n\n### **Livraison & Suivi**\n* Planifie livraisons.\n* Informe client et manager.\n\n---\n\n### **Base de Données**\n* Toutes les actions interagissent avec la base.\n* Vérifie cohérence avant d’agir.\n\n---\n\n### **Style et attitude**\n* **Chaleureux, positif, professionnel.**\n* **Marketplace** : neutre.\n* **Entreprise** : personnalisé.\n\n---\n\n### **Objectifs clés**\n* Réduire interventions humaines.\n* Créer expérience immersive.\n* Optimiser commandes, stocks et plaintes.\n\n---\n\n### Exemple de salutation\n> Bonjour 👋 Je suis Angelina AI, votre assistante shopping. Que puis-je faire pour vous aujourd’hui ?\n\n---\nNe jamais rien inventer. Si une information n'est pas disponible, dis-le poliment.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [0, 0],
+      "id": "e724f265-a742-438d-b458-14f709744707",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "mistral-medium-2505",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [-704, 224],
+      "id": "4d9efe4c-cb81-4288-b4ab-1f11573b3b91",
+      "name": "Mistral Cloud Chat Model",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "ikYW50Ik0xLF6fgI",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.contacts[0].wa_id }}",
+        "contextWindowLength": 100
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [-512, 272],
+      "id": "4d144262-8c0b-4a36-90aa-da898046a8b0",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "updates": ["messages"],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [-592, 16],
+      "id": "0b3b6ad3-09e0-4499-9d6c-05ab16eacce4",
+      "name": "WhatsApp Trigger",
+      "webhookId": "5da96b21-e0d8-4db3-8cca-1f4ca7fa32fb",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "KNFlvIS0LFkDHugs",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51c921be-bd5e-43fe-981f-c4a39778528a",
+              "name": "contacts[0].wa_id",
+              "value": "={{ $json.contacts[0].wa_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-352, 32],
+      "id": "4f55da32-acea-43d2-af18-cf484abdfdfd",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "187967121072676",
+        "recipientPhoneNumber": "={{ $('Edit Fields').item.json.contacts[0].wa_id }}",
+        "textBody": "={{ $json.output }}"
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [352, 0],
+      "id": "f57acb14-d554-45bb-b31b-3b82640e0478",
+      "name": "Send message",
+      "webhookId": "6ed86342-15ec-41fb-9d1c-7c59fd7b2d99",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "V5pSUStUYhfcdMDa",
+          "name": "WhatsApp account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Mistral Cloud Chat Model": {
+      "ai_languageModel": [[{ "node": "AI Agent", "type": "ai_languageModel", "index": 0 }]]
+    },
+    "Simple Memory": {
+      "ai_memory": [[{ "node": "AI Agent", "type": "ai_memory", "index": 0 }]]
+    },
+    "WhatsApp Trigger": {
+      "main": [[{ "node": "Edit Fields", "type": "main", "index": 0 }]]
+    },
+    "AI Agent": {
+      "main": [[{ "node": "Send message", "type": "main", "index": 0 }]]
+    },
+    "Edit Fields": {
+      "main": [[{ "node": "AI Agent", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "69d8cede-70d0-48e4-83af-7d04331c5696",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "createdAt": "2025-09-27T11:55:08.506Z",
+  "updatedAt": "2025-09-27T12:04:33.000Z",
+  "triggerCount": 0
+}

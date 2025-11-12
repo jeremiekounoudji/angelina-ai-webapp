@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -26,6 +26,7 @@ import { CompanyType } from "@/types/database";
 import { useAuthActions } from "@/hooks/useAuth";
 import { useAppStore } from "@/store";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const createStep1Schema = (t: any) => z
   .object({
@@ -81,10 +82,18 @@ export default function RegisterPage() {
   const router = useRouter();
   const { signUp } = useAuthActions();
   const { loading } = useAppStore();
-  const { t } = useTranslationNamespace('auth.register');
+  const { t, locale } = useTranslationNamespace('auth.register');
+  const { user, loading: authLoading } = useAuth();
 
-  const step1Schema = createStep1Schema(t);
-  const step2Schema = createStep2Schema(t);
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace("/dashboard");
+    }
+  }, [user, authLoading, router]);
+
+  const step1Schema = useMemo(() => createStep1Schema(t), [locale]);
+  const step2Schema = useMemo(() => createStep2Schema(t), [locale]);
 
   const step1Form = useForm<Step1FormData>({
     resolver: zodResolver(step1Schema),

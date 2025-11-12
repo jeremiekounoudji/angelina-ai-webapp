@@ -19,7 +19,7 @@ export default function Footer() {
           {/* Main footer content */}
           <motion.div
             variants={staggerItem}
-            className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12"
+            className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12"
           >
             {/* Company info */}
           <div className="md:col-span-2">
@@ -81,6 +81,15 @@ export default function Footer() {
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">API</a></li>
             </ul>
           </div>
+
+            {/* Legal */}
+          <div>
+              <h4 className="text-lg font-semibold mb-4">Légal</h4>
+            <ul className="space-y-2">
+                <li><a href="/privacy" className="text-gray-400 hover:text-white transition-colors">{t('links.privacy')}</a></li>
+                <li><a href="/terms" className="text-gray-400 hover:text-white transition-colors">{t('links.terms')}</a></li>
+            </ul>
+          </div>
         </motion.div>
 
           {/* Bottom section */}
@@ -96,11 +105,11 @@ export default function Footer() {
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 {t('rgpd')}
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Conditions d&apos;utilisation
+              <a href="/terms" className="text-gray-400 hover:text-white transition-colors">
+                {t('links.terms')}
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Politique de confidentialité
+              <a href="/privacy" className="text-gray-400 hover:text-white transition-colors">
+                {t('links.privacy')}
               </a>
           </div>
           </motion.div>
