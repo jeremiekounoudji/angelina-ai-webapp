@@ -14,7 +14,15 @@
     "notifications": "Notifications",
     "profile": "Profile",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "pageNames": {
+      "company": "Company Profile",
+      "users": "Team Management",
+      "subscription": "Subscription & Billing",
+      "products": "Product Management",
+      "settings": "Settings",
+      "dashboard": "Dashboard"
+    }
   },
   "overview": {
     "title": "Dashboard Overview",
@@ -297,7 +305,29 @@
       "purchased": "Purchased",
       "buyMore": "Buy More Tokens",
       "loadingData": "Loading usage data...",
-      "usageProgress": "Usage Progress"
+      "usageProgress": "Usage Progress",
+      "buyModal": {
+        "title": "Buy More Tokens",
+        "subtitle": "Add more tokens to your account to continue using AI features",
+        "packages": "Packages",
+        "customAmount": "Custom Amount",
+        "popular": "Popular",
+        "tokens": "tokens",
+        "perMillion": "per 1M tokens",
+        "totalCost": "Total Cost",
+        "rate": "Rate: $0.00005 per token",
+        "securePayment": "Secure Payment",
+        "paymentNote": "Tokens will be added to your account immediately after payment confirmation. This is a simulation - no actual payment will be processed.",
+        "cancel": "Cancel",
+        "purchase": "Purchase Tokens",
+        "processing": "Processing...",
+        "enterCustom": "Enter custom amount",
+        "numberOfTokens": "Number of Tokens",
+        "smallBoost": "Small boost for light usage",
+        "greatValue": "Great value for regular users",
+        "perfectHeavy": "Perfect for heavy usage",
+        "maxValue": "Maximum value package"
+      }
     },
     "plans": {
       "choose": "Choose Your Plan",
@@ -347,7 +377,8 @@
     "actions": {
       "edit": "Edit Company",
       "save": "Save Changes",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "connectWhatsapp": "Connect WhatsApp"
     },
     "success": {
       "updated": "Company information updated successfully",
@@ -361,6 +392,42 @@
       "companyId": "Company ID",
       "subscription": "Subscription",
       "created": "Created"
+    },
+    "whatsapp": {
+      "title": "Connect WhatsApp",
+      "subtitle": "Connect your WhatsApp number to start receiving orders",
+      "integration": "WhatsApp Integration",
+      "connectDescription": "Connect your WhatsApp to receive orders",
+      "connectedTo": "Connected: {phone}",
+      "phoneLabel": "WhatsApp Phone Number",
+      "phonePlaceholder": "33612345678",
+      "phoneHelp": "Enter the phone number with country code (e.g., 33612345678 for France)",
+      "scanQrTitle": "Scan QR Code",
+      "scanQrDescription": "Open WhatsApp on your phone and scan this QR code",
+      "instructions": {
+        "step1": "1. Open WhatsApp on your phone",
+        "step2": "2. Tap Menu (⋮) → Linked Devices",
+        "step3": "3. Tap \"Link a Device\"",
+        "step4": "4. Scan this QR code"
+      },
+      "orEnterCode": "Or enter this code manually:",
+      "waitingConnection": "Waiting for connection...",
+      "successTitle": "WhatsApp Connected Successfully!",
+      "successDescription": "Your WhatsApp is now connected and ready to receive orders.",
+      "errorTitle": "Connection Failed",
+      "errorDescription": "Failed to connect WhatsApp. Please try again.",
+      "phone": "Phone",
+      "status": "Status",
+      "connected": "Connected",
+      "connecting": "Connecting",
+      "disconnected": "Disconnected",
+      "error": "Error",
+      "disconnect": "Disconnect",
+      "reconnect": "Reconnect",
+      "cancel": "Cancel",
+      "connect": "Connect WhatsApp",
+      "done": "Done",
+      "tryAgain": "Try Again"
     }
   },
   "settings": {

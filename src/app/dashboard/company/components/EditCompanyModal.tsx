@@ -6,7 +6,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Button,
   Input,
   Textarea,
@@ -60,6 +59,7 @@ export function EditCompanyModal({
   const [avatarUrl, setAvatarUrl] = useState(company.avatar_url || "");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [showConfirmClose, setShowConfirmClose] = useState(false);
+  const [showConfirmSave, setShowConfirmSave] = useState(false);
   const { t } = useTranslationNamespace('dashboard.company');
   const { t: tCommon } = useTranslationNamespace('common');
 
@@ -110,9 +110,17 @@ export function EditCompanyModal({
     setAvatarUrl(previewUrl);
   };
 
-  const onSubmit: (data: CompanyFormData) => Promise<void> = async (data) => {
+  const onSubmit = () => {
+    // Show confirmation dialog instead of saving directly
+    setShowConfirmSave(true);
+  };
+
+  const handleConfirmSave = async () => {
+    const data = watch(); // Get current form data
+    
     try {
       setIsLoading(true);
+      setShowConfirmSave(false);
 
       let finalAvatarUrl = company.avatar_url;
 
@@ -134,17 +142,15 @@ export function EditCompanyModal({
         avatar_url: finalAvatarUrl,
       };
 
-      const result = await updateCompany(updateData);
-
-      if (result) {
-        await refreshUser();
-        onOpenChange(false);
-        reset(data);
-        // Clean up preview URL
-        if (avatarUrl.startsWith('blob:')) {
-          URL.revokeObjectURL(avatarUrl);
-        }
+      await updateCompany(updateData);
+      
+      // Clean up preview URL
+      if (avatarUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(avatarUrl);
       }
+      
+      await refreshUser();
+      onOpenChange(false);
     } catch (error) {
       console.error("Error updating company:", error);
     } finally {
@@ -244,6 +250,7 @@ export function EditCompanyModal({
                     isInvalid={!!errors.name}
                     errorMessage={errors.name?.message}
                     isRequired
+                    variant="bordered"
                     classNames={{
                       input: "text-white",
                       label: "text-gray-50",
@@ -254,6 +261,8 @@ export function EditCompanyModal({
                   {/* Company Type */}
                   <Select
                     label="Company Type"
+                    variant="bordered"
+
                     placeholder="Select company type"
                     selectedKeys={companyType ? [companyType] : []}
                     onSelectionChange={(keys) => {
@@ -281,6 +290,8 @@ export function EditCompanyModal({
                     label="Email"
                     placeholder="Enter company email"
                     type="email"
+                    variant="bordered"
+
                     {...register("email")}
                     isInvalid={!!errors.email}
                     errorMessage={errors.email?.message}
@@ -298,6 +309,8 @@ export function EditCompanyModal({
                     {...register("phone")}
                     isInvalid={!!errors.phone}
                     errorMessage={errors.phone?.message}
+                    variant="bordered"
+
                     classNames={{
                       input: "text-white",
                       label: "text-gray-50",
@@ -313,6 +326,8 @@ export function EditCompanyModal({
                     isInvalid={!!errors.address}
                     errorMessage={errors.address?.message}
                     minRows={2}
+                    variant="bordered"
+
                     classNames={{
                       input: "text-white",
                       label: "text-gray-50",
@@ -328,16 +343,19 @@ export function EditCompanyModal({
                     isInvalid={!!errors.description}
                     errorMessage={errors.description?.message}
                     minRows={3}
+                    variant="bordered"
+
                     classNames={{
                       input: "text-white",
                       label: "text-gray-50",
                       inputWrapper: "border-secondary bg-background"
                     }}
                   />
+
+
                 </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button
+                <div className=" flex justify-end gap-2">
+                    <Button
                   color="danger"
                   variant="light"
                   onPress={handleClose}
@@ -353,7 +371,8 @@ export function EditCompanyModal({
                 >
                   Save Changes
                 </Button>
-              </ModalFooter>
+                </div>
+              </ModalBody>
             </form>
           )}
         </ModalContent>
@@ -368,6 +387,17 @@ export function EditCompanyModal({
         confirmText={tCommon("modals.discardChanges")}
         cancelText={tCommon("modals.keepEditing")}
         variant="warning"
+      />
+
+      <ConfirmationModal
+        isOpen={showConfirmSave}
+        onClose={() => setShowConfirmSave(false)}
+        onConfirm={handleConfirmSave}
+        title="Save Company Changes"
+        message="Are you sure you want to save these changes to your company profile?"
+        confirmText="Save Changes"
+        cancelText="Cancel"
+        variant="info"
       />
     </>
   );

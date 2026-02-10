@@ -7,20 +7,28 @@ import {
   Button, 
   Avatar,
   Chip,
-  useDisclosure
+  useDisclosure,
+  Spinner
 } from '@heroui/react'
 import { useAuth } from '@/contexts/AuthContext'
 import { PencilIcon, MapPinIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/react/24/outline'
 import { EditCompanyModal } from './components/EditCompanyModal'
 import { MetricsCards } from './components/MetricsCards'
+import { PolicyCard } from './components/PolicyCard'
 import { useTranslationNamespace } from '@/contexts/TranslationContext'
 import { useWhatsAppConnect } from "@/hooks/useWhatsAppConnect";
+import { WhatsAppConnectModal } from './components/WhatsAppConnectModal';
 
 export default function CompanyPage() {
-  const { company,user } = useAuth()
+  const { company, loading } = useAuth()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen: isWhatsAppOpen, onOpen: onWhatsAppOpen, onOpenChange: onWhatsAppOpenChange } = useDisclosure()
   const { t } = useTranslationNamespace('dashboard.company')
-  const { authUrl } = useWhatsAppConnect({ userId:user?.id });
+  const { 
+    whatsappInstance, 
+    connectionStatus, 
+    disconnectWhatsApp 
+  } = useWhatsAppConnect();
 
   const getStatusColor = (status?: string) => {
     switch (status) {
@@ -32,13 +40,27 @@ export default function CompanyPage() {
     }
   }
 
+  // Show loading only while auth is initializing
+  if (loading) {
+    return (
+      <div className="p-6 bg-background min-h-screen flex items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
+
+  // Show empty state if no company after loading completes
   if (!company) {
     return (
       <div className="p-6 bg-background min-h-screen">
-        <div className="animate-pulse">
-          <div className="h-8 bg-secondary rounded w-1/4 mb-6"></div>
-          <div className="h-64 bg-secondary rounded"></div>
-        </div>
+        <Card className="bg-background border border-secondary shadow-lg shadow-secondary/20">
+          <CardBody className="text-center py-12">
+            <h3 className="text-lg font-medium text-white mb-2">No company found</h3>
+            <p className="text-gray-50">
+              Please contact support if you believe this is an error.
+            </p>
+          </CardBody>
+        </Card>
       </div>
     )
   }
@@ -114,19 +136,58 @@ export default function CompanyPage() {
                   </div>
                 )}
 
-                {/* sethup wahtsapp btn */}
-                <Button
-                  className="bg-background border border-secondary text-white hover:bg-secondary shadow-lg shadow-secondary/20"
-                  startContent={<PencilIcon className="w-4 h-4" />}
-                  onPress={()=>{
-                    if(authUrl){
-                      window.open(authUrl, '_blank');
-                    }
-                  }
-                  }
-                >
-                  {t('actions.connectWhatsapp')}
-                </Button>
+                {/* WhatsApp Connection */}
+                <div className="flex items-center justify-between p-4 border border-secondary rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                      <PhoneIcon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-white">{t('whatsapp.integration')}</h4>
+                      <p className="text-sm text-gray-400">
+                        {whatsappInstance 
+                          ? `${t('whatsapp.connected')}: ${whatsappInstance.phone_number}`
+                          : t('whatsapp.connectDescription')
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    {whatsappInstance && (
+                      <Chip
+                        size="sm"
+                        color={connectionStatus === 'connected' ? 'success' : 
+                               connectionStatus === 'connecting' ? 'warning' : 'danger'}
+                        variant="flat"
+                        className="capitalize"
+                      >
+                        {connectionStatus === 'connected' ? t('whatsapp.connected') :
+                         connectionStatus === 'connecting' ? t('whatsapp.connecting') :
+                         connectionStatus === 'error' ? t('whatsapp.error') : t('whatsapp.disconnected')}
+                      </Chip>
+                    )}
+                    
+                    {whatsappInstance && connectionStatus === 'connected' ? (
+                      <Button
+                        size="sm"
+                        color="danger"
+                        variant="light"
+                        onPress={disconnectWhatsApp}
+                      >
+                        {t('whatsapp.disconnect')}
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        className="bg-green-500 text-white hover:bg-green-600"
+                        onPress={onWhatsAppOpen}
+                      >
+                        {whatsappInstance ? t('whatsapp.reconnect') : t('actions.connectWhatsapp')}
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </div>
             </CardBody>
           </Card>
@@ -162,6 +223,11 @@ export default function CompanyPage() {
         </div>
       </div>
 
+      {/* Company Policy Section */}
+      <div className="mb-8">
+        <PolicyCard />
+      </div>
+
       {/* Metrics Section */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-white mb-4">{t('subtitle')}</h2>
@@ -172,6 +238,11 @@ export default function CompanyPage() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         company={company}
+      />
+
+      <WhatsAppConnectModal
+        isOpen={isWhatsAppOpen}
+        onOpenChange={onWhatsAppOpenChange}
       />
     </div>
   )

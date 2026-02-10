@@ -16,6 +16,7 @@ import {
 import { CpuChipIcon, CreditCardIcon } from "@heroicons/react/24/outline";
 import { tokenService } from "@/lib/tokenService";
 import toast from 'react-hot-toast';
+import { useTranslationNamespace } from "@/contexts/TranslationContext";
 
 interface BuyTokensModalProps {
   isOpen: boolean;
@@ -24,54 +25,54 @@ interface BuyTokensModalProps {
   onSuccess?: () => void;
 }
 
-const TOKEN_PACKAGES = [
-  {
-    tokens: 100000, // 100K tokens
-    price: 5,
-    popular: false,
-    description: "Small boost for light usage"
-  },
-  {
-    tokens: 500000, // 500K tokens
-    price: 20,
-    popular: true,
-    description: "Great value for regular users"
-  },
-  {
-    tokens: 1000000, // 1M tokens
-    price: 35,
-    popular: false,
-    description: "Perfect for heavy usage"
-  },
-  {
-    tokens: 2000000, // 2M tokens
-    price: 60,
-    popular: false,
-    description: "Maximum value package"
-  }
-];
-
 export default function BuyTokensModal({
   isOpen,
   onClose,
   companyId,
   onSuccess
 }: BuyTokensModalProps) {
-  const [selectedPackage, setSelectedPackage] = useState<typeof TOKEN_PACKAGES[0] | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
   const [customTokens, setCustomTokens] = useState("");
   const [loading, setLoading] = useState(false);
   const [useCustom, setUseCustom] = useState(false);
+  const { t } = useTranslationNamespace('dashboard.subscription.tokens.buyModal');
+
+  const TOKEN_PACKAGES = [
+    {
+      tokens: 100000,
+      price: 5,
+      popular: false,
+      description: t('smallBoost')
+    },
+    {
+      tokens: 500000,
+      price: 20,
+      popular: true,
+      description: t('greatValue')
+    },
+    {
+      tokens: 1000000,
+      price: 35,
+      popular: false,
+      description: t('perfectHeavy')
+    },
+    {
+      tokens: 2000000,
+      price: 60,
+      popular: false,
+      description: t('maxValue')
+    }
+  ];
 
   const handlePurchase = async () => {
-    if (!selectedPackage && !customTokens) return;
+    const pkg = selectedPackage !== null ? TOKEN_PACKAGES[selectedPackage] : null;
+    if (!pkg && !customTokens) return;
 
     setLoading(true);
     try {
-      const tokensToAdd = useCustom ? parseInt(customTokens) : selectedPackage?.tokens || 0;
-      const amount = useCustom ? (parseInt(customTokens) * 0.00005) : selectedPackage?.price || 0; // $0.00005 per token
+      const tokensToAdd = useCustom ? parseInt(customTokens) : pkg?.tokens || 0;
+      const amount = useCustom ? (parseInt(customTokens) * 0.00005) : pkg?.price || 0;
 
-      // In a real app, you would integrate with a payment processor here
-      // For now, we'll simulate a successful payment
       const success = await tokenService.purchaseTokens(companyId, tokensToAdd, {
         amount,
         currency: 'USD',
@@ -119,10 +120,10 @@ export default function BuyTokensModal({
         <ModalHeader className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <CpuChipIcon className="w-6 h-6 text-primary" />
-            <span className="text-white">Buy More Tokens</span>
+            <span className="text-white">{t('title')}</span>
           </div>
           <p className="text-sm text-gray-50 font-normal">
-            Add more tokens to your account to continue using AI features
+            {t('subtitle')}
           </p>
         </ModalHeader>
 
@@ -136,7 +137,7 @@ export default function BuyTokensModal({
                 size="sm"
                 onPress={() => setUseCustom(false)}
               >
-                Packages
+                {t('packages')}
               </Button>
               <Button
                 variant={useCustom ? "solid" : "bordered"}
@@ -144,7 +145,7 @@ export default function BuyTokensModal({
                 size="sm"
                 onPress={() => setUseCustom(true)}
               >
-                Custom Amount
+                {t('customAmount')}
               </Button>
             </div>
 
@@ -155,12 +156,12 @@ export default function BuyTokensModal({
                   <Card
                     key={index}
                     className={`cursor-pointer transition-all bg-background ${
-                      selectedPackage === pkg
+                      selectedPackage === index
                         ? "border-2 border-primary shadow-lg shadow-primary/20"
                         : "border border-secondary hover:border-primary"
                     } ${pkg.popular ? "ring-2 ring-primary/30" : ""}`}
                     isPressable
-                    onPress={() => setSelectedPackage(pkg)}
+                    onPress={() => setSelectedPackage(index)}
                   >
                     <CardBody className="p-4">
                       {pkg.popular && (
@@ -169,7 +170,7 @@ export default function BuyTokensModal({
                           size="sm"
                           className="absolute -top-2 -right-2"
                         >
-                          Popular
+                          {t('popular')}
                         </Chip>
                       )}
                       
@@ -178,7 +179,7 @@ export default function BuyTokensModal({
                           {formatTokens(pkg.tokens)}
                         </div>
                         <div className="text-sm text-gray-50 mb-2">
-                          {pkg.tokens.toLocaleString()} tokens
+                          {pkg.tokens.toLocaleString()} {t('tokens')}
                         </div>
                         <div className="text-xl font-semibold text-white mb-2">
                           ${pkg.price}
@@ -187,7 +188,7 @@ export default function BuyTokensModal({
                           {pkg.description}
                         </div>
                         <div className="text-xs text-gray-50 mt-1">
-                          ${(pkg.price / pkg.tokens * 1000000).toFixed(2)} per 1M tokens
+                          ${(pkg.price / pkg.tokens * 1000000).toFixed(2)} {t('perMillion')}
                         </div>
                       </div>
                     </CardBody>
@@ -199,8 +200,8 @@ export default function BuyTokensModal({
               <div className="space-y-4">
                 <Input
                   type="number"
-                  label="Number of Tokens"
-                  placeholder="Enter custom amount"
+                  label={t('numberOfTokens')}
+                  placeholder={t('enterCustom')}
                   value={customTokens}
                   onValueChange={setCustomTokens}
                   min="1000"
@@ -217,11 +218,11 @@ export default function BuyTokensModal({
                   <Card className="bg-secondary border border-secondary">
                     <CardBody className="p-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-50">Total Cost:</span>
+                        <span className="text-sm text-gray-50">{t('totalCost')}:</span>
                         <span className="text-lg font-semibold text-white">${customPrice}</span>
                       </div>
                       <div className="text-xs text-gray-50 mt-1">
-                        Rate: $0.00005 per token
+                        {t('rate')}
                       </div>
                     </CardBody>
                   </Card>
@@ -236,11 +237,10 @@ export default function BuyTokensModal({
                   <CreditCardIcon className="w-5 h-5 text-blue-400 mt-0.5" />
                   <div className="text-sm">
                     <p className="text-blue-300 font-medium mb-1">
-                      Secure Payment
+                      {t('securePayment')}
                     </p>
                     <p className="text-blue-200">
-                      Tokens will be added to your account immediately after payment confirmation.
-                      This is a simulation - no actual payment will be processed.
+                      {t('paymentNote')}
                     </p>
                   </div>
                 </div>
@@ -251,15 +251,15 @@ export default function BuyTokensModal({
 
         <ModalFooter>
           <Button variant="light" onPress={onClose}>
-            Cancel
+            {t('cancel')}
           </Button>
           <Button
             color="primary"
             onPress={handlePurchase}
             isLoading={loading}
-            isDisabled={(!selectedPackage && !customTokens) || loading}
+            isDisabled={(selectedPackage === null && !customTokens) || loading}
           >
-            {loading ? "Processing..." : "Purchase Tokens"}
+            {loading ? t('processing') : t('purchase')}
           </Button>
         </ModalFooter>
       </ModalContent>

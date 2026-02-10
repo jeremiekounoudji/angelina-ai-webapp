@@ -1,0 +1,130 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Daily 20:00 GMT+1",
+      "type": "n8n-nodes-base.cron",
+      "position": [200, 300],
+      "parameters": {
+        "schedule": {
+          "time": [{ "hour": 20, "minute": 0 }],
+          "mode": "everyDay"
+        }
+      }
+    },
+    {
+      "id": "2",
+      "name": "Search AI News",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [420, 300],
+      "parameters": {
+        "url": "https://serpapi.com/search.json",
+        "method": "GET",
+        "responseFormat": "json",
+        "queryParameters": {
+          "q": "Artificial Intelligence news OR AI Benin Republic site:linkedin.com",
+          "tbm": "nws",
+          "num": "30",
+          "api_key": "={{$env.SERPAPI_KEY}}"
+        }
+      }
+    },
+    {
+      "id": "3",
+      "name": "Select & Structure News",
+      "type": "n8n-nodes-base.openAi",
+      "position": [660, 300],
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "system",
+            "content": "From the input, select exactly 10 AI news items. Ensure at least 3 are about Benin Republic. Return JSON with two arrays:\n1) tiktok_carousel: each item {title, slide_text (max 10 words), image_prompt, hashtags}\n2) linkedin_carousel: same items but professional tone + LinkedIn hashtags\nAlso return whatsapp_news_list as formatted plain text."
+          },
+          {
+            "role": "user",
+            "content": "{{$json}}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "name": "Split TikTok Slides",
+      "type": "n8n-nodes-base.itemLists",
+      "position": [900, 200],
+      "parameters": {
+        "operation": "splitOut",
+        "propertyName": "tiktok_carousel"
+      }
+    },
+    {
+      "id": "5",
+      "name": "Generate TikTok Image",
+      "type": "n8n-nodes-base.openAi",
+      "position": [1120, 200],
+      "parameters": {
+        "operation": "image",
+        "prompt": "={{$json.image_prompt}}, minimal flat design, black white and orange color palette, bold typography, TikTok carousel style, no watermark",
+        "size": "1024x1024"
+      }
+    },
+    {
+      "id": "6",
+      "name": "Send Image to WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [1340, 200],
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v18.0/{{$env.WHATSAPP_PHONE_NUMBER_ID}}/messages",
+        "jsonParameters": true,
+        "bodyParametersJson": {
+          "messaging_product": "whatsapp",
+          "to": "YOUR_WHATSAPP_NUMBER",
+          "type": "image",
+          "image": {
+            "link": "={{$json.data[0].url}}",
+            "caption": "={{$json.slide_text}}"
+          }
+        },
+        "headerParametersJson": {
+          "Authorization": "Bearer {{$env.WHATSAPP_ACCESS_TOKEN}}"
+        }
+      }
+    },
+    {
+      "id": "7",
+      "name": "Send WhatsApp News List",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [900, 450],
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v18.0/{{$env.WHATSAPP_PHONE_NUMBER_ID}}/messages",
+        "jsonParameters": true,
+        "bodyParametersJson": {
+          "messaging_product": "whatsapp",
+          "to": "YOUR_WHATSAPP_NUMBER",
+          "type": "text",
+          "text": {
+            "body": "={{$json.whatsapp_news_list}}"
+          }
+        },
+        "headerParametersJson": {
+          "Authorization": "Bearer {{$env.WHATSAPP_ACCESS_TOKEN}}"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "1": { "main": [[{ "node": "2", "type": "main" }]] },
+    "2": { "main": [[{ "node": "3", "type": "main" }]] },
+    "3": {
+      "main": [
+        [{ "node": "4", "type": "main" }],
+        [{ "node": "7", "type": "main" }]
+      ]
+    },
+    "4": { "main": [[{ "node": "5", "type": "main" }]] },
+    "5": { "main": [[{ "node": "6", "type": "main" }]] }
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppStore } from "@/store";
@@ -8,52 +8,61 @@ import { User } from "@/types/database";
 import toast from 'react-hot-toast';
 
 export function useUsers() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const { company } = useAuth();
+  const hasFetchedRef = useRef(false);
+  const currentCompanyIdRef = useRef<string | null>(null);
+  const isFetchingRef = useRef(false);
   
-  const {
-    users,
-    setUsers,
-    addUser,
-    updateUser,
-    removeUser,
-    loading,
-    setLoading,
-    errors,
-    setError,
-  } = useAppStore();
+  // Use selectors to get stable references
+  const users = useAppStore((state) => state.users);
+  const addUser = useAppStore((state) => state.addUser);
+  const updateUser = useAppStore((state) => state.updateUser);
+  const removeUser = useAppStore((state) => state.removeUser);
+  const loading = useAppStore((state) => state.loading.users);
+  const error = useAppStore((state) => state.errors.users);
 
   const fetchUsers = useCallback(async (forceRefresh = false) => {
-    if (!company?.id) return;
+    const companyId = company?.id;
+    if (!companyId) return;
 
-    // Return cached data if available and not forcing refresh
-    if (users.length > 0 && !forceRefresh) {
-      return users;
+    // Check if we've already fetched for this company
+    if (!forceRefresh && hasFetchedRef.current && currentCompanyIdRef.current === companyId) {
+      return;
+    }
+
+    // Prevent concurrent fetches
+    if (isFetchingRef.current) {
+      return;
     }
 
     try {
-      setLoading('users', true);
-      setError('users', null);
+      isFetchingRef.current = true;
+      useAppStore.getState().setLoading('users', true);
+      useAppStore.getState().setError('users', null);
 
       const { data, error } = await supabase
         .from('users')
         .select('*')
-        .eq('company_id', company.id)
+        .eq('company_id', companyId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      setUsers(data || []);
+      useAppStore.getState().setUsers(data || []);
+      hasFetchedRef.current = true;
+      currentCompanyIdRef.current = companyId;
       return data || [];
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch users';
-      setError('users', errorMessage);
+      useAppStore.getState().setError('users', errorMessage);
       toast.error(errorMessage);
       return [];
     } finally {
-      setLoading('users', false);
+      isFetchingRef.current = false;
+      useAppStore.getState().setLoading('users', false);
     }
-  }, [company?.id, users, supabase, setUsers, setLoading, setError]);
+  }, [company?.id, supabase]);
 
   const createUser = useCallback(async (userData: Omit<User, 'id' | 'created_at' | 'company_id'>) => {
     if (!company?.id) {
@@ -123,17 +132,36 @@ export function useUsers() {
     }
   }, [supabase, removeUser]);
 
-  // Auto-fetch on mount if no data
+  // Store fetchUsers in a ref to avoid dependency issues
+  const fetchUsersRef = useRef(fetchUsers);
+  fetchUsersRef.current = fetchUsers;
+
+  // Reset tracking when company changes
   useEffect(() => {
-    if (company?.id && users.length === 0 && !loading.users) {
-      fetchUsers();
+    if (company?.id !== currentCompanyIdRef.current) {
+      hasFetchedRef.current = false;
+      currentCompanyIdRef.current = null;
     }
-  }, [company?.id, users.length, loading.users, fetchUsers]);
+  }, [company?.id]);
+
+  // Simple effect - only fetch once per company
+  useEffect(() => {
+    if (company?.id && !hasFetchedRef.current && !isFetchingRef.current) {
+      fetchUsersRef.current();
+    }
+    
+    // Cleanup: ensure loading is false if component unmounts during fetch
+    return () => {
+      if (isFetchingRef.current) {
+        useAppStore.getState().setLoading('users', false);
+      }
+    };
+  }, [company?.id]);
 
   return {
     users,
-    loading: loading.users,
-    error: errors.users,
+    loading,
+    error,
     fetchUsers,
     createUser,
     editUser,

@@ -33,7 +33,7 @@ const createStep1Schema = (t: TranslationFunction) => z
     firstName: z.string().min(1, t('errors.weakPassword')),
     lastName: z.string().min(1, t('errors.weakPassword')),
     email: z.string().email(t('errors.emailExists')),
-    phone: z.string().min(1, t('errors.weakPassword')),
+    phone: z.string().min(8, 'WhatsApp number is required (min 8 digits)'),
     password: z.string().min(6, t('errors.weakPassword')),
     confirmPassword: z.string(),
   })
@@ -46,7 +46,7 @@ const createStep2Schema = (t: TranslationFunction) => z.object({
   companyName: z.string().min(1, t('errors.registrationFailed')),
   companyType: z.enum(["restaurant", "retail", "service", "other"]),
   address: z.string().optional(),
-  phone: z.string().optional(),
+  phone: z.string().min(8, 'Company WhatsApp number is required (min 8 digits)'),
   companyEmail: z.string().email(t('errors.emailExists')).optional().or(z.literal("")),
   description: z.string().optional(),
 });
@@ -64,7 +64,7 @@ type Step2FormData = {
   companyName: string;
   companyType: CompanyType;
   address?: string;
-  phone?: string;
+  phone: string;
   companyEmail?: string;
   description?: string;
 };
@@ -184,8 +184,8 @@ export default function RegisterPage() {
           <CardHeader className="text-center">
             <h3 className="text-lg font-medium text-white">
               {currentStep === 1
-                ? "Account Information"
-                : "Company Information"}
+                ? t('steps.account')
+                : t('steps.company')}
             </h3>
           </CardHeader>
           <CardBody>
@@ -196,8 +196,8 @@ export default function RegisterPage() {
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input
-                    label="First Name"
-                    placeholder="Enter your first name"
+                    label={t('form.firstName')}
+                    placeholder={t('form.firstNamePlaceholder')}
                     variant="bordered"
                     {...step1Form.register("firstName")}
                     isInvalid={!!step1Form.formState.errors.firstName}
@@ -211,8 +211,8 @@ export default function RegisterPage() {
                   />
 
                   <Input
-                    label="Last Name"
-                    placeholder="Enter your last name"
+                    label={t('form.lastName')}
+                    placeholder={t('form.lastNamePlaceholder')}
                     variant="bordered"
                     {...step1Form.register("lastName")}
                     isInvalid={!!step1Form.formState.errors.lastName}
@@ -227,9 +227,9 @@ export default function RegisterPage() {
                 </div>
 
                 <Input
-                  label="Email address"
+                  label={t('form.email')}
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t('form.emailPlaceholder')}
                   variant="bordered"
                   {...step1Form.register("email")}
                   isInvalid={!!step1Form.formState.errors.email}
@@ -243,9 +243,9 @@ export default function RegisterPage() {
                 />
 
                 <Input
-                  label="Phone Number"
+                  label={t('form.phone')}
                   type="tel"
-                  placeholder="Enter your phone number"
+                  placeholder={t('form.phonePlaceholder')}
                   variant="bordered"
                   {...step1Form.register("phone")}
                   isInvalid={!!step1Form.formState.errors.phone}
@@ -258,9 +258,21 @@ export default function RegisterPage() {
                   }}
                 />
 
+                {/* Admin WhatsApp Warning */}
+                <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-xs text-gray-50 leading-relaxed">
+                      {t('form.phoneWarning')}
+                    </p>
+                  </div>
+                </div>
+
                 <Input
-                  label="Password"
-                  placeholder="Enter your password"
+                  label={t('form.password')}
+                  placeholder={t('form.passwordPlaceholder')}
                   variant="bordered"
                   {...step1Form.register("password")}
                   isInvalid={!!step1Form.formState.errors.password}
@@ -288,8 +300,8 @@ export default function RegisterPage() {
                 />
 
                 <Input
-                  label="Confirm Password"
-                  placeholder="Confirm your password"
+                  label={t('form.confirmPassword')}
+                  placeholder={t('form.confirmPasswordPlaceholder')}
                   variant="bordered"
                   {...step1Form.register("confirmPassword")}
                   isInvalid={!!step1Form.formState.errors.confirmPassword}
@@ -309,7 +321,7 @@ export default function RegisterPage() {
                   type="submit"
                   className="w-full bg-primary hover:bg-primary/80 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg shadow-secondary/20"
                 >
-                  Continue
+                  {t('form.continue')}
                 </Button>
               </form>
             ) : (
@@ -318,8 +330,8 @@ export default function RegisterPage() {
                 className="space-y-6"
               >
                 <Input
-                  label="Company Name"
-                  placeholder="Enter your company name"
+                  label={t('form.companyName')}
+                  placeholder={t('form.companyNamePlaceholder')}
                   variant="bordered"
                   {...step2Form.register("companyName")}
                   isInvalid={!!step2Form.formState.errors.companyName}
@@ -333,8 +345,8 @@ export default function RegisterPage() {
                 />
 
                 <Select
-                  label="Company Type"
-                  placeholder="Select company type"
+                  label={t('form.companyType')}
+                  placeholder={t('form.companyTypePlaceholder')}
                   variant="bordered"
                   {...step2Form.register("companyType")}
                   isInvalid={!!step2Form.formState.errors.companyType}
@@ -352,9 +364,9 @@ export default function RegisterPage() {
                 </Select>
 
                 <Input
-                  label="Company Email"
+                  label={t('form.companyEmail')}
                   type="email"
-                  placeholder="Enter company email (optional)"
+                  placeholder={t('form.companyEmailPlaceholder')}
                   variant="bordered"
                   {...step2Form.register("companyEmail")}
                   isInvalid={!!step2Form.formState.errors.companyEmail}
@@ -369,12 +381,13 @@ export default function RegisterPage() {
                 />
 
                 <Input
-                  label="Phone"
-                  placeholder="Enter company phone (optional)"
+                  label={t('form.companyPhone')}
+                  placeholder={t('form.companyPhonePlaceholder')}
                   variant="bordered"
                   {...step2Form.register("phone")}
                   isInvalid={!!step2Form.formState.errors.phone}
                   errorMessage={step2Form.formState.errors.phone?.message}
+                  isRequired
                   classNames={{
                     input: "text-white",
                     label: "text-gray-50",
@@ -382,9 +395,21 @@ export default function RegisterPage() {
                   }}
                 />
 
+                {/* Company WhatsApp Warning */}
+                <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-xs text-gray-50 leading-relaxed">
+                      {t('form.companyPhoneWarning')}
+                    </p>
+                  </div>
+                </div>
+
                 <Textarea
-                  label="Address"
-                  placeholder="Enter company address (optional)"
+                  label={t('form.address')}
+                  placeholder={t('form.addressPlaceholder')}
                   variant="bordered"
                   {...step2Form.register("address")}
                   isInvalid={!!step2Form.formState.errors.address}
@@ -398,8 +423,8 @@ export default function RegisterPage() {
                 />
 
                 <Textarea
-                  label="Description"
-                  placeholder="Enter company description (optional)"
+                  label={t('form.description')}
+                  placeholder={t('form.descriptionPlaceholder')}
                   variant="bordered"
                   {...step2Form.register("description")}
                   isInvalid={!!step2Form.formState.errors.description}
@@ -420,7 +445,7 @@ export default function RegisterPage() {
                     onPress={goBack}
                     isDisabled={loading.users}
                   >
-                    Back
+                    {t('form.back')}
                   </Button>
                   <Button
                     type="submit"
@@ -428,7 +453,7 @@ export default function RegisterPage() {
                     isLoading={loading.users}
                     isDisabled={loading.users}
                   >
-                    Create Account
+                    {t('form.submit')}
                   </Button>
                 </div>
               </form>

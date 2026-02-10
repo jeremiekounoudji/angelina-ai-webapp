@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAppStore } from "@/store";
 import toast from 'react-hot-toast';
@@ -9,27 +9,32 @@ import { useTranslationNamespace } from "@/contexts/TranslationContext";
 export function usePlanLimits(companyId?: string) {
   const supabase = useMemo(() => createClient(), []);
   const { t } = useTranslationNamespace('hooks.planLimits');
+  const hasFetchedRef = useRef(false);
+  const currentCompanyIdRef = useRef<string | null>(null);
+  const isFetchingRef = useRef(false);
   
-  const {
-    planLimits,
-    setPlanLimits,
-    loading,
-    setLoading,
-    errors,
-    setError,
-  } = useAppStore();
+  // Use selectors to get stable references
+  const planLimits = useAppStore((state) => state.planLimits);
+  const loading = useAppStore((state) => state.loading.planLimits);
+  const error = useAppStore((state) => state.errors.planLimits);
 
   const fetchLimits = useCallback(async (forceRefresh = false) => {
     if (!companyId) return;
 
-    // Return cached data if available and not forcing refresh
-    if (planLimits && !forceRefresh) {
+    // Check if we've already fetched for this company
+    if (!forceRefresh && hasFetchedRef.current && currentCompanyIdRef.current === companyId) {
       return planLimits;
     }
 
+    // Prevent concurrent fetches
+    if (isFetchingRef.current) {
+      return;
+    }
+
     try {
-      setLoading('planLimits', true);
-      setError('planLimits', null);
+      isFetchingRef.current = true;
+      useAppStore.getState().setLoading('planLimits', true);
+      useAppStore.getState().setError('planLimits', null);
 
       const { data, error: limitsError } = await supabase.rpc('get_company_limits', {
         company_uuid: companyId
@@ -38,7 +43,9 @@ export function usePlanLimits(companyId?: string) {
       if (limitsError) throw limitsError;
 
       if (data && data.length > 0) {
-        setPlanLimits(data[0]);
+        useAppStore.getState().setPlanLimits(data[0]);
+        hasFetchedRef.current = true;
+        currentCompanyIdRef.current = companyId;
         return data[0];
       }
       return null;
@@ -46,13 +53,14 @@ export function usePlanLimits(companyId?: string) {
       const errorMessage = error instanceof Error ? error.message : t('errors.limitExceeded');
       console.log(error);
       
-      setError('planLimits', errorMessage);
+      useAppStore.getState().setError('planLimits', errorMessage);
       toast.error(errorMessage);
       return null;
     } finally {
-      setLoading('planLimits', false);
+      useAppStore.getState().setLoading('planLimits', false);
+      isFetchingRef.current = false;
     }
-  }, [companyId, planLimits, setPlanLimits, setLoading, setError, t, supabase]);
+  }, [companyId, t, supabase, planLimits]);
 
   const canAddUser = useCallback(async (): Promise<boolean> => {
     if (!companyId) return false;
@@ -92,17 +100,36 @@ export function usePlanLimits(companyId?: string) {
     }
   }, [companyId, t, supabase]);
 
-  // Auto-fetch on mount if no data
+  // Store fetchLimits in a ref to avoid dependency issues
+  const fetchLimitsRef = useRef(fetchLimits);
+  fetchLimitsRef.current = fetchLimits;
+
+  // Reset tracking when company changes
   useEffect(() => {
-    if (companyId && !planLimits && !loading.planLimits) {
-      fetchLimits();
+    if (companyId !== currentCompanyIdRef.current) {
+      hasFetchedRef.current = false;
+      currentCompanyIdRef.current = null;
     }
-  }, [companyId, planLimits, loading.planLimits, fetchLimits]);
+  }, [companyId]);
+
+  // Simple effect - only fetch once per company
+  useEffect(() => {
+    if (companyId && !hasFetchedRef.current && !isFetchingRef.current) {
+      fetchLimitsRef.current();
+    }
+    
+    // Cleanup: ensure loading is false if component unmounts during fetch
+    return () => {
+      if (isFetchingRef.current) {
+        useAppStore.getState().setLoading('planLimits', false);
+      }
+    };
+  }, [companyId]);
 
   return {
     limits: planLimits,
-    loading: loading.planLimits,
-    error: errors.planLimits,
+    loading,
+    error,
     canAddUser,
     canAddProduct,
     refetch: () => fetchLimits(true),

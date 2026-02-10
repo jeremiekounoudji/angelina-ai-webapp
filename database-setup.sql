@@ -17,6 +17,7 @@ CREATE TABLE public.companies (
     phone CHARACTER VARYING(50) NULL,
     email CHARACTER VARYING(100) NULL,
     description TEXT NULL,
+    policy TEXT NULL,
     avatar_url TEXT NULL,
     subscription_id CHARACTER VARYING(100) NULL,
     subscription_status subscription_status NULL DEFAULT 'inactive'::subscription_status,

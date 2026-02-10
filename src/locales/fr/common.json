@@ -63,6 +63,13 @@
     "fileTooLarge": "Le fichier est trop volumineux",
     "invalidFileType": "Type de fichier invalide"
   },
+  "modals": {
+    "unsavedChanges": "Modifications non enregistrées",
+    "unsavedChangesMessage": "Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir fermer ?",
+    "discardChanges": "Annuler les modifications",
+    "keepEditing": "Continuer l'édition",
+    "updateFailed": "Échec de la mise à jour"
+  },
   "errors": {
     "generic": "Une erreur s'est produite. Veuillez réessayer.",
     "networkError": "Erreur réseau. Veuillez vérifier votre connexion.",

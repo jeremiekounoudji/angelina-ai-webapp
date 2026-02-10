@@ -106,7 +106,7 @@ export const useAppStore = create<AppState>()(
         tokenPurchases: false,
         planLimits: false,
         metrics: false,
-      },
+      } as const,
 
       errors: {
         users: null,

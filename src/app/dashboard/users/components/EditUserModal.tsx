@@ -123,16 +123,15 @@ export function EditUserModal({
         avatar_url: finalAvatarUrl,
       };
 
-      const result = await editUser(user.id, updateData);
-
-      if (result) {
-        onUserUpdated();
-        handleClose();
-        // Clean up preview URL
-        if (avatarUrl.startsWith("blob:")) {
-          URL.revokeObjectURL(avatarUrl);
-        }
+      await editUser(user.id, updateData);
+      
+      // Clean up preview URL
+      if (avatarUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(avatarUrl);
       }
+      
+      onUserUpdated();
+      onOpenChange(false);
     } catch (error: unknown) {
       setError(
         error instanceof Error ? error.message : tCommon("modals.updateFailed")

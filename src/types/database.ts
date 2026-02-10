@@ -5,6 +5,7 @@ export type OrderStatus = 'pending' | 'confirmed' | 'preparing' | 'completed' | 
 export type ComplaintStatus = 'open' | 'in_progress' | 'resolved' | 'closed'
 export type PaymentStatus = 'pending' | 'completed' | 'failed' | 'cancelled' | 'refunded'
 export type BillingInterval = 'monthly' | 'yearly'
+export type WhatsAppInstanceStatus = 'disconnected' | 'connecting' | 'connected' | 'error'
 
 export interface Company {
   id: string
@@ -16,6 +17,7 @@ export interface Company {
   phone?: string
   email?: string
   description?: string
+  policy?: string
   avatar_url?: string
   subscription_id?: string
   subscription_status?: SubscriptionStatus
@@ -162,6 +164,21 @@ export interface Metrics {
   updated_at: string
 }
 
+export interface WhatsAppInstance {
+  id: string
+  company_id: string
+  instance_name: string
+  instance_id?: string
+  phone_number: string
+  status: WhatsAppInstanceStatus
+  pairing_code?: string
+  qr_code?: string
+  api_key?: string
+  webhook_url?: string
+  created_at: string
+  updated_at: string
+}
+
 export interface PlanLimits {
   max_users: number;
   max_products: number;
@@ -238,6 +255,11 @@ export interface Database {
         Row: Metrics
         Insert: Omit<Metrics, 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Omit<Metrics, 'id' | 'created_at' | 'updated_at'>>
+      }
+      whatsapp_instances: {
+        Row: WhatsAppInstance
+        Insert: Omit<WhatsAppInstance, 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Omit<WhatsAppInstance, 'id' | 'created_at' | 'updated_at'>>
       }
     }
   }

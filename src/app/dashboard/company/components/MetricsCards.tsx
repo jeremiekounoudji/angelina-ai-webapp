@@ -1,98 +1,117 @@
 "use client";
 
 import { useMetrics } from "@/hooks/useMetrics";
-import { useTokenUsage } from "@/hooks/useTokenUsage";
-import { useAuth } from "@/contexts/AuthContext";
-import { Card, CardBody, CardHeader, Progress } from "@heroui/react";
+import { Card, CardBody, CardHeader } from "@heroui/react";
 import {
   ChatBubbleLeftRightIcon,
   CubeIcon,
   UsersIcon,
   CpuChipIcon,
+  UserGroupIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
-import { useTranslationNamespace } from "@/contexts/TranslationContext";
-
 const defaultMetrics = {
-  messages_sent_total: 1250,
-  messages_allowed_total: 5000,
-  products_created_total: 23,
-  products_allowed_total: 100,
-  users_created_total: 8,
-  users_allowed_total: 25,
-  prospects_contacted_total: 342,
-  prospects_allowed_total: 1000,
+  messages_sent_total: 0,
+  messages_allowed_total: 0,
+  products_created_total: 0,
+  products_allowed_total: 0,
+  users_created_total: 0,
+  users_allowed_total: 0,
+  prospects_contacted_total: 0,
+  prospects_allowed_total: 0,
+  tokens_used_current_month: 0,
+  tokens_allowance_monthly: 0,
+  tokens_purchased_total: 0,
 };
 
 export function MetricsCards() {
-  const { metrics, loading } = useMetrics();
-  const { company } = useAuth();
-  const { usage, loading: tokenLoading } = useTokenUsage(company?.id);
-  const { t } = useTranslationNamespace('dashboard.company.metrics');
+  const { metrics, loading: metricsLoading } = useMetrics();
 
+  // Use metrics from the hook, fallback to default only if null/undefined
   const data = metrics || defaultMetrics;
 
   const metricsConfig = [
     {
-      title: t('tokensUsed'),
+      title: "Tokens Used",
       icon: CpuChipIcon,
-      current: usage?.tokens_used || 0,
-      total: (usage?.tokens_remaining || 0) + (usage?.tokens_used || 0),
-      color: "primary",
-      bgColor: "bg-blue-500",
-      cardBg: "bg-blue-500",
-      textColor: "text-white",
-      iconColor: "text-white",
-      loading: tokenLoading,
+      value: data.tokens_used_current_month || 0,
+      color: "bg-blue-500",
     },
     {
-      title: t('productsCreated'),
-      icon: CubeIcon,
-      current: data.products_created_total,
-      total: data.products_allowed_total,
-      color: "success",
-      bgColor: "bg-green-900",
-      cardBg: "bg-amber-500",
-      textColor: "text-white",
-      iconColor: "text-white",
-      loading: false,
+      title: "Token Allowance",
+      icon: CpuChipIcon,
+      value: data.tokens_allowance_monthly || 0,
+      color: "bg-blue-600",
     },
     {
-      title: t('usersCreated'),
-      icon: UsersIcon,
-      current: data.users_created_total,
-      total: data.users_allowed_total,
-      color: "secondary",
-      bgColor: "bg-purple-500",
-      cardBg: "bg-purple-500",
-      textColor: "text-white",
-      iconColor: "text-white",
-      loading: false,
+      title: "Tokens Purchased",
+      icon: ShoppingCartIcon,
+      value: data.tokens_purchased_total || 0,
+      color: "bg-indigo-500",
     },
     {
-      title: t('messagesTotal'),
+      title: "Messages Sent",
       icon: ChatBubbleLeftRightIcon,
-      current: data.messages_sent_total,
-      total: data.messages_allowed_total,
-      color: "warning",
-      bgColor: "bg-orange-500",
-      cardBg: "bg-orange-500",
-      textColor: "text-black",
-      iconColor: "text-black",
-      loading: false,
+      value: data.messages_sent_total || 0,
+      color: "bg-orange-500",
+    },
+    {
+      title: "Messages Allowed",
+      icon: ChatBubbleLeftRightIcon,
+      value: data.messages_allowed_total || 0,
+      color: "bg-orange-600",
+    },
+    {
+      title: "Products Created",
+      icon: CubeIcon,
+      value: data.products_created_total || 0,
+      color: "bg-amber-500",
+    },
+    {
+      title: "Products Allowed",
+      icon: CubeIcon,
+      value: data.products_allowed_total || 0,
+      color: "bg-amber-600",
+    },
+    {
+      title: "Users Created",
+      icon: UsersIcon,
+      value: data.users_created_total || 0,
+      color: "bg-purple-500",
+    },
+    {
+      title: "Users Allowed",
+      icon: UsersIcon,
+      value: data.users_allowed_total || 0,
+      color: "bg-purple-600",
+    },
+    {
+      title: "Prospects Contacted",
+      icon: UserGroupIcon,
+      value: data.prospects_contacted_total || 0,
+      color: "bg-green-500",
+    },
+    {
+      title: "Prospects Allowed",
+      icon: UserGroupIcon,
+      value: data.prospects_allowed_total || 0,
+      color: "bg-green-600",
     },
   ];
 
-  if (loading && tokenLoading) {
+  if (metricsLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[...Array(4)].map((_, i) => (
-          <Card key={i} className="animate-pulse bg-background border border-secondary">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {[...Array(11)].map((_, i) => (
+          <Card
+            key={i}
+            className="animate-pulse bg-background border border-secondary"
+          >
             <CardHeader className="pb-2">
               <div className="h-4 bg-secondary rounded w-3/4"></div>
             </CardHeader>
             <CardBody>
-              <div className="h-8 bg-secondary rounded w-1/2 mb-2"></div>
-              <div className="h-2 bg-secondary rounded w-full"></div>
+              <div className="h-8 bg-secondary rounded w-1/2"></div>
             </CardBody>
           </Card>
         ))}
@@ -101,49 +120,20 @@ export function MetricsCards() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {metricsConfig.map((metric, index) => {
-        const percentage = Math.round((metric.current / metric.total) * 100);
         const Icon = metric.icon;
 
-        if (metric.loading) {
-          return (
-            <Card key={index} className="animate-pulse bg-background border border-secondary">
-              <CardHeader className="pb-2">
-                <div className="h-4 bg-secondary rounded w-3/4"></div>
-              </CardHeader>
-              <CardBody>
-                <div className="h-8 bg-secondary rounded w-1/2 mb-2"></div>
-                <div className="h-2 bg-secondary rounded w-full"></div>
-              </CardBody>
-            </Card>
-          );
-        }
-
         return (
-          <Card key={index} className="bg-background border border-secondary shadow-lg shadow-secondary/20">
+          <Card key={index} className={`${metric.color} border-none shadow-lg`}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <h4 className="text-sm font-medium text-white">
-                {metric.title}
-              </h4>
-              <Icon className="h-5 w-5 text-primary" />
+              <h4 className="text-sm font-medium text-white">{metric.title}</h4>
+              <Icon className="h-5 w-5 text-white" />
             </CardHeader>
             <CardBody className="pt-0">
-              <div className="text-2xl font-bold text-white mb-3">
-                {metric.current.toLocaleString()}
-                <span className="text-sm font-normal text-gray-50 ml-1">
-                  / {metric.total.toLocaleString()}
-                </span>
+              <div className="text-3xl font-bold text-white">
+                {metric.value.toLocaleString()}
               </div>
-              <Progress
-                value={percentage}
-                color="secondary"
-                className="mb-2"
-                size="sm"
-              />
-              <p className="text-xs text-gray-50">
-                {percentage}% of limit used
-              </p>
             </CardBody>
           </Card>
         );

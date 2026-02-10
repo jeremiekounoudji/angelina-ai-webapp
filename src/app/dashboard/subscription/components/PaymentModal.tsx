@@ -49,7 +49,6 @@ export default function PaymentModal({
     "idle" | "processing" | "initialized" | "waiting" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [merchantReference, setMerchantReference] = useState("");
   const { refreshUser } = useAuth();
   const { t } = useTranslationNamespace('dashboard.payment');
 
@@ -95,9 +94,8 @@ export default function PaymentModal({
 
       if (data.success) {
         setPaymentStatus("initialized");
-        setMerchantReference(data.merchant_reference);
         // Start polling payment status from database
-        pollPaymentStatusFromDB(merchantReference);
+        pollPaymentStatusFromDB(data.merchant_reference);
       }
     } catch (error) {
       console.error("Payment error:", error);
@@ -111,7 +109,7 @@ export default function PaymentModal({
   };
 
   const pollPaymentStatusFromDB = async (merchantRef: string) => {
-    const maxAttempts = 60; // 10 minutes with 10-second intervals
+    const maxAttempts = 18; // 3 minutes with 10-second intervals
     let attempts = 0;
 
     // Show waiting status after initialization
@@ -273,6 +271,7 @@ export default function PaymentModal({
                 label={t('modal.provider')}
                 placeholder={t('modal.selectProvider')}
                 value={provider}
+                variant="bordered"
                 onChange={(e) => setProvider(e.target.value)}
                 isRequired
                 classNames={{
@@ -293,6 +292,8 @@ export default function PaymentModal({
                 onChange={(e) =>
                   setPhoneNumber(formatPhoneNumber(e.target.value))
                 }
+                variant="bordered"
+
                 isRequired
                 description={t('modal.phoneDescription')}
                 classNames={{
@@ -450,7 +451,6 @@ export default function PaymentModal({
                 onPress={() => {
                   setPaymentStatus("idle");
                   setErrorMessage("");
-                  setMerchantReference("");
                 }}
               >
                 {t('modal.tryAgain')}

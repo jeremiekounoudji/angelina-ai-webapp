@@ -6,7 +6,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Button,
   Input,
   Textarea,
@@ -142,6 +141,8 @@ export function EditProductModal({
       setError("");
 
       let finalImageUrl = product.image_url;
+      console.log(finalImageUrl);
+      
 
       // Upload image if selected
       if (imageFile) {
@@ -153,6 +154,8 @@ export function EditProductModal({
 
         if (result.success && result.urls.length > 0) {
           finalImageUrl = result.urls[0];
+      console.log(finalImageUrl);
+
         }
       } else if (imageUrl !== product.image_url) {
         // Image was removed
@@ -170,16 +173,15 @@ export function EditProductModal({
         image_url: finalImageUrl,
       };
 
-      const result = await editProduct(product.id, updateData);
-
-      if (result) {
-        onProductUpdated();
-        handleClose();
-        // Clean up preview URL
-        if (imageUrl.startsWith('blob:')) {
-          URL.revokeObjectURL(imageUrl);
-        }
+      await editProduct(product.id, updateData);
+      
+      // Clean up preview URL
+      if (imageUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(imageUrl);
       }
+      
+      onProductUpdated();
+      onOpenChange(false);
     } catch (error: unknown) {
       setError(
         error instanceof Error ? error.message : tCommon("modals.updateFailed")
@@ -306,6 +308,7 @@ export function EditProductModal({
                     isInvalid={!!errors.name}
                     errorMessage={errors.name?.message}
                     isRequired
+                    variant="bordered"
                     classNames={{
                       input: "text-white",
                       label: "text-gray-50",
@@ -321,6 +324,8 @@ export function EditProductModal({
                     isInvalid={!!errors.description}
                     errorMessage={errors.description?.message}
                     minRows={3}
+                    variant="bordered"
+
                     classNames={{
                       input: "text-white",
                       label: "text-gray-50",
@@ -345,6 +350,8 @@ export function EditProductModal({
                         label="Price"
                         type="number"
                         step="0.01"
+                    variant="bordered"
+
                         placeholder="0.00"
                         startContent="$"
                         {...register("price", { valueAsNumber: true })}
@@ -364,6 +371,8 @@ export function EditProductModal({
                           type="number"
                           step="0.01"
                           placeholder="0.00"
+                    variant="bordered"
+
                           startContent="$"
                           {...register("minPrice", { valueAsNumber: true })}
                           isInvalid={!!errors.minPrice}
@@ -381,6 +390,8 @@ export function EditProductModal({
                           step="0.01"
                           placeholder="0.00"
                           startContent="$"
+                    variant="bordered"
+
                           {...register("maxPrice", { valueAsNumber: true })}
                           isInvalid={!!errors.maxPrice}
                           errorMessage={errors.maxPrice?.message}
@@ -400,6 +411,8 @@ export function EditProductModal({
                     label="Stock Quantity"
                     type="number"
                     placeholder="0"
+                    variant="bordered"
+
                     {...register("stockQuantity", { valueAsNumber: true })}
                     isInvalid={!!errors.stockQuantity}
                     errorMessage={errors.stockQuantity?.message}
@@ -411,9 +424,8 @@ export function EditProductModal({
                     }}
                   />
                 </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button
+                <div className="flex gap-2 justify-end">
+                  <Button
                   color="danger"
                   variant="light"
                   onPress={handleClose}
@@ -429,7 +441,8 @@ export function EditProductModal({
                 >
                   Save Changes
                 </Button>
-              </ModalFooter>
+                </div>
+              </ModalBody>
             </form>
           )}
         </ModalContent>

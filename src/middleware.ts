@@ -31,27 +31,27 @@ export async function middleware(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  await supabase.auth.getUser()
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/register') &&
-    !request.nextUrl.pathname.startsWith('/auth') &&
-    !request.nextUrl.pathname.startsWith('/marketing') &&
-    !request.nextUrl.pathname.startsWith('/privacy') &&
-    !request.nextUrl.pathname.startsWith('/terms') &&
-    !request.nextUrl.pathname.startsWith('/cookies') &&
-    !request.nextUrl.pathname.startsWith('/legal') &&
-    request.nextUrl.pathname !== '/'
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  }
+  // if (
+  //   !user &&
+  //   !request.nextUrl.pathname.startsWith('/login') &&
+  //   !request.nextUrl.pathname.startsWith('/register') &&
+  //   !request.nextUrl.pathname.startsWith('/auth') &&
+  //   !request.nextUrl.pathname.startsWith('/marketing') &&
+  //   !request.nextUrl.pathname.startsWith('/privacy') &&
+  //   !request.nextUrl.pathname.startsWith('/terms') &&
+  //   !request.nextUrl.pathname.startsWith('/cookies') &&
+  //   !request.nextUrl.pathname.startsWith('/legal') &&
+  //   request.nextUrl.pathname !== '/'
+  // ) {
+  //   console.log("debug redirection to login");
+    
+  //   // no user, potentially respond by redirecting the user to the login page
+  //   const url = request.nextUrl.clone()
+  //   url.pathname = '/login'
+  //   return NextResponse.redirect(url)
+  // }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:

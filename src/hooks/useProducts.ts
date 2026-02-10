@@ -12,33 +12,37 @@ export function useProducts() {
   const supabase = useMemo(() => createClient(), []);
   const { company } = useAuth();
   const { t } = useTranslationNamespace('hooks.products');
-  const fetchedCompanyId = useRef<string | null>(null);
+  const hasFetchedRef = useRef(false);
+  const currentCompanyIdRef = useRef<string | null>(null);
+  const isFetchingRef = useRef(false);
 
-  const {
-    products,
-    setProducts,
-    addProduct,
-    updateProduct,
-    removeProduct,
-    loading,
-    setLoading,
-    errors,
-    setError,
-  } = useAppStore();
+  // Use selectors to get stable references
+  const products = useAppStore((state) => state.products);
+  const addProduct = useAppStore((state) => state.addProduct);
+  const updateProduct = useAppStore((state) => state.updateProduct);
+  const removeProduct = useAppStore((state) => state.removeProduct);
+  const loading = useAppStore((state) => state.loading.products);
+  const error = useAppStore((state) => state.errors.products);
 
   const fetchProducts = useCallback(
     async (forceRefresh = false) => {
       const companyId = company?.id;
       if (!companyId) return;
 
-      // Prevent duplicate fetches for the same company
-      if (!forceRefresh && fetchedCompanyId.current === companyId) {
-        return products;
+      // Check if we've already fetched for this company
+      if (!forceRefresh && hasFetchedRef.current && currentCompanyIdRef.current === companyId) {
+        return;
+      }
+
+      // Prevent concurrent fetches
+      if (isFetchingRef.current) {
+        return;
       }
 
       try {
-        setLoading("products", true);
-        setError("products", null);
+        isFetchingRef.current = true;
+        useAppStore.getState().setLoading("products", true);
+        useAppStore.getState().setError("products", null);
 
         const { data, error } = await supabase
           .from("products")
@@ -48,20 +52,22 @@ export function useProducts() {
 
         if (error) throw error;
 
-        setProducts(data || []);
-        fetchedCompanyId.current = companyId;
+        useAppStore.getState().setProducts(data || []);
+        hasFetchedRef.current = true;
+        currentCompanyIdRef.current = companyId;
         return data || [];
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : t('errors.loadFailed');
-        setError("products", errorMessage);
+        useAppStore.getState().setError("products", errorMessage);
         toast.error(errorMessage);
         return [];
       } finally {
-        setLoading("products", false);
+        isFetchingRef.current = false;
+        useAppStore.getState().setLoading("products", false);
       }
     },
-    [company?.id, products, setError, setLoading, setProducts, supabase, t]
+    [company?.id, supabase, t]
   );
 
   const createProduct = useCallback(
@@ -145,17 +151,36 @@ export function useProducts() {
     [removeProduct, supabase, t]
   );
 
-  // Simple effect that only runs when company changes
+  // Store fetchProducts in a ref to avoid dependency issues
+  const fetchProductsRef = useRef(fetchProducts);
+  fetchProductsRef.current = fetchProducts;
+
+  // Reset tracking when company changes
   useEffect(() => {
-    if (company?.id && fetchedCompanyId.current !== company.id) {
-      fetchProducts();
+    if (company?.id !== currentCompanyIdRef.current) {
+      hasFetchedRef.current = false;
+      currentCompanyIdRef.current = null;
     }
-  }, [company?.id, fetchProducts]);
+  }, [company?.id]);
+
+  // Simple effect - only fetch once per company
+  useEffect(() => {
+    if (company?.id && !hasFetchedRef.current && !isFetchingRef.current) {
+      fetchProductsRef.current();
+    }
+    
+    // Cleanup: ensure loading is false if component unmounts during fetch
+    return () => {
+      if (isFetchingRef.current) {
+        useAppStore.getState().setLoading('products', false);
+      }
+    };
+  }, [company?.id]);
 
   return {
     products,
-    loading: loading.products,
-    error: errors.products,
+    loading,
+    error,
     fetchProducts,
     createProduct,
     editProduct,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useAppStore } from "@/store";
@@ -30,7 +30,7 @@ interface RegisterStep2Data {
 }
 
 export function useAuthActions() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const router = useRouter();
   
   const {
@@ -40,31 +40,51 @@ export function useAuthActions() {
   } = useAppStore();
 
   const signIn = useCallback(async (data: LoginData) => {
+    console.log('signIn called with:', { email: data.email });
+    
     try {
+      console.log('Setting loading to true');
       setLoading('users', true);
       setError('users', null);
 
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      console.log('Calling supabase.auth.signInWithPassword');
+      
+      // Add timeout to prevent infinite hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Sign in timeout after 30 seconds')), 30000);
+      });
+
+      const signInPromise = supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
       });
 
-      if (signInError) {
-        toast.error(signInError.message);
-        return { success: false, error: signInError.message };
+      const result = await Promise.race([signInPromise, timeoutPromise]) as Awaited<typeof signInPromise>;
+      
+      console.log('Sign in result:', result);
+
+      if (result.error) {
+        console.error('Sign in error:', result.error);
+        toast.error(result.error.message);
+        return { success: false, error: result.error.message };
       }
 
+      console.log('Sign in successful, redirecting to dashboard');
       toast.success('Successfully signed in!');
       router.push("/dashboard");
       return { success: true };
-    } catch {
-      const errorMessage = "An unexpected error occurred";
+    } catch (error) {
+      console.error('Unexpected error during sign in:', error);
+      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
+      console.log('Setting loading to false');
       setLoading('users', false);
     }
-  }, [supabase, router, setLoading, setError]);
+  }, [
+    router, setError, setLoading,  supabase.auth
+  ]);
 
   const signUp = useCallback(async (step1Data: RegisterStep1Data, step2Data: RegisterStep2Data) => {
     try {

@@ -14,7 +14,15 @@
     "notifications": "Notifications",
     "profile": "Profil",
     "settings": "Paramètres",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "pageNames": {
+      "company": "Profil de l'Entreprise",
+      "users": "Gestion de l'Équipe",
+      "subscription": "Abonnement et Facturation",
+      "products": "Gestion des Produits",
+      "settings": "Paramètres",
+      "dashboard": "Dashboard"
+    }
   },
   "overview": {
     "title": "Aperçu du Dashboard",
@@ -297,7 +305,29 @@
       "purchased": "Achetés",
       "buyMore": "Acheter Plus de Tokens",
       "loadingData": "Chargement des données d'utilisation...",
-      "usageProgress": "Progression de l'Utilisation"
+      "usageProgress": "Progression de l'Utilisation",
+      "buyModal": {
+        "title": "Acheter Plus de Tokens",
+        "subtitle": "Ajoutez plus de tokens à votre compte pour continuer à utiliser les fonctionnalités IA",
+        "packages": "Forfaits",
+        "customAmount": "Montant Personnalisé",
+        "popular": "Populaire",
+        "tokens": "tokens",
+        "perMillion": "par 1M tokens",
+        "totalCost": "Coût Total",
+        "rate": "Tarif : 0,00005 $ par token",
+        "securePayment": "Paiement Sécurisé",
+        "paymentNote": "Les tokens seront ajoutés à votre compte immédiatement après confirmation du paiement. Ceci est une simulation - aucun paiement réel ne sera traité.",
+        "cancel": "Annuler",
+        "purchase": "Acheter des Tokens",
+        "processing": "Traitement...",
+        "enterCustom": "Entrez un montant personnalisé",
+        "numberOfTokens": "Nombre de Tokens",
+        "smallBoost": "Petit boost pour une utilisation légère",
+        "greatValue": "Excellent rapport qualité-prix pour les utilisateurs réguliers",
+        "perfectHeavy": "Parfait pour une utilisation intensive",
+        "maxValue": "Forfait valeur maximale"
+      }
     },
     "plans": {
       "choose": "Choisissez Votre Plan",
@@ -361,6 +391,48 @@
       "companyId": "ID de l'Entreprise",
       "subscription": "Abonnement",
       "created": "Créé"
+    },
+    "whatsapp": {
+      "title": "Connecter WhatsApp",
+      "subtitle": "Connectez votre numéro WhatsApp pour commencer à recevoir des commandes",
+      "integration": "Intégration WhatsApp",
+      "connectDescription": "Connectez votre WhatsApp pour recevoir des commandes",
+      "connectedTo": "Connecté : {phone}",
+      "phoneLabel": "Numéro de téléphone WhatsApp",
+      "phonePlaceholder": "33612345678",
+      "phoneHelp": "Entrez le numéro de téléphone avec l'indicatif pays (ex: 33612345678 pour la France)",
+      "scanQrTitle": "Scanner le QR Code",
+      "scanQrDescription": "Ouvrez WhatsApp sur votre téléphone et scannez ce QR code",
+      "instructions": {
+        "step1": "1. Ouvrez WhatsApp sur votre téléphone",
+        "step2": "2. Appuyez sur Menu (⋮) → Appareils liés",
+        "step3": "3. Appuyez sur \"Lier un appareil\"",
+        "step4": "4. Scannez ce QR code"
+      },
+      "orEnterCode": "Ou entrez ce code manuellement :",
+      "waitingConnection": "En attente de connexion...",
+      "successTitle": "WhatsApp connecté avec succès !",
+      "successDescription": "Votre WhatsApp est maintenant connecté et prêt à recevoir des commandes.",
+      "errorTitle": "Échec de la connexion",
+      "errorDescription": "Échec de la connexion WhatsApp. Veuillez réessayer.",
+      "phone": "Téléphone",
+      "status": "Statut",
+      "connected": "Connecté",
+      "connecting": "Connexion en cours",
+      "disconnected": "Déconnecté",
+      "error": "Erreur",
+      "disconnect": "Déconnecter",
+      "reconnect": "Reconnecter",
+      "cancel": "Annuler",
+      "connect": "Connecter WhatsApp",
+      "done": "Terminé",
+      "tryAgain": "Réessayer"
+    },
+    "actions": {
+      "edit": "Modifier l'Entreprise",
+      "save": "Enregistrer les Modifications",
+      "cancel": "Annuler",
+      "connectWhatsapp": "Connecter WhatsApp"
     }
   },
   "settings": {

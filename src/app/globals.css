@@ -10,3 +10,152 @@
   --color-tertiary: #18230f;
   --color-background: #1a1a1d;
 }
+
+/* Dark mode overrides for HeroUI components */
+:root {
+  --heroui-background: 26 26 29;
+  --heroui-foreground: 255 255 255;
+  --heroui-content1: 26 26 29;
+  --heroui-content2: 37 37 40;
+  --heroui-content3: 47 47 51;
+  --heroui-content4: 58 58 63;
+  --heroui-default-50: 26 26 29;
+  --heroui-default-100: 37 37 40;
+  --heroui-default-200: 47 47 51;
+  --heroui-default-300: 58 58 63;
+  --heroui-default-400: 113 113 122;
+  --heroui-default-500: 161 161 170;
+  --heroui-default-600: 212 212 216;
+  --heroui-default-700: 228 228 231;
+  --heroui-default-800: 244 244 245;
+  --heroui-default-900: 250 250 250;
+  --heroui-default-foreground: 255 255 255;
+}
+
+/* Modal and dialog dark styling */
+[role="dialog"],
+[data-overlay-container="true"] section {
+  background-color: #1a1a1d !important;
+  color: #ffffff !important;
+}
+
+/* Input components dark styling */
+[data-slot="input-wrapper"],
+.group[data-slot="input-wrapper"] {
+  background-color: #1a1a1d !important;
+  border-color: #17b794 !important;
+}
+
+[data-slot="input-wrapper"]:hover,
+[data-slot="input-wrapper"][data-hover="true"],
+.group[data-slot="input-wrapper"]:hover {
+  background-color: #252528 !important;
+  border-color: #1f7d53 !important;
+}
+
+[data-slot="input-wrapper"]:focus-within,
+[data-slot="input-wrapper"][data-focus="true"],
+[data-slot="input-wrapper"][data-focus-within="true"],
+.group[data-slot="input-wrapper"]:focus-within {
+  background-color: #252528 !important;
+  border-color: #1f7d53 !important;
+}
+
+[data-slot="inner-wrapper"] {
+  background-color: transparent !important;
+}
+
+[data-slot="input"],
+input[data-slot="input"],
+textarea[data-slot="input"] {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  caret-color: #1f7d53 !important;
+}
+
+[data-slot="input"]::placeholder,
+input[data-slot="input"]::placeholder,
+textarea[data-slot="input"]::placeholder {
+  color: #9ca3af !important;
+  opacity: 1 !important;
+}
+
+[data-slot="label"] {
+  color: #e5e7eb !important;
+}
+
+/* Select/Dropdown dark styling */
+[data-slot="trigger"],
+button[data-slot="trigger"] {
+  background-color: #1a1a1d !important;
+  border-color: #17b794 !important;
+}
+
+[data-slot="trigger"]:hover,
+[data-slot="trigger"][data-hover="true"],
+button[data-slot="trigger"]:hover {
+  background-color: #252528 !important;
+}
+
+[data-slot="trigger"][data-focus="true"],
+[data-slot="trigger"][data-open="true"] {
+  background-color: #252528 !important;
+  border-color: #1f7d53 !important;
+}
+
+[data-slot="value"],
+[data-slot="selectorIcon"] {
+  color: #ffffff !important;
+}
+
+/* Listbox/Popover dark styling */
+[data-slot="listbox"],
+[data-slot="content"],
+[role="listbox"] {
+  background-color: #1a1a1d !important;
+  border-color: #17b794 !important;
+}
+
+[data-slot="listboxItem"],
+[role="option"] {
+  color: #ffffff !important;
+}
+
+[data-slot="listboxItem"]:hover,
+[data-slot="listboxItem"][data-hover="true"],
+[role="option"]:hover,
+[role="option"][data-hover="true"] {
+  background-color: #252528 !important;
+}
+
+[data-slot="listboxItem"][data-selected="true"],
+[role="option"][aria-selected="true"] {
+  background-color: #1f7d53 !important;
+  color: #ffffff !important;
+}
+
+/* Card dark styling */
+[data-slot="base"],
+.bg-content1 {
+  background-color: #1a1a1d !important;
+}
+
+/* Helper text */
+[data-slot="description"],
+[data-slot="helper-wrapper"] {
+  color: #9ca3af !important;
+}
+
+[data-slot="error-message"] {
+  color: #ef4444 !important;
+}
+
+/* Autocomplete input fix */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #1a1a1d inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #1f7d53 !important;
+}

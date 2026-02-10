@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useMemo, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 import { Company } from "@/types/database";
@@ -20,90 +28,154 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [company, setCompany] = useState<Company | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const supabase = useMemo(() => createClient(), []);
   const { clearAll } = useAppStore();
+  const initRef = useRef(false);
 
-  const fetchUserCompany = useCallback(async (userId: string) => {
+  const refreshUser = useCallback(async () => {
+    console.log("Refreshing user");
+    
     try {
-      const { data: companyData, error: companyError } = await supabase
-        .from("companies")
-        .select("*")
-        .eq("user_id", userId)
-        .single();
+      setLoading(true);
+      const {
+        data: { user: currentUser },
+        error,
+      } = await supabase.auth.getUser();
 
-      console.log("Company data:", companyData, "Error:", companyError);
+      if (error) {
+        console.error("Error getting user:", error);
+      setLoading(false);
 
-      if (companyData) {
-        setCompany(companyData);
+        setUser(null);
+        setCompany(null);
+        return;
+      }
+
+      setUser(currentUser);
+      if (currentUser) {
+        console.log("User found:", currentUser.id);
+        console.log("fetch users company");
+
+        
+        try {
+          const { data: companyData } = await supabase
+            .from("companies")
+            .select("*")
+            .eq("user_id", currentUser.id)
+            .single();
+
+          if (companyData) {
+            setCompany(companyData);
+          } else {
+            setCompany(null);
+          }
+      setLoading(false);
+
+        } catch (err) {
+          console.error("Error fetching company:", err);
+      setLoading(false);
+
+          setCompany(null);
+        }
+      } else {
+      setLoading(false);
+
+        setCompany(null);
       }
     } catch (error) {
-      console.error("Error fetching user company:", error);
+      console.error("Error refreshing user:", error);
+      setLoading(false);
+
+      setUser(null);
       setCompany(null);
+    } finally {
+      setLoading(false);
     }
   }, [supabase]);
 
-  const refreshUser = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    setUser(user);
-    if (user) {
-      await fetchUserCompany(user.id);
-    } else {
-      setCompany(null);
-    }
-  };
-
   useEffect(() => {
-    const getUser = async () => {
+    const isMounted = true;
+
+    const initializeAuth = async () => {
+      if (initRef.current) return;
+      initRef.current = true;
+
       try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        console.log(user, "user log");
-        setUser(user);
-        if (user) {
-          await fetchUserCompany(user.id);
-        }
+        console.log("Starting auth initialization");
+        await refreshUser();
       } catch (error) {
-        console.error("Error getting user:", error);
+        console.error("Error initializing auth:", error);
+        if (isMounted) {
+          setUser(null);
+          setCompany(null);
+        }
       } finally {
-        setLoading(false);
+
+        if (isMounted) {
+          console.log("Auth initialization complete");
+          setLoading(false);
+        }
       }
     };
 
-    getUser();
+    initializeAuth();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(
-      async (event: string, session: { user: User } | null) => {
-        console.log("Auth state change:", event, session?.user?.id);
-        setUser(session?.user ?? null);
+    // const {
+    //   data: { subscription },
+    // } = supabase.auth.onAuthStateChange(
+    //   async (event: string, session: { user: User } | null) => {
+    //     console.log("Auth state change:", event, session?.user?.id);
+    //     if (isMounted) {
+    //       setUser(session?.user ?? null);
 
-        if (event === "SIGNED_IN" && session?.user) {
-          setLoading(true);
-          await fetchUserCompany(session.user.id);
-          setLoading(false);
-        } else if (event === "SIGNED_OUT") {
-          setCompany(null);
-          setLoading(false);
-          // Clear all cached data when user signs out
-          clearAll();
-        }
+    //       if (event === "SIGNED_IN" && session?.user) {
+    //         // try {
+    //         //   const { data: companyData } = await supabase
+    //         //     .from("companies")
+    //         //     .select("*")
+    //         //     .eq("user_id", session.user.id)
+    //         //     .single();
+
+    //         //   if (companyData) {
+    //         //     setCompany(companyData);
+    //         //   }
+    //         // } catch (err) {
+    //         //   console.error("Error fetching company on sign in:", err);
+    //         // }
+    //       } else if (event === "SIGNED_OUT") {
+    //         setCompany(null);
+    //         clearAll();
+    //       }
+    //     }
+    //   }
+    // );
+
+    // return () => {
+    //   isMounted = false;
+    //   subscription.unsubscribe();
+    // };
+  }, [supabase, clearAll,refreshUser]);
+
+  const signOut = useCallback(async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      setCompany(null);
+      clearAll();
+
+      // Redirect to login page
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
       }
-    );
-
-    return () => subscription.unsubscribe();
-  }, [supabase, clearAll, fetchUserCompany]);
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setCompany(null);
-    clearAll();
-  };
+    } catch (error) {
+      console.error("Error signing out:", error);
+      // Still redirect even if there's an error
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
+    }
+  }, [supabase, clearAll]);
 
   return (
     <AuthContext.Provider

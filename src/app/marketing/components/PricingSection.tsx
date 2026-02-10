@@ -15,6 +15,7 @@ export default function PricingSection() {
   const { t } = useTranslationNamespace('marketing.pricing');
   const { user, loading: authLoading } = useAuth();
   const { plans, loading } = useSubscriptionContext();
+  // const {  loading:l } = useSubscriptions();
   const [isAnnual, setIsAnnual] = useState(false);
 
   const handlePlanSelect = () => {

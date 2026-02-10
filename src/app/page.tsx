@@ -1,6 +1,6 @@
 
 'use client'
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -8,10 +8,14 @@ import LoadingScreen from "@/components/LoadingScreen";
 export default function Home() {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const redirectedRef = useRef(false);
 
   useEffect(() => {
-    if (!loading) {
-      // If user is authenticated and has completed setup, go to dashboard
+    // Only redirect once to prevent infinite loops
+    if (!loading && !redirectedRef.current) {
+      redirectedRef.current = true;
+      
+      // If user is authenticated, go to dashboard
       // Otherwise, go to marketing page
       if (user) {
         router.push("/dashboard");
@@ -20,10 +24,6 @@ export default function Home() {
       }
     }
   }, [user, loading, router]);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
 
   return <LoadingScreen />;
 }

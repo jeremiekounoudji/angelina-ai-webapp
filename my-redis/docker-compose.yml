@@ -1,0 +1,35 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis-prod
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
+    # Wrap the password in single quotes to be safe
+    command: ["redis-server", "--requirepass", "Angelina123!", "--appendonly", "yes"]
+    networks:
+      - redis-net
+
+  dashboard:
+    image: redis/redisinsight:latest
+    container_name: redis-insight
+    restart: always
+    ports:
+      - "5540:5540"
+    networks:
+      - redis-net
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-bridge
+    restart: always
+    environment:
+      - TUNNEL_TOKEN=eyJhIjoiZWM5N2I2YTc3YzhhMTk0YjVhZWRjMmEyOWFmNzM4YzEiLCJ0IjoiYjVhMDc1ZTEtMmVhOS00YzY5LTllZDUtMGZkNDE0NDIyNmU0IiwicyI6Ik56VTVPR0psWlRrdFptWXpNUzAwTVdNMUxXSTFZMkV0TlRka016TTRaVE5oTURBMyJ9
+    command: tunnel --no-autoupdate run
+    networks:
+      - redis-net
+      
+networks:
+  redis-net:
+    driver: bridge

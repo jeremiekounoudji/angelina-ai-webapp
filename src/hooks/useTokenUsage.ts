@@ -1,36 +1,40 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAppStore } from "@/store";
 import toast from 'react-hot-toast';
 
 export function useTokenUsage(companyId?: string) {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
+  const hasFetchedRef = useRef(false);
+  const currentCompanyIdRef = useRef<string | null>(null);
+  const isFetchingRef = useRef(false);
   
-  const {
-    tokenUsage,
-    setTokenUsage,
-    tokenPurchases,
-    setTokenPurchases,
-    addTokenPurchase,
-    loading,
-    setLoading,
-    errors,
-    setError,
-  } = useAppStore();
+  // Use selectors to get stable references
+  const tokenUsage = useAppStore((state) => state.tokenUsage);
+  const tokenPurchases = useAppStore((state) => state.tokenPurchases);
+  const addTokenPurchase = useAppStore((state) => state.addTokenPurchase);
+  const loading = useAppStore((state) => state.loading.tokenUsage);
+  const error = useAppStore((state) => state.errors.tokenUsage);
 
   const fetchTokenUsage = useCallback(async (forceRefresh = false) => {
     if (!companyId) return;
 
-    // Return cached data if available and not forcing refresh
-    if (tokenUsage && tokenPurchases.length > 0 && !forceRefresh) {
+    // Check if we've already fetched for this company
+    if (!forceRefresh && hasFetchedRef.current && currentCompanyIdRef.current === companyId) {
       return { usage: tokenUsage, purchases: tokenPurchases };
     }
 
+    // Prevent concurrent fetches
+    if (isFetchingRef.current) {
+      return;
+    }
+
     try {
-      setLoading('tokenUsage', true);
-      setError('tokenUsage', null);
+      isFetchingRef.current = true;
+      useAppStore.getState().setLoading('tokenUsage', true);
+      useAppStore.getState().setError('tokenUsage', null);
 
       const currentMonth = new Date().getMonth() + 1;
       const currentYear = new Date().getFullYear();
@@ -42,36 +46,39 @@ export function useTokenUsage(companyId?: string) {
         .eq("company_id", companyId)
         .eq("usage_month", currentMonth)
         .eq("usage_year", currentYear)
-        .single();
+       ;
 
       if (usageError && usageError.code !== 'PGRST116') {
         throw usageError;
       }
 
-      setTokenUsage(usageData);
+      useAppStore.getState().setTokenUsage(usageData);
 
       // Fetch purchase history
       const { data: purchasesData, error: purchasesError } = await supabase
         .from("token_purchases")
         .select("*")
         .eq("company_id", companyId)
-        .order("created_at", { ascending: false })
+        .order("created_at", { ascending: false})
         .limit(10);
 
       if (purchasesError) throw purchasesError;
 
-      setTokenPurchases(purchasesData || []);
+      useAppStore.getState().setTokenPurchases(purchasesData || []);
+      hasFetchedRef.current = true;
+      currentCompanyIdRef.current = companyId;
       
       return { usage: usageData, purchases: purchasesData || [] };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch token usage';
-      setError('tokenUsage', errorMessage);
+      useAppStore.getState().setError('tokenUsage', errorMessage);
       toast.error(errorMessage);
       return { usage: null, purchases: [] };
     } finally {
-      setLoading('tokenUsage', false);
+      useAppStore.getState().setLoading('tokenUsage', false);
+      isFetchingRef.current = false;
     }
-  }, [companyId, tokenUsage, tokenPurchases, supabase, setTokenUsage, setTokenPurchases, setLoading, setError]);
+  }, [companyId, supabase, tokenUsage, tokenPurchases]);
 
   const consumeTokens = useCallback(async (tokensToConsume: number) => {
     if (!companyId) return false;
@@ -149,18 +156,37 @@ export function useTokenUsage(companyId?: string) {
     }
   }, [companyId, supabase, tokenUsage, addTokenPurchase, fetchTokenUsage]);
 
-  // Auto-fetch on mount if no data
+  // Store fetchTokenUsage in a ref to avoid dependency issues
+  const fetchTokenUsageRef = useRef(fetchTokenUsage);
+  fetchTokenUsageRef.current = fetchTokenUsage;
+
+  // Reset tracking when company changes
   useEffect(() => {
-    if (companyId && !tokenUsage && !loading.tokenUsage) {
-      fetchTokenUsage();
+    if (companyId !== currentCompanyIdRef.current) {
+      hasFetchedRef.current = false;
+      currentCompanyIdRef.current = null;
     }
-  }, [companyId, tokenUsage, loading.tokenUsage, fetchTokenUsage]);
+  }, [companyId]);
+
+  // Simple effect - only fetch once per company
+  useEffect(() => {
+    if (companyId && !hasFetchedRef.current && !isFetchingRef.current) {
+      fetchTokenUsageRef.current();
+    }
+    
+    // Cleanup: ensure loading is false if component unmounts during fetch
+    return () => {
+      if (isFetchingRef.current) {
+        useAppStore.getState().setLoading('tokenUsage', false);
+      }
+    };
+  }, [companyId]);
 
   return {
     usage: tokenUsage,
     purchases: tokenPurchases,
-    loading: loading.tokenUsage,
-    error: errors.tokenUsage,
+    loading,
+    error,
     consumeTokens,
     purchaseTokens,
     refetch: () => fetchTokenUsage(true),

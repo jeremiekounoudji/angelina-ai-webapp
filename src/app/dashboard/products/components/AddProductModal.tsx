@@ -7,13 +7,13 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Button,
   Input,
   Textarea,
   Switch,
   Progress,
 } from "@heroui/react";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -63,6 +63,7 @@ export function AddProductModal({
 }: AddProductModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [showConfirmClose, setShowConfirmClose] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { upload, uploading } = useUpload();
@@ -96,21 +97,16 @@ export function AddProductModal({
 
   const isPriceFixed = watch("is_price_fixed");
 
-  const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const files = Array.from(event.target.files || []);
-    if (files.length === 0) return;
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    const result = await upload({
-      bucket: "products",
-      files,
-      path: "product-images",
-    });
-
-    if (result.success && result.urls.length > 0) {
-      setImageUrl(result.urls[0]);
-    }
+    // Store the file but don't upload yet
+    setImageFile(file);
+    
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setImageUrl(previewUrl);
   };
 
   const onSubmit = async (data: ProductFormData) => {
@@ -126,9 +122,24 @@ export function AddProductModal({
         return;
       }
 
+      let finalImageUrl = "";
+
+      // Upload image if selected
+      if (imageFile) {
+        const result = await upload({
+          bucket: "products",
+          files: [imageFile],
+          path: "product-images"
+        });
+
+        if (result.success && result.urls.length > 0) {
+          finalImageUrl = result.urls[0];
+        }
+      }
+
       const productData = {
         ...data,
-        image_url: imageUrl,
+        image_url: finalImageUrl,
       };
 
       const result = await createProduct(productData);
@@ -138,6 +149,11 @@ export function AddProductModal({
         onOpenChange(false);
         reset();
         setImageUrl("");
+        setImageFile(null);
+        // Clean up preview URL
+        if (imageUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(imageUrl);
+        }
       }
     } catch (error) {
       console.error("Error creating product:", error);
@@ -157,6 +173,11 @@ export function AddProductModal({
   const confirmClose = () => {
     reset();
     setImageUrl("");
+    setImageFile(null);
+    // Clean up preview URL
+    if (imageUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(imageUrl);
+    }
     setShowConfirmClose(false);
     onOpenChange(false);
   };
@@ -205,9 +226,11 @@ export function AddProductModal({
               <div className="flex flex-col items-center gap-4">
                 <div className="relative">
                   {imageUrl ? (
-                    <img
+                    <Image
                       src={imageUrl}
                       alt="Product"
+                      width={96}
+                      height={96}
                       className="w-24 h-24 rounded-lg object-cover"
                     />
                   ) : (
@@ -241,7 +264,7 @@ export function AddProductModal({
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
-                  onChange={handleImageUpload}
+                  onChange={handleImageSelect}
                   className="hidden"
                 />
               </div>
@@ -252,6 +275,8 @@ export function AddProductModal({
                 placeholder="Enter product name"
                 {...register("name")}
                 isInvalid={!!errors.name}
+                variant="bordered"
+
                 errorMessage={errors.name?.message}
                 isRequired
                 classNames={{
@@ -269,6 +294,8 @@ export function AddProductModal({
                 isInvalid={!!errors.description}
                 errorMessage={errors.description?.message}
                 minRows={3}
+                variant="bordered"
+
                 classNames={{
                   input: "text-white",
                   label: "text-gray-50",
@@ -285,6 +312,8 @@ export function AddProductModal({
                 isInvalid={!!errors.stock_quantity}
                 errorMessage={errors.stock_quantity?.message}
                 isRequired
+                variant="bordered"
+
                 classNames={{
                   input: "text-white",
                   label: "text-gray-50",
@@ -311,6 +340,8 @@ export function AddProductModal({
                     placeholder="Enter price"
                     type="number"
                     step="0.01"
+                variant="bordered"
+
                     {...register("price", { valueAsNumber: true })}
                     isInvalid={!!errors.price}
                     errorMessage={errors.price?.message}
@@ -332,6 +363,8 @@ export function AddProductModal({
                       placeholder="Min price"
                       type="number"
                       step="0.01"
+                variant="bordered"
+
                       {...register("min_price", { valueAsNumber: true })}
                       isInvalid={!!errors.min_price}
                       errorMessage={errors.min_price?.message}
@@ -350,6 +383,8 @@ export function AddProductModal({
                       label="Max Price"
                       placeholder="Max price"
                       type="number"
+                variant="bordered"
+
                       step="0.01"
                       {...register("max_price", { valueAsNumber: true })}
                       isInvalid={!!errors.max_price}
@@ -368,9 +403,8 @@ export function AddProductModal({
                   </div>
                 )}
               </div>
-            </ModalBody>
-            <ModalFooter>
-              <Button
+              <div className=" flex gap-2 justify-end">
+                 <Button
                 color="danger"
                 variant="light"
                 onPress={handleClose}
@@ -381,12 +415,13 @@ export function AddProductModal({
               <Button
                 color="primary"
                 type="submit"
-                isLoading={isLoading}
+                isLoading={isLoading || uploading}
                 isDisabled={!isDirty || Boolean(limits && !limits.can_add_products)}
               >
-                Add Product
+                {uploading ? "Uploading..." : "Add Product"}
               </Button>
-            </ModalFooter>
+              </div>
+            </ModalBody>
           </form>
         )}
       </ModalContent>

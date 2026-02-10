@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardBody, CardHeader, Button, Input, Link } from "@heroui/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
@@ -10,13 +10,13 @@ import { z } from "zod";
 import { useAuthActions } from "@/hooks/useAuth";
 import { useAppStore } from "@/store";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
-import { useAuth } from "@/contexts/AuthContext";
 import { TranslationFunction } from "@/locales";
 
-const createLoginSchema = (t: TranslationFunction) => z.object({
-  email: z.string().email(t('errors.invalidCredentials')),
-  password: z.string().min(6, t('errors.invalidCredentials')),
-});
+const createLoginSchema = (t: TranslationFunction) =>
+  z.object({
+    email: z.string().email(t("errors.invalidCredentials")),
+    password: z.string().min(6, t("errors.invalidCredentials")),
+  });
 
 type LoginFormData = {
   email: string;
@@ -28,18 +28,17 @@ export default function LoginPage() {
   const router = useRouter();
   const { signIn } = useAuthActions();
   const { loading } = useAppStore();
-  const { t } = useTranslationNamespace('auth.login');
-  const { user, loading: authLoading } = useAuth();
+  const { t } = useTranslationNamespace("auth.login");
 
   // Redirect authenticated users to dashboard
-  useEffect(() => {
-    if (!authLoading && user) {
-      router.replace("/dashboard");
-    }
-  }, [user, authLoading, router]);
+  // useEffect(() => {
+  //   if (!authLoading && user) {
+  //     router.replace("/dashboard");
+  //   }
+  // }, [user, authLoading]); // Remove router from dependencies
 
   const loginSchema = useMemo(() => createLoginSchema(t), [t]);
-  
+
   const {
     register,
     handleSubmit,
@@ -62,42 +61,39 @@ export default function LoginPage() {
 
       <div className="max-w-md w-full space-y-8 relative z-10">
         <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold text-white">
-            {t('title')}
-          </h2>
+          <h2 className="mt-6 text-3xl font-bold text-white">{t("title")}</h2>
           <p className="mt-2 text-sm text-gray-50">
-            {t('footer.noAccount')}{" "}
+            {t("footer.noAccount")}{" "}
             <button
               onClick={() => router.push("/register")}
               className="font-medium text-primary hover:text-primary/80 underline cursor-pointer"
             >
-              {t('footer.signUp')}
+              {t("footer.signUp")}
             </button>
           </p>
         </div>
 
         <Card className="mt-8 bg-background backdrop-blur-sm border border-secondary shadow-lg shadow-secondary/20">
           <CardHeader className="text-center">
-            <h3 className="text-lg font-medium text-white">{t('subtitle')}</h3>
+            <h3 className="text-lg font-medium text-white">{t("subtitle")}</h3>
           </CardHeader>
           <CardBody>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <Input
-                label={t('form.email')}
+                label={t("form.email")}
                 type="email"
-                placeholder={t('form.emailPlaceholder')}
+                placeholder={t("form.emailPlaceholder")}
                 {...register("email")}
                 isInvalid={!!errors.email}
                 variant="bordered"
                 className="text-gray-50"
-
                 errorMessage={errors.email?.message}
                 isRequired
               />
 
               <Input
-                label={t('form.password')}
-                placeholder={t('form.passwordPlaceholder')}
+                label={t("form.password")}
+                placeholder={t("form.passwordPlaceholder")}
                 variant="bordered"
                 {...register("password")}
                 isInvalid={!!errors.password}
@@ -125,7 +121,7 @@ export default function LoginPage() {
                   href="/forgot-password"
                   className="text-sm text-primary hover:text-primary/80"
                 >
-                  {t('form.forgotPassword')}
+                  {t("form.forgotPassword")}
                 </Link>
               </div>
 
@@ -135,7 +131,7 @@ export default function LoginPage() {
                 isLoading={loading.users}
                 isDisabled={loading.users}
               >
-                {t('form.submit')}
+                {t("form.submit")}
               </Button>
             </form>
           </CardBody>
