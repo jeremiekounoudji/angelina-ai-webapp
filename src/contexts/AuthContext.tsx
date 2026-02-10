@@ -38,6 +38,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     try {
       setLoading(true);
+      
+      // First check if there's a session
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        console.log("No session found");
+        setUser(null);
+        setCompany(null);
+        return;
+      }
+
       const {
         data: { user: currentUser },
         error,
@@ -45,8 +56,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error("Error getting user:", error);
-      setLoading(false);
-
         setUser(null);
         setCompany(null);
         return;
@@ -55,38 +64,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(currentUser);
       if (currentUser) {
         console.log("User found:", currentUser.id);
-        console.log("fetch users company");
+        console.log("Fetching user's company");
 
-        
-        try {
-          const { data: companyData } = await supabase
-            .from("companies")
-            .select("*")
-            .eq("user_id", currentUser.id)
-            .single();
+        const { data: companyData, error: companyError } = await supabase
+          .from("companies")
+          .select("*")
+          .eq("user_id", currentUser.id)
+          .single();
 
-          if (companyData) {
-            setCompany(companyData);
-          } else {
-            setCompany(null);
-          }
-      setLoading(false);
-
-        } catch (err) {
-          console.error("Error fetching company:", err);
-      setLoading(false);
-
+        if (companyError) {
+          console.error("Error fetching company:", companyError);
+          setCompany(null);
+        } else if (companyData) {
+          console.log("Company found:", companyData.id);
+          setCompany(companyData);
+        } else {
           setCompany(null);
         }
       } else {
-      setLoading(false);
-
         setCompany(null);
       }
     } catch (error) {
       console.error("Error refreshing user:", error);
-      setLoading(false);
-
       setUser(null);
       setCompany(null);
     } finally {
@@ -95,8 +94,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase]);
 
   useEffect(() => {
-    const isMounted = true;
-
     const initializeAuth = async () => {
       if (initRef.current) return;
       initRef.current = true;
@@ -106,56 +103,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await refreshUser();
       } catch (error) {
         console.error("Error initializing auth:", error);
-        if (isMounted) {
-          setUser(null);
-          setCompany(null);
-        }
+        setUser(null);
+        setCompany(null);
       } finally {
-
-        if (isMounted) {
-          console.log("Auth initialization complete");
-          setLoading(false);
-        }
+        console.log("Auth initialization complete");
+        setLoading(false);
       }
     };
 
     initializeAuth();
 
-    // const {
-    //   data: { subscription },
-    // } = supabase.auth.onAuthStateChange(
-    //   async (event: string, session: { user: User } | null) => {
-    //     console.log("Auth state change:", event, session?.user?.id);
-    //     if (isMounted) {
-    //       setUser(session?.user ?? null);
+    // Listen for auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event: string, session: { user: User } | null) => {
+      console.log("Auth state change:", event, session?.user?.id);
+      
+      if (event === "SIGNED_IN" && session?.user) {
+        // Refresh user and company data when signed in
+        await refreshUser();
+      } else if (event === "SIGNED_OUT") {
+        setUser(null);
+        setCompany(null);
+        clearAll();
+      }
+    });
 
-    //       if (event === "SIGNED_IN" && session?.user) {
-    //         // try {
-    //         //   const { data: companyData } = await supabase
-    //         //     .from("companies")
-    //         //     .select("*")
-    //         //     .eq("user_id", session.user.id)
-    //         //     .single();
-
-    //         //   if (companyData) {
-    //         //     setCompany(companyData);
-    //         //   }
-    //         // } catch (err) {
-    //         //   console.error("Error fetching company on sign in:", err);
-    //         // }
-    //       } else if (event === "SIGNED_OUT") {
-    //         setCompany(null);
-    //         clearAll();
-    //       }
-    //     }
-    //   }
-    // );
-
-    // return () => {
-    //   isMounted = false;
-    //   subscription.unsubscribe();
-    // };
-  }, [supabase, clearAll,refreshUser]);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [supabase, clearAll, refreshUser]);
 
   const signOut = useCallback(async () => {
     try {
