@@ -1,8 +1,8 @@
 # Technology Stack
 
 ## Frontend Framework
-- **Next.js 15.5.2** with App Router
-- **React 19.1.0** with React DOM
+- **Next.js 16.1.6** with App Router
+- **React 19.2.4** with React DOM
 - **TypeScript 5** (strict mode enabled)
 
 ## Styling & UI
