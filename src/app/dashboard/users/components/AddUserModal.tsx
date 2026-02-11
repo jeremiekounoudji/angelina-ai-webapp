@@ -172,21 +172,21 @@ export function AddUserModal({
     <Modal
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      size="2xl"
+      size="md"
       scrollBehavior="inside"
       onClose={handleClose}
       classNames={{
-        body: "py-6 max-h-[70vh] overflow-y-auto",
+        body: "py-6 max-h-[60vh]",
         backdrop: "bg-black/50",
-        base: "border-0 bg-background",
-        header: "border-b-1 border-secondary",
-        footer: "border-t-1 border-secondary",
+        base: "border-0 bg-white max-w-[450px]",
+        header: "border-b border-gray-200",
+        footer: "border-t border-gray-200 bg-white",
       }}
     >
       <ModalContent>
         {() => (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <ModalHeader className="flex flex-col gap-1 text-white">
+            <ModalHeader className="flex flex-col gap-1 text-gray-900">
               {t('form.addTitle')}
             </ModalHeader>
             <ModalBody className="gap-4">
@@ -211,14 +211,12 @@ export function AddUserModal({
                     src={avatarUrl}
                     name={watch("full_name") || "User"}
                     size="lg"
-                    className="w-24 h-24"
+                    className="w-24 h-24 bg-green-100 text-[#328E6E]"
                   />
                   <Button
                     isIconOnly
                     size="sm"
-                    variant="solid"
-                    color="primary"
-                    className="absolute -bottom-1 -right-1"
+                    className="absolute -bottom-1 -right-1 bg-[#328E6E] text-white hover:bg-[#15803d]"
                     onPress={() => fileInputRef.current?.click()}
                     isDisabled={uploading}
                   >
@@ -226,7 +224,7 @@ export function AddUserModal({
                   </Button>
                 </div>
 
-                <p className="text-sm text-gray-50">
+                <p className="text-sm text-gray-600">
                   {t('form.avatar')}
                 </p>
 
@@ -247,10 +245,11 @@ export function AddUserModal({
                 isInvalid={!!errors.full_name}
                 errorMessage={errors.full_name?.message}
                 isRequired
+                variant="bordered"
                 classNames={{
-                  input: "text-white",
-                  label: "text-gray-50",
-                  inputWrapper: "border-secondary bg-background"
+                  input: "text-gray-900",
+                  label: "text-gray-700",
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
                 }}
               />
 
@@ -263,10 +262,11 @@ export function AddUserModal({
                 isInvalid={!!errors.email}
                 errorMessage={errors.email?.message}
                 isRequired
+                variant="bordered"
                 classNames={{
-                  input: "text-white",
-                  label: "text-gray-50",
-                  inputWrapper: "border-secondary bg-background"
+                  input: "text-gray-900",
+                  label: "text-gray-700",
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
                 }}
               />
 
@@ -278,10 +278,11 @@ export function AddUserModal({
                 isInvalid={!!errors.phone}
                 errorMessage={errors.phone?.message}
                 isRequired
+                variant="bordered"
                 classNames={{
-                  input: "text-white",
-                  label: "text-gray-50",
-                  inputWrapper: "border-secondary bg-background"
+                  input: "text-gray-900",
+                  label: "text-gray-700",
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
                 }}
               />
 
@@ -289,6 +290,7 @@ export function AddUserModal({
               <Select
                 label={t('form.role')}
                 placeholder={t('form.selectRole')}
+                variant="bordered"
                 selectedKeys={userRole ? [userRole] : []}
                 onSelectionChange={(keys) => {
                   const selectedRole = Array.from(keys)[0] as "customer" | "manager" | "staff";
@@ -298,9 +300,9 @@ export function AddUserModal({
                 errorMessage={errors.role?.message}
                 isRequired
                 classNames={{
-                  trigger: "border-secondary bg-background",
-                  label: "text-gray-50",
-                  value: "text-white"
+                  trigger: "border-gray-300 bg-white hover:border-[#328E6E]",
+                  label: "text-gray-700",
+                  value: "text-gray-900"
                 }}
               >
                 {userRoles.map((role) => (
@@ -320,7 +322,7 @@ export function AddUserModal({
                 {t('form.cancel')}
               </Button>
               <Button
-                color="primary"
+                className="bg-[#328E6E] text-white hover:bg-[#15803d]"
                 type="submit"
                 isLoading={isLoading || uploading}
                 isDisabled={!isDirty || Boolean(limits && !limits.can_add_users)}

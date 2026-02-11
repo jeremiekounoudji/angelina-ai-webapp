@@ -19,10 +19,11 @@ import { AddUserModal } from './components/AddUserModal'
 import { EditUserModal } from './components/EditUserModal'
 import { ConfirmationModal } from '@/components/ConfirmationModal'
 import { useTranslationNamespace } from '@/contexts/TranslationContext'
+import toast from 'react-hot-toast'
 
 export default function UsersPage() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
-  const { company } = useAuth()
+  const { company, user: currentUser } = useAuth()
   const { users, loading, deleteUser } = useUsers()
   const { limits } = usePlanLimits(company?.id)
   const { t } = useTranslationNamespace('dashboard.users')
@@ -32,12 +33,20 @@ export default function UsersPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [userToDelete, setUserToDelete] = useState<string | null>(null)
 
+  // Check if current user is the company owner
+  const isOwner = currentUser?.id === company?.owner_id
+
   const handleEditUser = (user: User) => {
     setSelectedUser(user)
     editModal.onOpen()
   }
 
   const handleDeleteUser = (userId: string) => {
+    // Prevent owner from deleting themselves
+    if (userId === currentUser?.id) {
+      toast.error(t('errors.cannotDeleteSelf') || "You cannot delete your own account")
+      return
+    }
     setUserToDelete(userId)
     setShowDeleteConfirm(true)
   }
@@ -62,18 +71,18 @@ export default function UsersPage() {
 
   if (loading) {
     return (
-      <div className="p-6 bg-background min-h-screen flex items-center justify-center">
-        <Spinner size="lg" />
+      <div className="p-6 bg-white min-h-screen flex items-center justify-center">
+        <Spinner size="lg" color="success" />
       </div>
     )
   }
 
   return (
-    <div className="p-6 bg-background min-h-screen">
+    <div className="p-6 bg-white min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-semibold text-white">{t('title')}</h2>
-          <p className="text-gray-50">
+          <h2 className="text-xl font-semibold text-gray-900">{t('title')}</h2>
+          <p className="text-gray-600">
             {t('subtitle')}
             {limits && (
               <span className="ml-2 text-sm">
@@ -83,7 +92,7 @@ export default function UsersPage() {
           </p>
         </div>
         <Button
-          className="bg-background border border-secondary text-white hover:bg-secondary shadow-lg shadow-secondary/20"
+          className="bg-[#328E6E] text-white hover:bg-[#15803d]"
           startContent={<PlusIcon className="w-4 h-4" />}
           onPress={addModal.onOpen}
           isDisabled={Boolean(limits && !limits.can_add_users)}
@@ -93,15 +102,15 @@ export default function UsersPage() {
       </div>
 
       {users.length === 0 ? (
-        <Card className="bg-background border border-secondary shadow-lg shadow-secondary/20">
+        <Card className="bg-white border border-gray-200 shadow-sm">
           <CardBody className="text-center py-12">
-            <UsersIcon className="w-12 h-12 text-gray-50 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-white mb-2">{t('empty.title')}</h3>
-            <p className="text-gray-50 mb-4">
+            <UsersIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{t('empty.title')}</h3>
+            <p className="text-gray-600 mb-4">
               {t('empty.description')}
             </p>
             <Button
-              className="bg-primary text-white hover:bg-primary/80 shadow-lg shadow-secondary/20"
+              className="bg-[#328E6E] text-white hover:bg-[#15803d]"
               startContent={<PlusIcon className="w-4 h-4" />}
               onPress={addModal.onOpen}
               isDisabled={Boolean(limits && !limits.can_add_users)}
@@ -126,7 +135,7 @@ export default function UsersPage() {
           )}
           
           {users.map((user) => (
-            <Card key={user.id} className="bg-background border border-secondary shadow-lg shadow-secondary/20 hover:shadow-xl hover:shadow-secondary/30 transition-shadow">
+            <Card key={user.id} className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
               <CardBody className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center space-x-3">
@@ -134,12 +143,13 @@ export default function UsersPage() {
                       src={user.avatar_url}
                       name={user.full_name || user.email || 'User'}
                       size="md"
+                      className="bg-green-100 text-[#328E6E]"
                     />
                     <div>
-                      <h3 className="font-medium text-white">
+                      <h3 className="font-medium text-gray-900">
                         {user.full_name || t('info.noName')}
                       </h3>
-                      <p className="text-sm text-gray-50">{user.email}</p>
+                      <p className="text-sm text-gray-600">{user.email}</p>
                     </div>
                   </div>
                   <div className="flex space-x-1">
@@ -147,7 +157,7 @@ export default function UsersPage() {
                       isIconOnly
                       size="sm"
                       variant="light"
-                      className="text-gray-50 hover:text-white"
+                      className="text-gray-600 hover:text-gray-900"
                       onPress={() => handleEditUser(user)}
                     >
                       <PencilIcon className="w-4 h-4" />
@@ -158,6 +168,8 @@ export default function UsersPage() {
                       variant="light"
                       color="danger"
                       onPress={() => handleDeleteUser(user.id)}
+                      isDisabled={user.id === currentUser?.id}
+                      title={user.id === currentUser?.id ? "You cannot delete your own account" : "Delete user"}
                     >
                       <TrashIcon className="w-4 h-4" />
                     </Button>
@@ -166,7 +178,7 @@ export default function UsersPage() {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-50">{t('table.role')}</span>
+                    <span className="text-sm text-gray-600">{t('table.role')}</span>
                     <Chip
                       size="sm"
                       color={getRoleColor(user.role)}
@@ -179,14 +191,14 @@ export default function UsersPage() {
 
                   {user.phone && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-white">{t('info.phone')}</span>
-                      <span className="text-sm text-gray-50">{user.phone}</span>
+                      <span className="text-sm text-gray-600">{t('info.phone')}</span>
+                      <span className="text-sm text-gray-900">{user.phone}</span>
                     </div>
                   )}
 
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-white">{t('info.joined')}</span>
-                    <span className="text-sm text-gray-50">
+                    <span className="text-sm text-gray-600">{t('info.joined')}</span>
+                    <span className="text-sm text-gray-900">
                       {new Date(user.created_at).toLocaleDateString()}
                     </span>
                   </div>
@@ -209,6 +221,8 @@ export default function UsersPage() {
           onOpenChange={editModal.onOpenChange}
           user={selectedUser}
           onUserUpdated={() => {}} // Hook handles state updates automatically
+          isEditingSelf={selectedUser.id === currentUser?.id}
+          isOwner={isOwner}
         />
       )}
 

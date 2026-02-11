@@ -234,16 +234,16 @@ export default function PaymentModal({
       size="md"
       isDismissable={paymentStatus !== "processing"}
       classNames={{
-        base: "bg-background border border-secondary",
-        header: "border-b border-secondary",
-        footer: "border-t border-secondary"
+        base: "bg-white border-0 max-w-[450px]",
+        header: "border-b border-gray-200",
+        footer: "border-t border-gray-200"
       }}
     >
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
-          <h3 className="text-xl font-semibold text-white">{t('modal.title')}</h3>
+          <h3 className="text-xl font-semibold text-gray-900">{t('modal.title')}</h3>
           {plan && (
-            <p className="text-sm text-gray-50">
+            <p className="text-sm text-gray-600">
               {plan.title} -{" "}
               {billingInterval === "yearly" ? t('billing.yearly') : t('billing.monthly')} Plan
             </p>
@@ -252,16 +252,16 @@ export default function PaymentModal({
         <ModalBody>
           {paymentStatus === "idle" && (
             <div className="space-y-4">
-              <div className="bg-secondary p-4 rounded-lg border border-secondary">
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                 <div className="flex justify-between items-center">
-                  <span className="font-medium text-white">{t('modal.totalAmount')}</span>
-                  <span className="text-xl font-bold text-primary">
+                  <span className="font-medium text-gray-900">{t('modal.totalAmount')}</span>
+                  <span className="text-xl font-bold text-[#328E6E]">
                     {calculateAmount().toLocaleString()} XOF
                   </span>
                 </div>
                 {billingInterval === "yearly" &&
                   plan?.yearly_discount_percent && (
-                    <p className="text-sm text-green-400 mt-1">
+                    <p className="text-sm text-green-700 mt-1">
                       {t('billing.saveDiscount', { percent: plan.yearly_discount_percent })}
                     </p>
                   )}
@@ -275,13 +275,13 @@ export default function PaymentModal({
                 onChange={(e) => setProvider(e.target.value)}
                 isRequired
                 classNames={{
-                  trigger: "border-secondary bg-background",
-                  label: "text-gray-50",
-                  value: "text-white"
+                  trigger: "border-gray-300 bg-white hover:border-[#328E6E]",
+                  label: "text-gray-700",
+                  value: "text-gray-900"
                 }}
               >
                 {mobileProviders.map((prov) => (
-                  <SelectItem key={prov.key} className=" text-gray-800">{prov.label}</SelectItem>
+                  <SelectItem key={prov.key}>{prov.label}</SelectItem>
                 ))}
               </Select>
 
@@ -293,19 +293,18 @@ export default function PaymentModal({
                   setPhoneNumber(formatPhoneNumber(e.target.value))
                 }
                 variant="bordered"
-
                 isRequired
                 description={t('modal.phoneDescription')}
                 classNames={{
-                  input: "text-white",
-                  label: "text-gray-50",
-                  inputWrapper: "border-secondary bg-background",
-                  description: "text-gray-50"
+                  input: "text-gray-900",
+                  label: "text-gray-700",
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]",
+                  description: "text-gray-600"
                 }}
               />
 
-              <div className="bg-secondary p-3 rounded-lg border border-secondary">
-                <p className="text-sm text-blue-300">
+              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                <p className="text-sm text-blue-800">
                   <strong>{t('modal.note')}</strong> {t('modal.instructions')}
                 </p>
               </div>
@@ -314,11 +313,11 @@ export default function PaymentModal({
 
           {paymentStatus === "processing" && (
             <div className="text-center py-8">
-              <Spinner size="lg" color="primary" />
-              <p className="mt-4 text-lg font-medium text-white">
+              <Spinner size="lg" color="success" />
+              <p className="mt-4 text-lg font-medium text-gray-900">
                 {t('status.initializing')}
               </p>
-              <p className="text-sm text-gray-50 mt-2">
+              <p className="text-sm text-gray-600 mt-2">
                 {t('status.initializingDescription')}
               </p>
             </div>
@@ -344,11 +343,11 @@ export default function PaymentModal({
               <p className="text-lg font-medium text-blue-600">
                 {t('status.initialized')}
               </p>
-              <p className="text-sm text-gray-50 mt-2">
+              <p className="text-sm text-gray-600 mt-2">
                 {t('status.initializedDescription')}
               </p>
-              <div className="bg-secondary p-3 rounded-lg mt-4 border border-secondary">
-                <p className="text-sm text-blue-300">
+              <div className="bg-blue-50 p-3 rounded-lg mt-4 border border-blue-200">
+                <p className="text-sm text-blue-800">
                   {t('status.initializedInstructions')}
                 </p>
               </div>
@@ -361,11 +360,11 @@ export default function PaymentModal({
               <p className="mt-4 text-lg font-medium text-orange-600">
                 {t('status.waiting')}
               </p>
-              <p className="text-sm text-gray-50 mt-2">
+              <p className="text-sm text-gray-600 mt-2">
                 {t('status.waitingDescription')}
               </p>
-              <div className="bg-secondary p-3 rounded-lg mt-4 border border-secondary">
-                <p className="text-sm text-orange-300">
+              <div className="bg-orange-50 p-3 rounded-lg mt-4 border border-orange-200">
+                <p className="text-sm text-orange-800">
                   {t('status.waitingInstructions')}
                 </p>
               </div>
@@ -392,7 +391,7 @@ export default function PaymentModal({
               <p className="text-lg font-medium text-green-600">
                 {t('status.confirmed')}
               </p>
-              <p className="text-sm text-gray-50 mt-2">
+              <p className="text-sm text-gray-600 mt-2">
                 {t('status.confirmedDescription')}
               </p>
             </div>
@@ -416,18 +415,18 @@ export default function PaymentModal({
                 </svg>
               </div>
               <p className="text-lg font-medium text-red-600">{t('status.failed')}</p>
-              <p className="text-sm text-gray-50 mt-2">{errorMessage}</p>
+              <p className="text-sm text-gray-600 mt-2">{errorMessage}</p>
             </div>
           )}
         </ModalBody>
         <ModalFooter>
           {paymentStatus === "idle" && (
             <>
-              <Button variant="light" onPress={onClose}>
+              <Button color="danger" variant="light" onPress={onClose}>
                 {t('modal.cancel')}
               </Button>
               <Button
-                color="primary"
+                className="bg-[#328E6E] text-white hover:bg-[#15803d]"
                 onPress={handlePayment}
                 isDisabled={!phoneNumber || !provider || loading}
                 isLoading={loading}
@@ -447,7 +446,7 @@ export default function PaymentModal({
                 {t('modal.close')}
               </Button>
               <Button
-                color="primary"
+                className="bg-[#328E6E] text-white hover:bg-[#15803d]"
                 onPress={() => {
                   setPaymentStatus("idle");
                   setErrorMessage("");

@@ -75,9 +75,9 @@ export function ConfirmationModal({
       size="md"
       isDismissable={!isLoading}
       classNames={{
-        base: "bg-background border border-secondary",
-        header: "border-b border-secondary",
-        footer: "border-t border-secondary",
+        base: "bg-white border-0 max-w-[450px]",
+        header: "border-b border-gray-200",
+        footer: "border-t border-gray-200",
       }}
     >
       <ModalContent>
@@ -86,15 +86,16 @@ export function ConfirmationModal({
             <div className={`p-2 rounded-full ${styles.bgColor} ${styles.borderColor} border`}>
               <ExclamationTriangleIcon className={`w-6 h-6 ${styles.iconColor}`} />
             </div>
-            <h3 className="text-lg font-semibold text-white">{title}</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
           </div>
         </ModalHeader>
         <ModalBody>
-          <p className="text-gray-50 leading-relaxed">{message}</p>
+          <p className="text-gray-600 leading-relaxed">{message}</p>
         </ModalBody>
         <ModalFooter>
           <Button
             variant="light"
+            color="danger"
             onPress={onClose}
             isDisabled={isLoading}
           >

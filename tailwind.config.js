@@ -20,7 +20,7 @@ const config = {
             300: '#86efac',
             400: '#4ade80', // Main green accent
             500: '#22c55e', // Primary green
-            600: '#16a34a', // Darker green for buttons
+            600: '#328E6E', // Darker green for buttons
             700: '#15803d',
             800: '#166534',
             900: '#14532d',

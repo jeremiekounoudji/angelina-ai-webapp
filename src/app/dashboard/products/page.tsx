@@ -16,8 +16,7 @@ import { Product } from '@/types/database'
 import { useProducts } from '@/hooks/useProducts'
 import { usePlanLimits } from '@/hooks/usePlanLimits'
 import { UpgradePrompt } from '@/components/UpgradePrompt'
-import { AddProductModal } from './components/AddProductModal'
-import { EditProductModal } from './components/EditProductModal'
+import { ProductModal } from './components/ProductModal'
 import { ConfirmationModal } from '@/components/ConfirmationModal'
 import { useTranslationNamespace } from '@/contexts/TranslationContext'
 
@@ -67,18 +66,18 @@ export default function ProductsPage() {
 
   if (loading) {
     return (
-      <div className="p-6 bg-background min-h-screen flex items-center justify-center">
-        <Spinner size="lg" />
+      <div className="p-6 bg-white min-h-screen flex items-center justify-center">
+        <Spinner size="lg" color="success" />
       </div>
     )
   }
 
   return (
-    <div className="p-6 bg-background min-h-screen">
+    <div className="p-6 bg-white min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-semibold text-white">{t('title')}</h2>
-          <p className="text-gray-50">
+          <h2 className="text-xl font-semibold text-gray-900">{t('title')}</h2>
+          <p className="text-gray-600">
             {t('subtitle')}
             {limits && (
               <span className="ml-2 text-sm">
@@ -88,7 +87,7 @@ export default function ProductsPage() {
           </p>
         </div>
         <Button
-          className="bg-background border border-secondary text-white hover:bg-secondary shadow-lg shadow-secondary/20"
+          className="bg-[#328E6E] text-white hover:bg-[#15803d]"
           startContent={<PlusIcon className="w-4 h-4" />}
           onPress={addModal.onOpen}
           isDisabled={Boolean(limits && !limits.can_add_products)}
@@ -98,15 +97,15 @@ export default function ProductsPage() {
       </div>
 
       {products.length === 0 ? (
-        <Card className="bg-background border border-secondary shadow-lg shadow-secondary/20">
+        <Card className="bg-white border border-gray-200 shadow-sm">
           <CardBody className="text-center py-12">
-            <ShoppingBagIcon className="w-12 h-12 text-gray-50 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-white mb-2">{t('empty.title')}</h3>
-            <p className="text-gray-50 mb-4">
+            <ShoppingBagIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{t('empty.title')}</h3>
+            <p className="text-gray-600 mb-4">
               {t('empty.description')}
             </p>
             <Button
-              className="bg-primary text-white hover:bg-primary/80 shadow-lg shadow-secondary/20"
+              className="bg-[#328E6E] text-white hover:bg-[#15803d]"
               startContent={<PlusIcon className="w-4 h-4" />}
               onPress={addModal.onOpen}
               isDisabled={Boolean(limits && !limits.can_add_products)}
@@ -133,10 +132,10 @@ export default function ProductsPage() {
             const stockStatus = getStockStatus(product.stock_quantity)
             
             return (
-              <Card key={product.id} className="bg-background border border-secondary shadow-lg shadow-secondary/20 hover:shadow-xl hover:shadow-secondary/30 transition-shadow">
+              <Card key={product.id} className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                 <CardBody className="p-0">
                   {/* Product Image */}
-                  <div className="relative bg-secondary">
+                  <div className="relative bg-gray-100">
                     {product.image_url ? (
                       <Image
                       width={400}
@@ -147,7 +146,7 @@ export default function ProductsPage() {
                       />
                     ) : (
                       <div className="w-full h-[200px] flex items-center justify-center">
-                        <ShoppingBagIcon className="w-12 h-12 text-gray-50" />
+                        <ShoppingBagIcon className="w-12 h-12 text-gray-400" />
                       </div>
                     )}
                     
@@ -156,24 +155,18 @@ export default function ProductsPage() {
                       <Button
                         isIconOnly
                         size="sm"
-                        variant="solid"
-                        color="warning"
-                        className="backdrop-blur-sm"
+                        className="bg-white/90 backdrop-blur-sm hover:bg-white"
                         onPress={() => handleEditProduct(product)}
                       >
-                        <PencilIcon 
-                        color='warning'
-                        className="w-4 h-4" />
+                        <PencilIcon className="w-4 h-4 text-gray-700" />
                       </Button>
                       <Button
                         isIconOnly
                         size="sm"
-                        variant="solid"
-                        color="danger"
-                        className="backdrop-blur-sm"
+                        className="bg-white/90 backdrop-blur-sm hover:bg-white"
                         onPress={() => handleDeleteProduct(product.id)}
                       >
-                        <TrashIcon className="w-4 h-4" />
+                        <TrashIcon className="w-4 h-4 text-red-600" />
                       </Button>
                     </div>
                    
@@ -182,7 +175,7 @@ export default function ProductsPage() {
                   {/* Product Info */}
                   <div className="p-4">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-medium text-white truncate flex-1">
+                      <h3 className="font-medium text-gray-900 truncate flex-1">
                         {product.name}
                       </h3>
                       <Chip
@@ -196,29 +189,29 @@ export default function ProductsPage() {
                     </div>
 
                     {product.description && (
-                      <p className="text-sm text-gray-50 mb-3 line-clamp-2">
+                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                         {product.description}
                       </p>
                     )}
 
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-50">{t('info.price')}</span>
-                        <span className="font-medium text-white">
+                        <span className="text-sm text-gray-600">{t('info.price')}</span>
+                        <span className="font-medium text-gray-900">
                           {formatPrice(product)}
                         </span>
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-50">{t('info.stock')}</span>
-                        <span className="font-medium text-white">
+                        <span className="text-sm text-gray-600">{t('info.stock')}</span>
+                        <span className="font-medium text-gray-900">
                           {product.stock_quantity} {t('info.units')}
                         </span>
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-50">{t('info.added')}</span>
-                        <span className="text-sm text-white">
+                        <span className="text-sm text-gray-600">{t('info.added')}</span>
+                        <span className="text-sm text-gray-900">
                           {new Date(product.created_at).toLocaleDateString()}
                         </span>
                       </div>
@@ -231,26 +224,22 @@ export default function ProductsPage() {
         </div>
       )}
 
-      <AddProductModal
-        isOpen={addModal.isOpen}
-        onOpenChange={addModal.onOpenChange}
-        onProductAdded={() => {
-          // The hook handles state updates automatically, but we can trigger a refetch if needed
-          // refetch();
+      <ProductModal
+        isOpen={addModal.isOpen || editModal.isOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            addModal.onClose();
+            editModal.onClose();
+            setSelectedProduct(null);
+          }
+        }}
+        product={selectedProduct}
+        onSuccess={() => {
+          addModal.onClose();
+          editModal.onClose();
+          setSelectedProduct(null);
         }}
       />
-
-      {selectedProduct && (
-        <EditProductModal
-          isOpen={editModal.isOpen}
-          onOpenChange={editModal.onOpenChange}
-          product={selectedProduct}
-          onProductUpdated={() => {
-            // The hook handles state updates automatically, but we can trigger a refetch if needed
-            // refetch();
-          }}
-        />
-      )}
 
       <ConfirmationModal
         isOpen={showDeleteConfirm}

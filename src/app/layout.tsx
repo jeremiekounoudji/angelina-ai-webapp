@@ -15,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="antialiased bg-background text-white font-sans">
+    <html lang="en" className="light">
+      <body className="antialiased bg-white text-gray-900 font-sans">
         <TranslationProvider>
           <Providers>
             {children}
@@ -25,13 +25,14 @@ export default function RootLayout({
               toastOptions={{
                 duration: 4000,
                 style: {
-                  background: '#363636',
-                  color: '#fff',
+                  background: '#ffffff',
+                  color: '#111827',
+                  border: '1px solid #e5e7eb',
                 },
                 success: {
                   duration: 3000,
                   iconTheme: {
-                    primary: '#4ade80',
+                    primary: '#328E6E',
                     secondary: '#fff',
                   },
                 },

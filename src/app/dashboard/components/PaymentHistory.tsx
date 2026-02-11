@@ -63,11 +63,11 @@ export default function PaymentHistory() {
   if (!company) return null;
 
   return (
-    <Card className="w-full m-4 bg-background  shadow-lg shadow-secondary/20">
-      <CardHeader className="flex justify-between items-center">
+    <Card className="w-full bg-white border border-gray-200 shadow-sm">
+      <CardHeader className="flex justify-between items-center border-b border-gray-200">
         <div>
-          <h3 className="text-lg font-semibold text-white">{t('history.title')}</h3>
-          <p className="text-sm text-gray-50">
+          <h3 className="text-lg font-semibold text-gray-900">{t('history.title')}</h3>
+          <p className="text-sm text-gray-600">
             {payments.length} {payments.length === 1 ? t('history.payment') : t('history.payments')} {t('history.total')}
           </p>
         </div>
@@ -75,7 +75,7 @@ export default function PaymentHistory() {
       <CardBody>
         {loading ? (
           <div className="flex justify-center py-8">
-            <Spinner size="lg" />
+            <Spinner size="lg" color="success" />
           </div>
         ) : payments.length === 0 ? (
           <div className="text-center py-8">
@@ -84,8 +84,8 @@ export default function PaymentHistory() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <p className="text-gray-50">{t('history.noPayments')}</p>
-            <p className="text-sm text-gray-50 mt-1">
+            <p className="text-gray-900 font-medium">{t('history.noPayments')}</p>
+            <p className="text-sm text-gray-600 mt-1">
               {t('history.noPaymentsDescription')}
             </p>
           </div>
@@ -94,11 +94,11 @@ export default function PaymentHistory() {
             {currentPayments.map((payment) => (
               <div
                 key={payment.id}
-                className="flex items-center justify-between p-4 border border-secondary/20 rounded-lg hover:bg-tertiary/20 transition-colors"
+                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-medium text-white">
+                    <h4 className="font-medium text-gray-900">
                       {payment.plan?.title || t('history.unknownPlan')}
                     </h4>
                     <Chip
@@ -109,7 +109,7 @@ export default function PaymentHistory() {
                       {getStatusLabel(payment.payment_status, t)}
                     </Chip>
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-50">
+                  <div className="flex items-center gap-4 text-sm text-gray-600">
                     <span>{formatAmount(payment.amount, payment.currency)}</span>
                     <span>•</span>
                     <span>{formatDate(payment.created_at)}</span>
@@ -121,17 +121,17 @@ export default function PaymentHistory() {
                     )}
                   </div>
                   {payment.transaction_id && (
-                    <p className="text-xs text-gray-50 mt-1 font-mono">
+                    <p className="text-xs text-gray-500 mt-1 font-mono">
                       ID: {payment.transaction_id.split('_')[3] || payment.transaction_id}
                     </p>
                   )}
                 </div>
                 <div className="text-right">
-                  <div className="text-lg font-semibold text-white">
+                  <div className="text-lg font-semibold text-gray-900">
                     {formatAmount(payment.amount, payment.currency)}
                   </div>
                   {payment.plan?.price_monthly && (
-                    <div className="text-sm text-gray-50">
+                    <div className="text-sm text-gray-600">
                       {payment.plan.price_monthly}/month
                     </div>
                   )}
@@ -147,7 +147,7 @@ export default function PaymentHistory() {
                   onChange={setCurrentPage}
                   showControls
                   showShadow
-                  color="primary"
+                  color="success"
                 />
               </div>
             )}

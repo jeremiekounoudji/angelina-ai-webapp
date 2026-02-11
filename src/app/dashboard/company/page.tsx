@@ -43,8 +43,8 @@ export default function CompanyPage() {
   // Show loading only while auth is initializing
   if (loading) {
     return (
-      <div className="p-6 bg-background min-h-screen flex items-center justify-center">
-        <Spinner size="lg" />
+      <div className="p-6 bg-white min-h-screen flex items-center justify-center">
+        <Spinner size="lg" color="success" />
       </div>
     )
   }
@@ -52,11 +52,11 @@ export default function CompanyPage() {
   // Show empty state if no company after loading completes
   if (!company) {
     return (
-      <div className="p-6 bg-background min-h-screen">
-        <Card className="bg-background border border-secondary shadow-lg shadow-secondary/20">
+      <div className="p-6 bg-white min-h-screen">
+        <Card className="bg-white border border-gray-200 shadow-sm">
           <CardBody className="text-center py-12">
-            <h3 className="text-lg font-medium text-white mb-2">No company found</h3>
-            <p className="text-gray-50">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No company found</h3>
+            <p className="text-gray-600">
               Please contact support if you believe this is an error.
             </p>
           </CardBody>
@@ -66,11 +66,11 @@ export default function CompanyPage() {
   }
 
   return (
-    <div className="p-6 bg-background min-h-screen ">
+    <div className="p-6 bg-white min-h-screen">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-white">{t('title')}</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
         <Button
-          className="bg-background border border-secondary text-white hover:bg-secondary shadow-lg shadow-secondary/20"
+          className="bg-[#328E6E] text-white hover:bg-[#15803d]"
           startContent={<PencilIcon className="w-4 h-4" />}
           onPress={onOpen}
         >
@@ -82,19 +82,19 @@ export default function CompanyPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Main Company Info */}
         <div className="lg:col-span-1">
-          <Card className="bg-background border-1 border-secondary shadow-lg shadow-secondary/20">
-            <CardHeader className="flex gap-3">
+          <Card className="bg-white border border-gray-200 shadow-sm h-full">
+            <CardHeader className="flex gap-3 border-b border-gray-100">
               <Avatar
                 src={company.avatar_url}
                 name={company.name}
                 size="lg"
-                className="w-16 h-16 bg-primary text-center text-white"
+                className="w-16 h-16 bg-green-100 text-[#328E6E]"
               />
               <div className="flex flex-col">
-                <h2 className="text-xl font-semibold text-white">{company.name}</h2>
-                <p className="text-gray-50 capitalize">{company.type}</p>
+                <h2 className="text-xl font-semibold text-gray-900">{company.name}</h2>
+                <p className="text-gray-600 capitalize">{company.type}</p>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-sm text-gray-50">{t('form.status')}:</span>
+                  <span className="text-sm text-gray-600">{t('form.status')}:</span>
                   <Chip
                     size="sm"
                     color={getStatusColor(company.subscription_status)}
@@ -106,45 +106,45 @@ export default function CompanyPage() {
                 </div>
               </div>
             </CardHeader>
-            <CardBody className="pt-0">
+            <CardBody className="pt-4">
               {company.description && (
                 <div className="mb-4">
-                  <h3 className="font-medium text-white mb-2">{t('form.description')}</h3>
-                  <p className="text-gray-50">{company.description}</p>
+                  <h3 className="font-medium text-gray-900 mb-2">{t('form.description')}</h3>
+                  <p className="text-gray-600">{company.description}</p>
                 </div>
               )}
 
               <div className="space-y-3">
                 {company.address && (
                   <div className="flex items-center gap-3">
-                    <MapPinIcon className="w-5 h-5 text-gray-50" />
-                    <span className="text-white">{company.address}</span>
+                    <MapPinIcon className="w-5 h-5 text-gray-400" />
+                    <span className="text-gray-700">{company.address}</span>
                   </div>
                 )}
 
                 {company.phone && (
                   <div className="flex items-center gap-3">
-                    <PhoneIcon className="w-5 h-5 text-gray-50" />
-                    <span className="text-gray-50">{company.phone}</span>
+                    <PhoneIcon className="w-5 h-5 text-gray-400" />
+                    <span className="text-gray-700">{company.phone}</span>
                   </div>
                 )}
 
                 {company.email && (
                   <div className="flex items-center gap-3">
-                    <EnvelopeIcon className="w-5 h-5 text-white" />
-                    <span className="text-gray-50">{company.email}</span>
+                    <EnvelopeIcon className="w-5 h-5 text-gray-400" />
+                    <span className="text-gray-700">{company.email}</span>
                   </div>
                 )}
 
                 {/* WhatsApp Connection */}
-                <div className="flex items-center justify-between p-4 border border-secondary rounded-lg">
+                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-gray-50">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
                       <PhoneIcon className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-white">{t('whatsapp.integration')}</h4>
-                      <p className="text-sm text-gray-400">
+                      <h4 className="font-medium text-gray-900">{t('whatsapp.integration')}</h4>
+                      <p className="text-sm text-gray-600">
                         {whatsappInstance 
                           ? `${t('whatsapp.connected')}: ${whatsappInstance.phone_number}`
                           : t('whatsapp.connectDescription')
@@ -193,44 +193,15 @@ export default function CompanyPage() {
           </Card>
         </div>
 
-        {/* Quick Stats Card */}
-        <div>
-          <Card className="bg-background border border-secondary shadow-lg shadow-secondary/20">
-            <CardHeader>
-              <h3 className="text-lg font-semibold text-white">{t('metrics.title')}</h3>
-            </CardHeader>
-            <CardBody className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-white">{t('info.created')}</span>
-                <span className="font-medium text-gray-50">
-                  {new Date(company.created_at).toLocaleDateString()}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-white">{t('info.companyId')}</span>
-                <span className="font-medium text-sm text-gray-50">#{company.id.slice(0, 8)}...</span>
-              </div>
-
-              {company.subscription_id && (
-                <div className="flex justify-between items-center">
-                  <span className="text-white">{t('info.subscription')}</span>
-                  <span className="font-medium text-sm text-gray-50 line-clamp-2">{company.subscription_id}</span>
-                </div>
-              )}
-            </CardBody>
-          </Card>
+        {/* Company Policy Card */}
+        <div className="lg:col-span-1">
+          <PolicyCard />
         </div>
-      </div>
-
-      {/* Company Policy Section */}
-      <div className="mb-8">
-        <PolicyCard />
       </div>
 
       {/* Metrics Section */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-white mb-4">{t('subtitle')}</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">{t('subtitle')}</h2>
         <MetricsCards />
       </div>
 

@@ -183,21 +183,21 @@ export function EditCompanyModal({
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        size="2xl"
+        size="md"
         scrollBehavior="inside"
         onClose={handleClose}
         classNames={{
           body: "py-6 max-h-[70vh] overflow-y-auto",
           backdrop: "bg-black/50",
-          base: "border-0 bg-background",
-          header: "border-b-1 border-secondary",
-          footer: "border-t-1 border-secondary",
+          base: "border-0 bg-white max-w-[450px]",
+          header: "border-b border-gray-200",
+          footer: "border-t border-gray-200",
         }}
       >
         <ModalContent>
           {() => (
             <form onSubmit={handleSubmit(onSubmit)}>
-              <ModalHeader className="flex flex-col gap-1 text-white">
+              <ModalHeader className="flex flex-col gap-1 text-gray-900">
                 Edit Company Profile
               </ModalHeader>
               <ModalBody className="gap-4">
@@ -214,9 +214,7 @@ export function EditCompanyModal({
                       <Button
                         isIconOnly
                         size="sm"
-                        variant="solid"
-                        color="primary"
-                        className="absolute -bottom-1 -right-1"
+                        className="absolute -bottom-1 -right-1 bg-[#328E6E] text-white hover:bg-[#15803d]"
                         onPress={() => fileInputRef.current?.click()}
                         isDisabled={uploading}
                       >
@@ -229,7 +227,7 @@ export function EditCompanyModal({
                         isIndeterminate
                         className="w-32"
                         size="sm"
-                        color="primary"
+                        color="success"
                       />
                     )}
 
@@ -252,9 +250,9 @@ export function EditCompanyModal({
                     isRequired
                     variant="bordered"
                     classNames={{
-                      input: "text-white",
-                      label: "text-gray-50",
-                      inputWrapper: "border-secondary bg-background"
+                      input: "text-gray-900",
+                      label: "text-gray-700",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
                     }}
                   />
 
@@ -262,7 +260,6 @@ export function EditCompanyModal({
                   <Select
                     label="Company Type"
                     variant="bordered"
-
                     placeholder="Select company type"
                     selectedKeys={companyType ? [companyType] : []}
                     onSelectionChange={(keys) => {
@@ -273,9 +270,9 @@ export function EditCompanyModal({
                     errorMessage={errors.type?.message}
                     isRequired
                     classNames={{
-                      trigger: "border-secondary bg-background",
-                      label: "text-gray-50",
-                      value: "text-white"
+                      trigger: "border-gray-300 bg-white hover:border-[#328E6E]",
+                      label: "text-gray-700",
+                      value: "text-gray-900"
                     }}
                   >
                     {companyTypes.map((type) => (
@@ -291,14 +288,13 @@ export function EditCompanyModal({
                     placeholder="Enter company email"
                     type="email"
                     variant="bordered"
-
                     {...register("email")}
                     isInvalid={!!errors.email}
                     errorMessage={errors.email?.message}
                     classNames={{
-                      input: "text-white",
-                      label: "text-gray-50",
-                      inputWrapper: "border-secondary bg-background"
+                      input: "text-gray-900",
+                      label: "text-gray-700",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
                     }}
                   />
 
@@ -310,11 +306,10 @@ export function EditCompanyModal({
                     isInvalid={!!errors.phone}
                     errorMessage={errors.phone?.message}
                     variant="bordered"
-
                     classNames={{
-                      input: "text-white",
-                      label: "text-gray-50",
-                      inputWrapper: "border-secondary bg-background"
+                      input: "text-gray-900",
+                      label: "text-gray-700",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
                     }}
                   />
 
@@ -327,11 +322,10 @@ export function EditCompanyModal({
                     errorMessage={errors.address?.message}
                     minRows={2}
                     variant="bordered"
-
                     classNames={{
-                      input: "text-white",
-                      label: "text-gray-50",
-                      inputWrapper: "border-secondary bg-background"
+                      input: "text-gray-900",
+                      label: "text-gray-700",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
                     }}
                   />
 
@@ -344,33 +338,31 @@ export function EditCompanyModal({
                     errorMessage={errors.description?.message}
                     minRows={3}
                     variant="bordered"
-
                     classNames={{
-                      input: "text-white",
-                      label: "text-gray-50",
-                      inputWrapper: "border-secondary bg-background"
+                      input: "text-gray-900",
+                      label: "text-gray-700",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
                     }}
                   />
-
-
                 </div>
-                <div className=" flex justify-end gap-2">
-                    <Button
-                  color="danger"
-                  variant="light"
-                  onPress={handleClose}
-                  isDisabled={isLoading}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  color="primary"
-                  type="submit"
-                  isLoading={isLoading}
-                  isDisabled={!isDirty}
-                >
-                  Save Changes
-                </Button>
+                
+                <div className="flex justify-end gap-2">
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={handleClose}
+                    isDisabled={isLoading}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+                    type="submit"
+                    isLoading={isLoading}
+                    isDisabled={!isDirty}
+                  >
+                    Save Changes
+                  </Button>
                 </div>
               </ModalBody>
             </form>

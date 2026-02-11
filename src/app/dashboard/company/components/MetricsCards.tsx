@@ -10,6 +10,7 @@ import {
   UserGroupIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
+
 const defaultMetrics = {
   messages_sent_total: 0,
   messages_allowed_total: 0,
@@ -105,13 +106,13 @@ export function MetricsCards() {
         {[...Array(11)].map((_, i) => (
           <Card
             key={i}
-            className="animate-pulse bg-background border border-secondary"
+            className="animate-pulse bg-white border border-gray-200"
           >
             <CardHeader className="pb-2">
-              <div className="h-4 bg-secondary rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
             </CardHeader>
             <CardBody>
-              <div className="h-8 bg-secondary rounded w-1/2"></div>
+              <div className="h-8 bg-gray-200 rounded w-1/2"></div>
             </CardBody>
           </Card>
         ))}
@@ -125,7 +126,7 @@ export function MetricsCards() {
         const Icon = metric.icon;
 
         return (
-          <Card key={index} className={`${metric.color} border-none shadow-lg`}>
+          <Card key={index} className={`${metric.color} border-none shadow-md`}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <h4 className="text-sm font-medium text-white">{metric.title}</h4>
               <Icon className="h-5 w-5 text-white" />

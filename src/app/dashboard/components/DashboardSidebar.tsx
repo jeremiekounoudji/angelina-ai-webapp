@@ -4,8 +4,6 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import {
-  Card,
-  CardBody,
   Avatar,
   Chip,
   Button
@@ -91,7 +89,7 @@ export function DashboardSidebar() {
   }, [isOpen])
 
   const SidebarContent = () => (
-    <div className="bg-background rounded-lg  border-secondary shadow-lg shadow-secondary/20 flex flex-col h-full">
+    <div className="bg-[#328E6E] h-full flex flex-col overflow-y-auto">
       {/* Mobile close button */}
       <div className="lg:hidden flex justify-end p-4">
         <Button
@@ -99,47 +97,44 @@ export function DashboardSidebar() {
           variant="light"
           size="sm"
           onPress={() => setIsOpen(false)}
-          className="text-gray-200 hover:text-white"
+          className="text-white/70 hover:text-white"
         >
           <XMarkIcon className="w-5 h-5" />
         </Button>
       </div>
 
-      {/* Company Card */}
-      <div className="p-4 border-b border-secondary">
-        <Card className="shadow-lg shadow-secondary/20 bg-background border border-secondary">
-          <CardBody className="p-4">
-            <div className="flex items-center space-x-3">
-              <Avatar
-                src={company?.avatar_url}
-                name={company?.name || 'Company'}
-                size="md"
-              />
-              <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-medium text-white truncate">
-                  {company?.name || 'Loading...'}
-                </h3>
-                <p className="text-xs text-gray-50 capitalize">
-                  {company?.type || 'N/A'}
-                </p>
-                <div className="mt-1">
-                  <Chip
-                    size="sm"
-                    color={getStatusColor(company?.subscription_status)}
-                    variant="flat"
-                    className="capitalize text-xs"
-                  >
-                    {company?.subscription_status || 'inactive'}
-                  </Chip>
-                </div>
-              </div>
+      {/* Company Info */}
+      <div className="p-4 border-b border-white">
+        <div className="flex items-center space-x-3 bg-white rounded-lg p-3">
+          <Avatar
+            src={company?.avatar_url}
+            name={company?.name || 'Company'}
+            size="md"
+            className="bg-gray-300"
+          />
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-semibold text-black truncate">
+              {company?.name || 'Loading...'}
+            </h3>
+            <p className="text-xs text-black capitalize">
+              {company?.type || 'N/A'}
+            </p>
+            <div className="mt-1">
+              <Chip
+                size="sm"
+                color={getStatusColor(company?.subscription_status)}
+                variant="flat"
+                className="capitalize text-xs"
+              >
+                {company?.subscription_status || 'inactive'}
+              </Chip>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2">
+      <nav className="flex-1 p-4 space-y-1">
         {navigation.map((item) => {
           const isActive = pathname === item.href
           const Icon = item.icon
@@ -148,10 +143,10 @@ export function DashboardSidebar() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                 isActive
-                  ? 'bg-primary text-white border-r-2 border-primary shadow-md shadow-secondary/20'
-                  : 'text-gray-50 hover:text-white hover:bg-secondary/50'
+                  ? 'bg-white text-[#328E6E] shadow-md'
+                  : 'text-white hover:bg-white/10'
               }`}
             >
               <Icon className="w-5 h-5 mr-3" />
@@ -162,24 +157,24 @@ export function DashboardSidebar() {
       </nav>
 
       {/* User Info & Sign Out */}
-      <div className="p-4 border-t border-secondary">
+      <div className="p-4 border-t border-white/10">
         <div className="flex items-center space-x-3 mb-3">
           <Avatar
             name={user?.email || 'User'}
             size="sm"
+            className="bg-white/10"
           />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-white truncate">
               {user?.email}
             </p>
-            <p className="text-xs text-gray-50">Admin</p>
+            <p className="text-xs text-white/70">Admin</p>
           </div>
         </div>
         <Button
           variant="light"
-          color="danger"
           size="sm"
-          className="w-full justify-start text-gray-50 hover:text-white"
+          className="w-full justify-start text-white hover:bg-white/10"
           startContent={<ArrowRightOnRectangleIcon className="w-4 h-4" />}
           onPress={signOut}
         >
@@ -195,35 +190,33 @@ export function DashboardSidebar() {
       <Button
         id="sidebar-toggle"
         isIconOnly
-        variant="light"
+        variant="flat"
         size="sm"
         onPress={() => setIsOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 bg-background text-white hover:bg-secondary border border-secondary shadow-lg shadow-secondary/20"
+        className="lg:hidden fixed top-4 left-4 z-50 bg-[#328E6E] text-white hover:bg-[#15803d] shadow-lg"
       >
         <Bars3Icon className="w-5 h-5" />
       </Button>
 
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:block w-64 m-1 h-screen">
+      {/* Desktop Sidebar - Fixed */}
+      <aside className="hidden lg:block fixed left-0 top-0 w-64 h-screen z-40">
         <SidebarContent />
-      </div>
+      </aside>
 
       {/* Mobile Drawer Overlay */}
       {isOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50" />
+        <div className="lg:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setIsOpen(false)} />
       )}
 
       {/* Mobile Drawer */}
-      <div
+      <aside
         id="mobile-sidebar"
         className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <SidebarContent />
-      </div>
-      
+      </aside>
     </>
   )
 }
-   

@@ -55,26 +55,26 @@ export default function SettingsPage() {
   ]
 
   return (
-    <div className="p-6 bg-background min-h-screen">
+    <div className="p-6 bg-white min-h-screen">
       <div className="flex items-center gap-3 mb-6">
-        <CogIcon className="h-6 w-6 text-gray-100" />
-        <h1 className="text-2xl font-bold text-gray-50">{t('title')}</h1>
+        <CogIcon className="h-6 w-6 text-gray-700" />
+        <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
       </div>
 
       <div className="max-w-4xl space-y-6">
         {settingsOptions.map((option, index) => {
           const Icon = option.icon
           return (
-            <Card key={index} className="shadow-sm bg-background border border-secondary/20 backdrop-blur-lg text-gray-100">
+            <Card key={index} className="shadow-sm bg-white border border-gray-200">
               <CardHeader>
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-4">
-                    <div className="p-2 bg-secondary rounded-lg">
-                      <Icon className="h-6 w-6 text-gray-300" />
+                    <div className="p-2 bg-gray-100 rounded-lg">
+                      <Icon className="h-6 w-6 text-gray-700" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-50">{option.title}</h3>
-                      <p className="text-gray-400 mt-1">
+                      <h3 className="text-lg font-semibold text-gray-900">{option.title}</h3>
+                      <p className="text-gray-600 mt-1">
                         {option.description}
                       </p>
                     </div>
@@ -83,7 +83,7 @@ export default function SettingsPage() {
                     color={option.buttonColor}
                     onClick={option.action}
                     disabled={loading}
-                    className="min-w-32"
+                    className={`min-w-32 ${option.buttonColor === 'primary' ? 'bg-[#328E6E] text-white hover:bg-[#15803d]' : ''}`}
                   >
                     {option.buttonText}
                   </Button>

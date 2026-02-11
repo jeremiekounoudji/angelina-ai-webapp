@@ -38,6 +38,8 @@ interface EditUserModalProps {
   onOpenChange: (open: boolean) => void;
   user: User;
   onUserUpdated: () => void;
+  isEditingSelf: boolean;
+  isOwner: boolean;
 }
 
 export function EditUserModal({
@@ -45,6 +47,8 @@ export function EditUserModal({
   onOpenChange,
   user,
   onUserUpdated,
+  isEditingSelf,
+  isOwner,
 }: EditUserModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(user.avatar_url || "");
@@ -167,25 +171,34 @@ export function EditUserModal({
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        size="2xl"
+        size="md"
         scrollBehavior="inside"
         onClose={handleClose}
         classNames={{
-          body: "py-6 max-h-[70vh] overflow-y-auto bg-background",
+          body: "py-6 max-h-[60vh]",
           backdrop: "bg-black/50",
-          base: "border-0",
-          header: "border-b-1 border-gray-200",
-          footer: "border-t-1 border-gray-200",
+          base: "border-0 bg-white max-w-[450px]",
+          header: "border-b border-gray-200",
+          footer: "border-t border-gray-200 bg-white",
         }}
       >
-        <ModalContent className=" bg-background">
+        <ModalContent>
           {() => (
             <form onSubmit={handleSubmit(onSubmit)}>
-              <ModalHeader>{t("form.editTitle")}</ModalHeader>
+              <ModalHeader className="text-gray-900">{t("form.editTitle")}</ModalHeader>
               <ModalBody className="gap-4">
                 {error && (
                   <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm mb-4">
                     {error}
+                  </div>
+                )}
+
+                {/* Warning for owner editing themselves */}
+                {isEditingSelf && isOwner && user.role === 'admin' && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p className="text-sm text-blue-800">
+                      <strong>Note:</strong> As the company owner, you cannot change your own role. Your role must remain as Admin.
+                    </p>
                   </div>
                 )}
 
@@ -197,14 +210,12 @@ export function EditUserModal({
                         src={avatarUrl}
                         name={user.full_name || user.email || "User"}
                         size="lg"
-                        className="w-24 h-24"
+                        className="w-24 h-24 bg-green-100 text-[#328E6E]"
                       />
                       <Button
                         isIconOnly
                         size="sm"
-                        variant="solid"
-                        color="primary"
-                        className="absolute -bottom-1 -right-1"
+                        className="absolute -bottom-1 -right-1 bg-[#328E6E] text-white hover:bg-[#15803d]"
                         onPress={() => fileInputRef.current?.click()}
                         isDisabled={uploading}
                       >
@@ -217,7 +228,7 @@ export function EditUserModal({
                         isIndeterminate
                         className="w-32"
                         size="sm"
-                        color="primary"
+                        color="success"
                       />
                     )}
 
@@ -239,9 +250,9 @@ export function EditUserModal({
                     isRequired
                     variant="bordered"
                     classNames={{
-                      input: "text-white",
-                      label: "text-gray-50",
-                      inputWrapper: "border-secondary bg-background",
+                      input: "text-gray-900",
+                      label: "text-gray-700",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]",
                     }}
                   />
 
@@ -255,9 +266,9 @@ export function EditUserModal({
                     isRequired
                     variant="bordered"
                     classNames={{
-                      input: "text-white",
-                      label: "text-gray-50",
-                      inputWrapper: "border-secondary bg-background",
+                      input: "text-gray-900",
+                      label: "text-gray-700",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]",
                     }}
                   />
 
@@ -270,9 +281,9 @@ export function EditUserModal({
                     variant="bordered"
                     isRequired
                     classNames={{
-                      input: "text-white",
-                      label: "text-gray-50",
-                      inputWrapper: "border-secondary bg-background",
+                      input: "text-gray-900",
+                      label: "text-gray-700",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]",
                     }}
                   />
 
@@ -288,10 +299,11 @@ export function EditUserModal({
                     isInvalid={!!errors.role}
                     errorMessage={errors.role?.message}
                     isRequired
+                    isDisabled={isEditingSelf && isOwner && user.role === 'admin'}
                     classNames={{
-                      trigger: "border-secondary bg-background",
-                      label: "text-gray-50",
-                      value: "text-white",
+                      trigger: "border-gray-300 bg-white hover:border-[#328E6E]",
+                      label: "text-gray-700",
+                      value: "text-gray-900",
                     }}
                   >
                     {roles.map((role) => (
@@ -310,7 +322,7 @@ export function EditUserModal({
                   {t("form.cancel")}
                 </Button>
                 <Button
-                  color="primary"
+                  className="bg-[#328E6E] text-white hover:bg-[#15803d]"
                   type="submit"
                   isLoading={isLoading}
                   isDisabled={!isDirty}
