@@ -664,9 +664,7 @@
       "units": "units",
       "added": "Added"
     }
-  }
-}
-,
+  },
   "status": {
     "title": "Status Management",
     "description": "Manage your WhatsApp status posts for automated publishing",
