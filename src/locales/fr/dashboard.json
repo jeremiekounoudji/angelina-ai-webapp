@@ -662,9 +662,7 @@
       "units": "unités",
       "added": "Ajouté"
     }
-  }
-}
-,
+  },
   "status": {
     "title": "Gestion des Statuts",
     "description": "Gérez vos publications de statut WhatsApp pour une publication automatisée",
