@@ -107,5 +107,19 @@
       "sessionExpired": "Your session has expired. Please login again.",
       "accessDenied": "Access denied"
     }
+  },
+  "status": {
+    "success": {
+      "created": "Status created successfully",
+      "updated": "Status updated successfully",
+      "deleted": "Status deleted successfully"
+    },
+    "errors": {
+      "createFailed": "Failed to create status",
+      "updateFailed": "Failed to update status",
+      "deleteFailed": "Failed to delete status",
+      "fetchFailed": "Failed to load status posts",
+      "limitReached": "Status limit reached for your plan"
+    }
   }
 }

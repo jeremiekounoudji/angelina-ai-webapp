@@ -5,6 +5,7 @@
     "products": "Produits",
     "users": "Utilisateurs",
     "subscription": "Abonnement",
+    "status": "Statut",
     "settings": "Paramètres",
     "support": "Support",
     "logout": "Déconnexion"
@@ -660,6 +661,55 @@
       "stock": "Stock",
       "units": "unités",
       "added": "Ajouté"
+    }
+  }
+}
+,
+  "status": {
+    "title": "Gestion des Statuts",
+    "description": "Gérez vos publications de statut WhatsApp pour une publication automatisée",
+    "addStatus": "Ajouter un Statut",
+    "editStatus": "Modifier le Statut",
+    "addFirstStatus": "Ajouter Votre Premier Statut",
+    "noStatus": "Aucun statut pour le moment",
+    "statusUsage": "Utilisation des Statuts",
+    "canAddMore": "Peut en ajouter plus",
+    "limitReached": "Limite atteinte",
+    "position": "Position",
+    "scheduledFor": "Programmé pour",
+    "frequency": "Fréquence",
+    "oneTime": "Unique",
+    "recurring": "Récurrent",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "save": "Enregistrer",
+    "text": "Contenu Texte",
+    "textPlaceholder": "Saisissez le texte du statut...",
+    "media": "Média",
+    "mediaHint": "Téléchargez une image ou une vidéo (max 1 minute pour les vidéos)",
+    "scheduleType": "Type de Programmation",
+    "publishmentDatetime": "Date et Heure de Publication",
+    "selectDays": "Sélectionner les Jours",
+    "deleteConfirmTitle": "Supprimer le Statut",
+    "deleteConfirmMessage": "Êtes-vous sûr de vouloir supprimer ce statut ? Cette action ne peut pas être annulée.",
+    "days": {
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi",
+      "sunday": "Dimanche"
+    },
+    "errors": {
+      "textOrMediaRequired": "Veuillez fournir du texte ou un média",
+      "datetimeRequired": "Veuillez sélectionner une date et une heure",
+      "frequencyRequired": "Veuillez sélectionner au moins un jour",
+      "invalidFileType": "Veuillez télécharger un fichier image ou vidéo",
+      "videoTooLong": "La vidéo doit durer 1 minute ou moins",
+      "uploadFailed": "Échec du téléchargement du média"
     }
   }
 }

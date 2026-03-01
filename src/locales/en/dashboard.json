@@ -5,6 +5,7 @@
     "products": "Products",
     "users": "Users",
     "subscription": "Subscription",
+    "status": "Status",
     "settings": "Settings",
     "support": "Support",
     "logout": "Logout"
@@ -662,6 +663,55 @@
       "stock": "Stock",
       "units": "units",
       "added": "Added"
+    }
+  }
+}
+,
+  "status": {
+    "title": "Status Management",
+    "description": "Manage your WhatsApp status posts for automated publishing",
+    "addStatus": "Add Status",
+    "editStatus": "Edit Status",
+    "addFirstStatus": "Add Your First Status",
+    "noStatus": "No status posts yet",
+    "statusUsage": "Status Usage",
+    "canAddMore": "Can add more",
+    "limitReached": "Limit reached",
+    "position": "Position",
+    "scheduledFor": "Scheduled for",
+    "frequency": "Frequency",
+    "oneTime": "One-time",
+    "recurring": "Recurring",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "create": "Create",
+    "save": "Save",
+    "text": "Text Content",
+    "textPlaceholder": "Enter status text...",
+    "media": "Media",
+    "mediaHint": "Upload an image or video (max 1 minute for videos)",
+    "scheduleType": "Schedule Type",
+    "publishmentDatetime": "Publish Date & Time",
+    "selectDays": "Select Days",
+    "deleteConfirmTitle": "Delete Status",
+    "deleteConfirmMessage": "Are you sure you want to delete this status? This action cannot be undone.",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "errors": {
+      "textOrMediaRequired": "Please provide either text or media",
+      "datetimeRequired": "Please select a date and time",
+      "frequencyRequired": "Please select at least one day",
+      "invalidFileType": "Please upload an image or video file",
+      "videoTooLong": "Video must be 1 minute or less",
+      "uploadFailed": "Failed to upload media"
     }
   }
 }

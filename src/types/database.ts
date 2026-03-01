@@ -157,6 +157,8 @@ export interface Metrics {
   users_allowed_total: number
   prospects_contacted_total: number
   prospects_allowed_total: number
+  status_created_total: number
+  status_allowed_total: number
   tokens_used_current_month: number
   tokens_allowance_monthly: number
   tokens_purchased_total: number
@@ -182,10 +184,29 @@ export interface WhatsAppInstance {
 export interface PlanLimits {
   max_users: number;
   max_products: number;
+  max_status: number;
   current_users: number;
   current_products: number;
+  current_status: number;
   can_add_users: boolean;
   can_add_products: boolean;
+  can_add_status: boolean;
+}
+
+export interface Status {
+  id: string
+  company_id: string
+  media_url?: string
+  text?: string
+  publishment_datetime?: string
+  position: number
+  frequency?: number[]
+  recurring_time?: string
+  publishing_status?: 'pending' | 'processing' | 'published' | 'failed'
+  next_post_at?: string
+  last_posted_at?: string
+  created_at: string
+  updated_at: string
 }
 
 export interface Database {
@@ -260,6 +281,11 @@ export interface Database {
         Row: WhatsAppInstance
         Insert: Omit<WhatsAppInstance, 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Omit<WhatsAppInstance, 'id' | 'created_at' | 'updated_at'>>
+      }
+      status: {
+        Row: Status
+        Insert: Omit<Status, 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Omit<Status, 'id' | 'created_at' | 'updated_at'>>
       }
     }
   }

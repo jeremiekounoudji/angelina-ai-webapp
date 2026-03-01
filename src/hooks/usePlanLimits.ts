@@ -100,6 +100,25 @@ export function usePlanLimits(companyId?: string) {
     }
   }, [companyId, t, supabase]);
 
+  const canAddStatus = useCallback(async (): Promise<boolean> => {
+    if (!companyId) return false;
+
+    try {
+      const { data, error } = await supabase.rpc('can_add_status', {
+        company_uuid: companyId
+      });
+
+      if (error) throw error;
+      return data === true;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : t('errors.limitExceeded');
+      
+      console.log(error);
+      toast.error(errorMessage);
+      return false;
+    }
+  }, [companyId, t, supabase]);
+
   // Store fetchLimits in a ref to avoid dependency issues
   const fetchLimitsRef = useRef(fetchLimits);
   fetchLimitsRef.current = fetchLimits;
@@ -132,6 +151,7 @@ export function usePlanLimits(companyId?: string) {
     error,
     canAddUser,
     canAddProduct,
+    canAddStatus,
     refetch: () => fetchLimits(true),
   };
 }

@@ -107,5 +107,19 @@
       "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
       "accessDenied": "Accès refusé"
     }
+  },
+  "status": {
+    "success": {
+      "created": "Statut créé avec succès",
+      "updated": "Statut mis à jour avec succès",
+      "deleted": "Statut supprimé avec succès"
+    },
+    "errors": {
+      "createFailed": "Échec de la création du statut",
+      "updateFailed": "Échec de la mise à jour du statut",
+      "deleteFailed": "Échec de la suppression du statut",
+      "fetchFailed": "Échec du chargement des statuts",
+      "limitReached": "Limite de statuts atteinte pour votre plan"
+    }
   }
 }

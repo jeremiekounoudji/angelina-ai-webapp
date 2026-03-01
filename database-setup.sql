@@ -323,3 +323,134 @@ oreign key constraint for company owner
 ALTER TABLE public.companies 
 ADD CONSTRAINT fk_companies_owner 
 FOREIGN KEY (owner_id) REFERENCES public.users(id) ON DELETE SET NULL;
+
+
+-- Create status table
+CREATE TABLE public.status (
+    id UUID NOT NULL DEFAULT gen_random_uuid(),
+    company_id UUID NOT NULL,
+    media_url TEXT NULL,
+    text TEXT NULL,
+    publishment_datetime TIMESTAMP WITHOUT TIME ZONE NULL,
+    position INTEGER NOT NULL DEFAULT 0,
+    frequency INTEGER[] NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT status_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_status_company FOREIGN KEY (company_id) REFERENCES companies (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT check_media_or_text CHECK (media_url IS NOT NULL OR text IS NOT NULL),
+    CONSTRAINT check_datetime_or_frequency CHECK (
+        (publishment_datetime IS NOT NULL AND frequency IS NULL) OR 
+        (publishment_datetime IS NULL AND frequency IS NOT NULL)
+    )
+);
+
+-- Create index for better performance
+CREATE INDEX idx_status_company_id ON public.status(company_id);
+CREATE INDEX idx_status_position ON public.status(company_id, position);
+
+-- Enable Row Level Security (RLS)
+ALTER TABLE public.status ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policies for status
+CREATE POLICY "Users can view status in their company" ON public.status
+    FOR SELECT USING (
+        company_id IN (
+            SELECT company_id FROM public.users WHERE id = auth.uid()
+        )
+    );
+
+CREATE POLICY "Admins and managers can insert status" ON public.status
+    FOR INSERT WITH CHECK (
+        company_id IN (
+            SELECT company_id FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'manager')
+        )
+    );
+
+CREATE POLICY "Admins and managers can update status" ON public.status
+    FOR UPDATE USING (
+        company_id IN (
+            SELECT company_id FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'manager')
+        )
+    );
+
+CREATE POLICY "Admins and managers can delete status" ON public.status
+    FOR DELETE USING (
+        company_id IN (
+            SELECT company_id FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'manager')
+        )
+    );
+
+-- Add status limits to metrics table
+ALTER TABLE public.metrics 
+ADD COLUMN IF NOT EXISTS status_created_total INTEGER DEFAULT 0,
+ADD COLUMN IF NOT EXISTS status_allowed_total INTEGER DEFAULT 0;
+
+-- Create storage bucket for status media
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('status', 'status', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Create storage policies for status bucket
+CREATE POLICY "Status media are publicly accessible" ON storage.objects
+    FOR SELECT USING (bucket_id = 'status');
+
+CREATE POLICY "Users can upload status media" ON storage.objects
+    FOR INSERT WITH CHECK (
+        bucket_id = 'status' AND 
+        auth.role() = 'authenticated'
+    );
+
+CREATE POLICY "Users can update status media" ON storage.objects
+    FOR UPDATE USING (
+        bucket_id = 'status' AND 
+        auth.role() = 'authenticated'
+    );
+
+CREATE POLICY "Users can delete status media" ON storage.objects
+    FOR DELETE USING (
+        bucket_id = 'status' AND 
+        auth.role() = 'authenticated'
+    );
+
+-- Create function to check if company can add status
+CREATE OR REPLACE FUNCTION public.can_add_status(company_uuid UUID)
+RETURNS BOOLEAN AS $$
+DECLARE
+    current_count INTEGER;
+    allowed_count INTEGER;
+BEGIN
+    SELECT status_created_total, status_allowed_total
+    INTO current_count, allowed_count
+    FROM public.metrics
+    WHERE company_id = company_uuid;
+    
+    IF current_count IS NULL THEN
+        RETURN FALSE;
+    END IF;
+    
+    RETURN current_count < allowed_count;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Create function to increment status count
+CREATE OR REPLACE FUNCTION public.increment_status_count(company_uuid UUID)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE public.metrics
+    SET status_created_total = status_created_total + 1,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE company_id = company_uuid;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Create function to decrement status count
+CREATE OR REPLACE FUNCTION public.decrement_status_count(company_uuid UUID)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE public.metrics
+    SET status_created_total = GREATEST(status_created_total - 1, 0),
+        updated_at = CURRENT_TIMESTAMP
+    WHERE company_id = company_uuid;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;

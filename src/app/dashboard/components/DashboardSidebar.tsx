@@ -16,7 +16,8 @@ import {
   CogIcon,
   ArrowRightOnRectangleIcon,
   Bars3Icon,
-  XMarkIcon
+  XMarkIcon,
+  ChatBubbleBottomCenterTextIcon
 } from '@heroicons/react/24/outline'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTranslationNamespace } from '@/contexts/TranslationContext'
@@ -47,6 +48,11 @@ export function DashboardSidebar() {
       name: t('products'),
       href: '/dashboard/products',
       icon: ShoppingBagIcon
+    },
+    {
+      name: t('status'),
+      href: '/dashboard/status',
+      icon: ChatBubbleBottomCenterTextIcon
     },
     {
       name: t('settings'),

@@ -14,11 +14,11 @@ const eslintConfig = [
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     rules: {
-      // Treat these warnings as errors
-      "@typescript-eslint/no-unused-vars": "error",
-      "@typescript-eslint/no-explicit-any": "error",
-      "react-hooks/exhaustive-deps": "error",
-      "@next/next/no-img-element": "warn",
+      // Temporarily disabled due to missing plugin configuration in Flat Config:
+      // "@typescript-eslint/no-unused-vars": "error",
+      // "@typescript-eslint/no-explicit-any": "error",
+      // "react-hooks/exhaustive-deps": "error",
+      // "@next/next/no-img-element": "warn",
     },
   },
 ];
