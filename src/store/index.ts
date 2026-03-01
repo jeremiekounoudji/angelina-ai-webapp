@@ -183,16 +183,23 @@ export const useAppStore = create<AppState>()(
       setMetrics: (metrics) => set({ metrics }),
 
       // Loading actions
+      // Loading actions - bail out if value unchanged to prevent re-render loops
       setLoading: (key, value) =>
-        set((state) => ({
-          loading: { ...state.loading, [key]: value },
-        })),
+        set((state) => {
+          if (state.loading[key] === value) return state;
+          return {
+            loading: { ...state.loading, [key]: value },
+          };
+        }),
 
-      // Error actions
+      // Error actions - bail out if value unchanged
       setError: (key, error) =>
-        set((state) => ({
-          errors: { ...state.errors, [key]: error },
-        })),
+        set((state) => {
+          if (state.errors[key] === error) return state;
+          return {
+            errors: { ...state.errors, [key]: error },
+          };
+        }),
 
       // Clear functions
       clearUsers: () => set({ users: [] }),

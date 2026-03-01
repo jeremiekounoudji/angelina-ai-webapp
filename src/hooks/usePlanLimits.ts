@@ -23,7 +23,7 @@ export function usePlanLimits(companyId?: string) {
 
     // Check if we've already fetched for this company
     if (!forceRefresh && hasFetchedRef.current && currentCompanyIdRef.current === companyId) {
-      return planLimits;
+      return useAppStore.getState().planLimits;
     }
 
     // Prevent concurrent fetches
@@ -60,7 +60,7 @@ export function usePlanLimits(companyId?: string) {
       useAppStore.getState().setLoading('planLimits', false);
       isFetchingRef.current = false;
     }
-  }, [companyId, t, supabase, planLimits]);
+  }, [companyId, t, supabase]);
 
   const canAddUser = useCallback(async (): Promise<boolean> => {
     if (!companyId) return false;
