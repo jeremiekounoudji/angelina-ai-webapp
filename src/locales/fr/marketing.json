@@ -24,6 +24,62 @@
     "rating": "4.9/5",
     "userCount": "+500 restaurants"
   },
+  "statusHero": {
+    "title": "Arrêtez de gaspiller de l'énergie mentale sur vos",
+    "titleHighlight": "Statuts WhatsApp.",
+    "subtitle": "Votre cerveau n'est pas fait pour les tâches répétitives et banales. Automatisez vos statuts WhatsApp quotidiens, éliminez l'anxiété du 'j'ai oublié de poster' et retrouvez votre concentration absolue.",
+    "cta": "Automatiser mes statuts maintenant",
+    "trialText": "Essai gratuit de 14 jours. Aucune carte de crédit requise."
+  },
+  "statusNeuro": {
+    "title": "Le coût caché des",
+    "titleHighlight": "Publications Manuelles",
+    "subtitle": "La science l'affirme : s'en remettre à sa mémoire pour accomplir des tâches administratives récurrentes épuise votre batterie cognitive et limite le potentiel de votre entreprise.",
+    "cards": {
+      "zeigarnik": {
+        "title": "L'effet Zeigarnik",
+        "description": "Chaque fois que vous vous rappelez \"je dois publier un statut\", votre cerveau crée une boucle de légère anxiété. Les tâches inachevées occupent constamment un espace mental précieux jusqu'à ce qu'elles soient terminées."
+      },
+      "decision": {
+        "title": "Fatigue Décisionnelle",
+        "description": "Interrompre un flux de travail créatif important juste pour prendre votre téléphone, sélectionner une image et taper une légende brûle immédiatement votre volonté, ce qui entraîne de moins bonnes décisions plus tard dans la journée."
+      },
+      "inconsistency": {
+        "title": "Perte d'Inconstance",
+        "description": "Puisque votre cerveau évite inconsciemment les corvées banales, vous finissez par publier de manière sporadique. Cela brise l'habitude avec votre audience et nuit directement à vos revenus quotidiens."
+      }
+    }
+  },
+  "statusFeatures": {
+    "title": "Planifiez votre semaine,",
+    "titleHighlight": "Puis lâchez prise",
+    "subtitle": "La psychologie montre que déléguer des tâches à un système de confiance réduit instantanément le stress. Consacrez 5 minutes le lundi pour planifier votre semaine de statuts, et profitez d'une tranquillité d'esprit.",
+    "items": {
+      "precision": {
+        "title": "Précision ponctuelle",
+        "description": "Lancez une promotion spécifique au moment où cela compte le plus, sans même toucher votre téléphone. Prévu à 14h ce vendredi ? C'est comme si c'était fait."
+      },
+      "recurring": {
+        "title": "Configurez et oubliez (Récurrent)",
+        "description": "Vous avez un 'Lundi Motivation' ou un 'Vendredi Promo' ? Définissez la fréquence une seule fois, et notre moteur diffusera votre superbe contenu automatiquement chaque semaine."
+      },
+      "media": {
+        "title": "Média Natifs Riches",
+        "description": "Images ? Vidéos ? Légendes textuelles ? Téléchargez-les en toute transparence. Notre intégration API Evolution formate parfaitement vos médias en statuts WhatsApp natifs."
+      },
+      "background": {
+        "title": "Exécution Instantanée en Arrière-plan",
+        "description": "Zéro plantage de chevauchement et zéro retard. Notre moteur d'interrogation robuste s'exécute en arrière-plan absolu pendant que vous vous concentrez sur la conclusion de ventes avec les clients."
+      }
+    }
+  },
+  "statusCTA": {
+    "title": "Récupérez",
+    "titleHighlight": "Plus de 10 heures",
+    "titleEnd": "de productivité mentale chaque mois",
+    "subtitle": "La vraie liberté, ce n'est pas seulement avoir plus de temps ; c'est avoir plus de paix. Arrêtez de servir l'algorithme manuellement et laissez Angelina AI faire le gros du travail.",
+    "cta": "Commencez à automatiser gratuitement"
+  },
   "features": {
     "title": "Fonctionnalités puissantes pour les",
     "titleHighlight": "Restaurants modernes",

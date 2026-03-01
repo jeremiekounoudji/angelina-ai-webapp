@@ -24,6 +24,62 @@
     "rating": "4.9/5",
     "userCount": "+500 restaurants"
   },
+  "statusHero": {
+    "title": "Stop Wasting Mental Energy on",
+    "titleHighlight": "WhatsApp Statuses.",
+    "subtitle": "Your brain wasn't built for repetitive, mundane tasks. Automate your daily WhatsApp statuses, eliminate the anxiety of \"forgetting to post,\" and reclaim your ultimate focus.",
+    "cta": "Automate My Statuses Now",
+    "trialText": "Free 14-day trial. No credit card required."
+  },
+  "statusNeuro": {
+    "title": "The Hidden Cost of",
+    "titleHighlight": "Manual Posting",
+    "subtitle": "Science tells us that relying on your memory to complete recurring administrative tasks drains your cognitive battery and limits your business potential.",
+    "cards": {
+      "zeigarnik": {
+        "title": "The Zeigarnik Effect",
+        "description": "Every time you remember \"I need to post a status,\" your brain creates a loop of low-level anxiety. Unfinished tasks constantly occupy valuable mental space until they are completed."
+      },
+      "decision": {
+        "title": "Decision Fatigue",
+        "description": "Interrupting an important creative workflow just to open your phone, select an image, and type a caption burns immediate willpower, meaning worse decisions later in the day."
+      },
+      "inconsistency": {
+        "title": "Inconsistency Loss",
+        "description": "Because your brain subconsciously avoids mundane chores, you end up posting sporadically. This breaks the habit with your audience and directly hurts your daily revenue."
+      }
+    }
+  },
+  "statusFeatures": {
+    "title": "Design Your Week,",
+    "titleHighlight": "Then Let Go",
+    "subtitle": "Psychology shows that offloading tasks to a trusted system instantly reduces stress. Spend 5 minutes on Monday scheduling your pipeline, and enjoy the peace of mind.",
+    "items": {
+      "precision": {
+        "title": "One-Time Precision",
+        "description": "Launch a specific promotion exactly when it matters without picking up your phone. Schedule at 2:00 PM on Friday? Consider it done."
+      },
+      "recurring": {
+        "title": "Set It & Forget It (Recurring)",
+        "description": "Got a 'Motivation Monday' or 'Flash Sale Friday'? Set the frequency array once, and our engine will loop your beautiful content automatically every week."
+      },
+      "media": {
+        "title": "Rich Media Native",
+        "description": "Images? Videos? Text captions? Upload them seamlessly. Our Evolution API integration perfectly formats your media into native WhatsApp statuses."
+      },
+      "background": {
+        "title": "Instant Background Execution",
+        "description": "Zero overlap crashes and zero delays. Our robust polling engine runs in the absolute background while you focus on sealing deals with customers."
+      }
+    }
+  },
+  "statusCTA": {
+    "title": "Reclaim",
+    "titleHighlight": "10+ Hours",
+    "titleEnd": "of Mental Output Every Month",
+    "subtitle": "True freedom isn't just about having more time; it's about having more peace. Stop serving the algorithm manually and start letting Angelina AI do the heavy lifting.",
+    "cta": "Start Automating for Free"
+  },
   "features": {
     "title": "Powerful Features for",
     "titleHighlight": "Modern Restaurants",
