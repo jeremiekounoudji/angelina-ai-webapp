@@ -692,6 +692,7 @@
     "scheduleType": "Schedule Type",
     "publishmentDatetime": "Publish Date & Time",
     "selectDays": "Select Days",
+    "recurringTime": "Time to Post",
     "deleteConfirmTitle": "Delete Status",
     "deleteConfirmMessage": "Are you sure you want to delete this status? This action cannot be undone.",
     "days": {
@@ -707,6 +708,7 @@
       "textOrMediaRequired": "Please provide either text or media",
       "datetimeRequired": "Please select a date and time",
       "frequencyRequired": "Please select at least one day",
+      "timeRequired": "Time is required for recurring schedule",
       "invalidFileType": "Please upload an image or video file",
       "videoTooLong": "Video must be 1 minute or less",
       "uploadFailed": "Failed to upload media"

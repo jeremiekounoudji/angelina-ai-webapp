@@ -690,6 +690,7 @@
     "scheduleType": "Type de Programmation",
     "publishmentDatetime": "Date et Heure de Publication",
     "selectDays": "Sélectionner les Jours",
+    "recurringTime": "Heure de Publication",
     "deleteConfirmTitle": "Supprimer le Statut",
     "deleteConfirmMessage": "Êtes-vous sûr de vouloir supprimer ce statut ? Cette action ne peut pas être annulée.",
     "days": {
@@ -705,6 +706,7 @@
       "textOrMediaRequired": "Veuillez fournir du texte ou un média",
       "datetimeRequired": "Veuillez sélectionner une date et une heure",
       "frequencyRequired": "Veuillez sélectionner au moins un jour",
+      "timeRequired": "L'heure est requise pour les publications récurrentes",
       "invalidFileType": "Veuillez télécharger un fichier image ou vidéo",
       "videoTooLong": "La vidéo doit durer 1 minute ou moins",
       "uploadFailed": "Échec du téléchargement du média"

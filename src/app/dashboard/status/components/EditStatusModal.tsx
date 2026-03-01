@@ -19,6 +19,7 @@ import { useStatus } from "@/hooks/useStatus";
 import { useUpload } from "@/hooks/useUpload";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { Status } from "@/types/database";
+import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 
 interface EditStatusModalProps {
@@ -51,13 +52,13 @@ export function EditStatusModal({ isOpen, onClose, status }: EditStatusModalProp
   const [loading, setLoading] = useState(false);
 
   const weekDays = [
-    { value: "1", label: t('days.monday') },
-    { value: "2", label: t('days.tuesday') },
-    { value: "3", label: t('days.wednesday') },
-    { value: "4", label: t('days.thursday') },
-    { value: "5", label: t('days.friday') },
-    { value: "6", label: t('days.saturday') },
-    { value: "7", label: t('days.sunday') },
+    { value: "1", label: t('days.monday'), short: "Mo" },
+    { value: "2", label: t('days.tuesday'), short: "Tu" },
+    { value: "3", label: t('days.wednesday'), short: "We" },
+    { value: "4", label: t('days.thursday'), short: "Th" },
+    { value: "5", label: t('days.friday'), short: "Fr" },
+    { value: "6", label: t('days.saturday'), short: "Sa" },
+    { value: "7", label: t('days.sunday'), short: "Su" },
   ];
 
   useEffect(() => {
@@ -103,6 +104,11 @@ export function EditStatusModal({ isOpen, onClose, status }: EditStatusModalProp
       setMediaFile(file);
       setMediaPreview(URL.createObjectURL(file));
     }
+  };
+
+  const clearMedia = () => {
+    setMediaFile(null);
+    setMediaPreview("");
   };
 
   const handleSubmit = async () => {
@@ -166,6 +172,11 @@ export function EditStatusModal({ isOpen, onClose, status }: EditStatusModalProp
         nextPostAt = nextDate.toISOString();
       }
 
+      // If media was cleared
+      if (!mediaPreview && !mediaFile) {
+        mediaUrl = undefined;
+      }
+
       const updates = {
         text: text || undefined,
         media_url: mediaUrl || undefined,
@@ -187,102 +198,158 @@ export function EditStatusModal({ isOpen, onClose, status }: EditStatusModalProp
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+    <Modal isOpen={isOpen} onClose={onClose} size="2xl" scrollBehavior="inside">
       <ModalContent>
-        <ModalHeader>{t('editStatus')}</ModalHeader>
-        <ModalBody className="space-y-4">
-          <Textarea
-            label={t('text')}
-            placeholder={t('textPlaceholder')}
-            value={text}
-            onValueChange={setText}
-            maxRows={4}
-          />
+        <ModalHeader className="flex flex-col gap-1 pb-2">
+          <h3 className="text-lg font-semibold">{t('editStatus')}</h3>
+          <p className="text-sm font-normal text-gray-500">{t('description')}</p>
+        </ModalHeader>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium">{t('media')}</label>
-            <input
-              type="file"
-              accept="image/*,video/*"
-              onChange={handleMediaChange}
-              className="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-lg file:border-0
-                file:text-sm file:font-semibold
-                file:bg-green-50 file:text-green-700
-                hover:file:bg-green-100"
+        <ModalBody className="space-y-5 py-4">
+          {/* Text Content */}
+          <div className="space-y-1.5">
+            <Textarea
+              label={t('text')}
+              placeholder={t('textPlaceholder')}
+              value={text}
+              onValueChange={setText}
+              maxRows={4}
+              variant="bordered"
+              classNames={{
+                inputWrapper: "border-gray-300 data-[hover=true]:border-[#328E6E] group-data-[focus=true]:border-[#328E6E]",
+              }}
             />
-            {mediaPreview && (
-              <div className="mt-2 relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
-                {mediaPreview.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+          </div>
+
+          {/* Media Upload */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">{t('media')}</label>
+            {!mediaPreview ? (
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-[#328E6E] transition-all duration-200">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <PhotoIcon className="w-10 h-10 text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-500">{t('mediaHint')}</p>
+                </div>
+                <input
+                  type="file"
+                  accept="image/*,video/*"
+                  onChange={handleMediaChange}
+                  className="hidden"
+                />
+              </label>
+            ) : (
+              <div className="relative w-full h-48 bg-gray-100 rounded-xl overflow-hidden group">
+                {(mediaFile?.type.startsWith('image/') || mediaPreview.match(/\.(jpg|jpeg|png|gif|webp)$/i)) ? (
                   <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
                   <video src={mediaPreview} className="w-full h-full object-cover" controls />
                 )}
+                <button
+                  onClick={clearMedia}
+                  className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-black/80 rounded-full text-white transition-colors"
+                >
+                  <XMarkIcon className="w-4 h-4" />
+                </button>
               </div>
             )}
-            <p className="text-xs text-gray-500">{t('mediaHint')}</p>
           </div>
 
-          <Input
-            type="number"
-            label={t('position')}
-            value={position}
-            onValueChange={setPosition}
-            min="1"
-          />
+          {/* Position & Schedule Row */}
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              type="number"
+              label={t('position')}
+              value={position}
+              onValueChange={setPosition}
+              min="1"
+              variant="bordered"
+              classNames={{
+                inputWrapper: "border-gray-300 data-[hover=true]:border-[#328E6E] group-data-[focus=true]:border-[#328E6E]",
+              }}
+            />
+            <Select
+              label={t('scheduleType')}
+              selectedKeys={[scheduleType]}
+              onSelectionChange={(keys) => setScheduleType(Array.from(keys)[0] as "datetime" | "frequency")}
+              variant="bordered"
+              classNames={{
+                trigger: "border-gray-300 data-[hover=true]:border-[#328E6E]",
+              }}
+            >
+              <SelectItem key="frequency">
+                {t('recurring')}
+              </SelectItem>
+              <SelectItem key="datetime">
+                {t('oneTime')}
+              </SelectItem>
+            </Select>
+          </div>
 
-          <Select
-            label={t('scheduleType')}
-            selectedKeys={[scheduleType]}
-            onSelectionChange={(keys) => setScheduleType(Array.from(keys)[0] as "datetime" | "frequency")}
-          >
-            <SelectItem key="frequency">
-              {t('recurring')}
-            </SelectItem>
-            <SelectItem key="datetime">
-              {t('oneTime')}
-            </SelectItem>
-          </Select>
-
+          {/* Datetime Picker */}
           {scheduleType === "datetime" && (
             <Input
               type="datetime-local"
               label={t('publishmentDatetime')}
               value={publishmentDatetime}
               onValueChange={setPublishmentDatetime}
+              variant="bordered"
+              classNames={{
+                inputWrapper: "border-gray-300 data-[hover=true]:border-[#328E6E] group-data-[focus=true]:border-[#328E6E]",
+              }}
             />
           )}
 
+          {/* Frequency Selector */}
           {scheduleType === "frequency" && (
-            <>
-              <CheckboxGroup
-                label={t('selectDays')}
-                value={selectedDays}
-                onValueChange={setSelectedDays}
-              >
-                {weekDays.map((day) => (
-                  <Checkbox key={day.value} value={day.value}>
-                    {day.label}
-                  </Checkbox>
-                ))}
-              </CheckboxGroup>
+            <div className="space-y-4">
+              {/* Day Buttons Grid */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">{t('selectDays')}</label>
+                <CheckboxGroup
+                  value={selectedDays}
+                  onValueChange={setSelectedDays}
+                  orientation="horizontal"
+                  classNames={{
+                    wrapper: "gap-2 flex-wrap",
+                  }}
+                >
+                  {weekDays.map((day) => (
+                    <Checkbox
+                      key={day.value}
+                      value={day.value}
+                      classNames={{
+                        base: "inline-flex m-0 bg-gray-100 hover:bg-gray-200 items-center justify-center rounded-xl border border-gray-200 data-[selected=true]:bg-[#328E6E] data-[selected=true]:border-[#328E6E] cursor-pointer px-3 py-2 transition-colors",
+                        label: "text-sm font-medium text-gray-700 group-data-[selected=true]:text-white",
+                        wrapper: "hidden",
+                      }}
+                    >
+                      {day.label}
+                    </Checkbox>
+                  ))}
+                </CheckboxGroup>
+              </div>
 
+              {/* Time Input */}
               <Input
                 type="time"
                 label={(t('recurringTime') as string) || 'Time to post'}
                 value={recurringTime}
                 onValueChange={setRecurringTime}
+                variant="bordered"
+                classNames={{
+                  inputWrapper: "border-gray-300 data-[hover=true]:border-[#328E6E] group-data-[focus=true]:border-[#328E6E]",
+                }}
               />
-            </>
+            </div>
           )}
         </ModalBody>
-        <ModalFooter>
-          <Button variant="light" onPress={onClose}>
+
+        <ModalFooter className="pt-2 gap-2">
+          <Button variant="flat" onPress={onClose} className="text-gray-600">
             {t('cancel')}
           </Button>
           <Button
-            color="success"
+            className="bg-[#328E6E] text-white hover:bg-[#15803d]"
             onPress={handleSubmit}
             isLoading={loading || uploading}
           >

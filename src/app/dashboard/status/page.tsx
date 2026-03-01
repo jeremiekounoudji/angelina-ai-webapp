@@ -8,7 +8,7 @@ import {
   Chip,
   Spinner,
 } from "@heroui/react";
-import { PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, PencilIcon, TrashIcon, ChatBubbleBottomCenterTextIcon, ClockIcon, CalendarIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/contexts/AuthContext";
 import { useStatus } from "@/hooks/useStatus";
 import { usePlanLimits } from "@/hooks/usePlanLimits";
@@ -75,152 +75,205 @@ export default function StatusPage() {
     return new Date(datetime).toLocaleString();
   };
 
+  const getPublishingStatusColor = (status?: string) => {
+    switch (status) {
+      case 'published': return 'success';
+      case 'processing': return 'warning';
+      case 'failed': return 'danger';
+      default: return 'default';
+    }
+  };
+
   if (loading && statuses.length === 0) {
     return (
-      <div className="flex justify-center items-center h-96">
+      <div className="p-6 bg-white min-h-screen flex items-center justify-center">
         <Spinner size="lg" color="success" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 bg-white min-h-screen">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-          <p className="text-gray-600 mt-1">{t('description')}</p>
+          <h2 className="text-xl font-semibold text-gray-900">{t('title')}</h2>
+          <p className="text-gray-600 mt-0.5">
+            {t('description')}
+            {limits && (
+              <span className="ml-2 text-sm">
+                ({limits.current_status || 0}/{limits.max_status || 0} statuses)
+              </span>
+            )}
+          </p>
         </div>
         <Button
-          color="success"
-          startContent={<PlusIcon className="w-5 h-5" />}
+          className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+          startContent={<PlusIcon className="w-4 h-4" />}
           onPress={handleAddClick}
         >
           {t('addStatus')}
         </Button>
       </div>
 
-      {/* Limits Info */}
-      {limits && (
-        <Card>
-          <CardBody>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">{t('statusUsage')}</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {limits.current_status || 0} / {limits.max_status || 0}
-                </p>
-              </div>
-              <Chip
-                color={limits.can_add_status ? "success" : "danger"}
-                variant="flat"
-              >
-                {limits.can_add_status ? t('canAddMore') : t('limitReached')}
-              </Chip>
+      {/* Limits Banner */}
+      {limits && !limits.can_add_status && (
+        <Card className="mb-6 bg-red-50 border border-red-200">
+          <CardBody className="py-3 px-4">
+            <div className="flex items-center gap-3">
+              <Chip color="danger" variant="flat" size="sm">{t('limitReached')}</Chip>
+              <p className="text-sm text-red-700">
+                {t('statusUsage')}: {limits.current_status || 0} / {limits.max_status || 0}
+              </p>
             </div>
           </CardBody>
         </Card>
       )}
 
-      {/* Status List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {statuses.map((status) => (
-          <Card key={status.id} className="hover:shadow-lg transition-shadow">
-            <CardBody className="space-y-3">
-              {/* Media Preview */}
-              {status.media_url && (
-                <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
-                  {status.media_url.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
-                    <img
-                      src={status.media_url}
-                      alt="Status media"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <video
-                      src={status.media_url}
-                      className="w-full h-full object-cover"
-                      controls
-                    />
-                  )}
-                </div>
-              )}
-
-              {/* Text Content */}
-              {status.text && (
-                <p className="text-sm text-gray-700 line-clamp-3">
-                  {status.text}
-                </p>
-              )}
-
-              {/* Schedule Info */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-gray-500">{t('position')}:</span>
-                  <Chip size="sm" variant="flat">
-                    #{status.position}
-                  </Chip>
-                </div>
-
-                {status.publishment_datetime ? (
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-500">{t('scheduledFor')}:</span>
-                    <span className="text-gray-700">
-                      {formatDateTime(status.publishment_datetime)}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-1 text-xs">
-                    <span className="text-gray-500">{t('frequency')}:</span>
-                    <span className="text-gray-700">
-                      {formatFrequency(status.frequency)}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-2 pt-2 border-t">
-                <Button
-                  size="sm"
-                  variant="flat"
-                  color="primary"
-                  startContent={<PencilIcon className="w-4 h-4" />}
-                  onPress={() => handleEditClick(status)}
-                  className="flex-1"
-                >
-                  {t('edit')}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="flat"
-                  color="danger"
-                  startContent={<TrashIcon className="w-4 h-4" />}
-                  onPress={() => handleDeleteClick(status)}
-                  className="flex-1"
-                >
-                  {t('delete')}
-                </Button>
-              </div>
-            </CardBody>
-          </Card>
-        ))}
-      </div>
-
       {/* Empty State */}
-      {statuses.length === 0 && !loading && (
-        <Card>
-          <CardBody className="text-center py-12">
-            <p className="text-gray-500 mb-4">{t('noStatus')}</p>
+      {statuses.length === 0 && !loading ? (
+        <Card className="bg-white border border-gray-200 shadow-sm">
+          <CardBody className="text-center py-16">
+            <ChatBubbleBottomCenterTextIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{t('noStatus')}</h3>
+            <p className="text-gray-500 mb-6 max-w-md mx-auto">
+              {t('description')}
+            </p>
             <Button
-              color="success"
-              startContent={<PlusIcon className="w-5 h-5" />}
+              className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+              startContent={<PlusIcon className="w-4 h-4" />}
               onPress={handleAddClick}
             >
               {t('addFirstStatus')}
             </Button>
           </CardBody>
         </Card>
+      ) : (
+        /* Status Grid */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {statuses.map((status) => (
+            <Card key={status.id} className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardBody className="p-0">
+                {/* Media Preview */}
+                <div className="relative bg-gray-100">
+                  {status.media_url ? (
+                    <>
+                      {status.media_url.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+                        <img
+                          src={status.media_url}
+                          alt="Status media"
+                          className="w-full h-[200px] object-cover"
+                        />
+                      ) : (
+                        <video
+                          src={status.media_url}
+                          className="w-full h-[200px] object-cover"
+                          controls
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <div className="w-full h-[140px] flex flex-col items-center justify-center gap-2">
+                      <PhotoIcon className="w-10 h-10 text-gray-300" />
+                      <span className="text-xs text-gray-400">{t('text')} only</span>
+                    </div>
+                  )}
+
+                  {/* Floating Action Buttons */}
+                  <div className="absolute top-2 right-2 flex space-x-1 z-10">
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      className="bg-white/90 backdrop-blur-sm hover:bg-white shadow-sm"
+                      onPress={() => handleEditClick(status)}
+                    >
+                      <PencilIcon className="w-4 h-4 text-gray-700" />
+                    </Button>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      className="bg-white/90 backdrop-blur-sm hover:bg-white shadow-sm"
+                      onPress={() => handleDeleteClick(status)}
+                    >
+                      <TrashIcon className="w-4 h-4 text-red-600" />
+                    </Button>
+                  </div>
+
+                  {/* Publishing Status Badge */}
+                  {status.publishing_status && (
+                    <div className="absolute top-2 left-2">
+                      <Chip
+                        size="sm"
+                        color={getPublishingStatusColor(status.publishing_status)}
+                        variant="flat"
+                        className="backdrop-blur-sm"
+                      >
+                        {status.publishing_status}
+                      </Chip>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content Info */}
+                <div className="p-4 space-y-3">
+                  {/* Text Content */}
+                  {status.text && (
+                    <p className="text-sm text-gray-700 line-clamp-2 leading-relaxed">
+                      {status.text}
+                    </p>
+                  )}
+
+                  {/* Meta Info */}
+                  <div className="space-y-2">
+                    {/* Position */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">{t('position')}</span>
+                      <Chip size="sm" variant="flat" className="bg-gray-100 text-gray-700">
+                        #{status.position}
+                      </Chip>
+                    </div>
+
+                    {/* Schedule */}
+                    {status.publishment_datetime ? (
+                      <div className="flex items-center gap-2 text-xs">
+                        <CalendarIcon className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                        <span className="text-gray-500">{t('scheduledFor')}:</span>
+                        <span className="text-gray-700 font-medium truncate">
+                          {formatDateTime(status.publishment_datetime)}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-start gap-2 text-xs">
+                        <ClockIcon className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
+                        <div>
+                          <span className="text-gray-500">{t('frequency')}:</span>
+                          <span className="text-gray-700 font-medium ml-1">
+                            {formatFrequency(status.frequency)}
+                          </span>
+                          {status.recurring_time && (
+                            <span className="text-gray-500 ml-1">
+                              @ {status.recurring_time.slice(0, 5)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Next Post */}
+                    {status.next_post_at && (
+                      <div className="flex items-center gap-2 text-xs pt-1 border-t border-gray-100">
+                        <span className="text-gray-400">Next:</span>
+                        <span className="text-green-600 font-medium">
+                          {formatDateTime(status.next_post_at)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          ))}
+        </div>
       )}
 
       {/* Modals */}
