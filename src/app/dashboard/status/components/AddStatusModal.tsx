@@ -25,9 +25,10 @@ interface AddStatusModalProps {
   isOpen: boolean;
   onClose: () => void;
   companyId: string;
+  onCreated?: () => void;
 }
 
-export function AddStatusModal({ isOpen, onClose, companyId }: AddStatusModalProps) {
+export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddStatusModalProps) {
   const { t } = useTranslationNamespace('dashboard.status');
   const { createStatus } = useStatus(companyId);
   const { upload, uploading } = useUpload();
@@ -164,6 +165,7 @@ export function AddStatusModal({ isOpen, onClose, companyId }: AddStatusModalPro
       };
 
       await createStatus(statusData);
+      onCreated?.();
       handleClose();
     } catch (error) {
       console.error("Error creating status:", error);

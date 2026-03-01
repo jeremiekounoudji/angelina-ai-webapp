@@ -21,7 +21,7 @@ import { ConfirmationModal } from "@/components/ConfirmationModal";
 export default function StatusPage() {
   const { company } = useAuth();
   const { t } = useTranslationNamespace('dashboard.status');
-  const { statuses, loading, deleteStatus } = useStatus(company?.id);
+  const { statuses, loading, deleteStatus, createStatus, updateStatus, refetch } = useStatus(company?.id);
   const { limits, canAddStatus } = usePlanLimits(company?.id);
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -95,7 +95,7 @@ export default function StatusPage() {
   return (
     <div className="p-6 bg-white min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-semibold text-gray-900">{t('title')}</h2>
           <p className="text-gray-600 mt-0.5">
@@ -116,31 +116,28 @@ export default function StatusPage() {
         </Button>
       </div>
 
-      {/* Limits Banner */}
+      {/* Limits Banner - compact, inline */}
       {limits && !limits.can_add_status && (
-        <Card className="mb-6 bg-red-50 border border-red-200">
-          <CardBody className="py-3 px-4">
-            <div className="flex items-center gap-3">
-              <Chip color="danger" variant="flat" size="sm">{t('limitReached')}</Chip>
-              <p className="text-sm text-red-700">
-                {t('statusUsage')}: {limits.current_status || 0} / {limits.max_status || 0}
-              </p>
-            </div>
-          </CardBody>
-        </Card>
+        <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-red-50 border border-red-200 rounded-xl">
+          <Chip color="danger" variant="flat" size="sm">{t('limitReached')}</Chip>
+          <p className="text-sm text-red-700">
+            {limits.current_status || 0} / {limits.max_status || 0}
+          </p>
+        </div>
       )}
 
-      {/* Empty State */}
+      {/* Empty State - compact */}
       {statuses.length === 0 && !loading ? (
-        <Card className="bg-white border border-gray-200 shadow-sm">
-          <CardBody className="text-center py-16">
-            <ChatBubbleBottomCenterTextIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">{t('noStatus')}</h3>
-            <p className="text-gray-500 mb-6 max-w-md mx-auto">
+        <Card className="bg-white border border-gray-200 shadow-sm max-w-md mx-auto">
+          <CardBody className="text-center py-10 px-6">
+            <ChatBubbleBottomCenterTextIcon className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+            <h3 className="text-base font-medium text-gray-900 mb-1">{t('noStatus')}</h3>
+            <p className="text-sm text-gray-500 mb-5">
               {t('description')}
             </p>
             <Button
               className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+              size="sm"
               startContent={<PlusIcon className="w-4 h-4" />}
               onPress={handleAddClick}
             >
@@ -162,19 +159,19 @@ export default function StatusPage() {
                         <img
                           src={status.media_url}
                           alt="Status media"
-                          className="w-full h-[200px] object-cover"
+                          className="w-full h-[180px] object-cover"
                         />
                       ) : (
                         <video
                           src={status.media_url}
-                          className="w-full h-[200px] object-cover"
+                          className="w-full h-[180px] object-cover"
                           controls
                         />
                       )}
                     </>
                   ) : (
-                    <div className="w-full h-[140px] flex flex-col items-center justify-center gap-2">
-                      <PhotoIcon className="w-10 h-10 text-gray-300" />
+                    <div className="w-full h-[100px] flex flex-col items-center justify-center gap-1">
+                      <PhotoIcon className="w-8 h-8 text-gray-300" />
                       <span className="text-xs text-gray-400">{t('text')} only</span>
                     </div>
                   )}
@@ -215,7 +212,7 @@ export default function StatusPage() {
                 </div>
 
                 {/* Content Info */}
-                <div className="p-4 space-y-3">
+                <div className="p-4 space-y-2.5">
                   {/* Text Content */}
                   {status.text && (
                     <p className="text-sm text-gray-700 line-clamp-2 leading-relaxed">
@@ -224,7 +221,7 @@ export default function StatusPage() {
                   )}
 
                   {/* Meta Info */}
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {/* Position */}
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">{t('position')}</span>
@@ -261,7 +258,7 @@ export default function StatusPage() {
 
                     {/* Next Post */}
                     {status.next_post_at && (
-                      <div className="flex items-center gap-2 text-xs pt-1 border-t border-gray-100">
+                      <div className="flex items-center gap-2 text-xs pt-1.5 border-t border-gray-100">
                         <span className="text-gray-400">Next:</span>
                         <span className="text-green-600 font-medium">
                           {formatDateTime(status.next_post_at)}
@@ -276,11 +273,12 @@ export default function StatusPage() {
         </div>
       )}
 
-      {/* Modals */}
+      {/* Modals — pass callbacks from the single useStatus hook */}
       <AddStatusModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         companyId={company?.id || ""}
+        onCreated={refetch}
       />
 
       {selectedStatus && (
@@ -291,6 +289,7 @@ export default function StatusPage() {
             setSelectedStatus(null);
           }}
           status={selectedStatus}
+          onUpdated={refetch}
         />
       )}
 

@@ -26,9 +26,10 @@ interface EditStatusModalProps {
   isOpen: boolean;
   onClose: () => void;
   status: Status;
+  onUpdated?: () => void;
 }
 
-export function EditStatusModal({ isOpen, onClose, status }: EditStatusModalProps) {
+export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStatusModalProps) {
   const { t } = useTranslationNamespace('dashboard.status');
   const { updateStatus } = useStatus(status.company_id);
   const { upload, uploading } = useUpload();
@@ -189,6 +190,7 @@ export function EditStatusModal({ isOpen, onClose, status }: EditStatusModalProp
       };
 
       await updateStatus(status.id, updates);
+      onUpdated?.();
       onClose();
     } catch (error) {
       console.error("Error updating status:", error);
