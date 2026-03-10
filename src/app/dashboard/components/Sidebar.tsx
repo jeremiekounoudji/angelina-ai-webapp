@@ -27,7 +27,7 @@ import {
 const navigation = [
   { name: 'Company', href: '/dashboard/company', icon: BuildingOfficeIcon },
   { name: 'Users', href: '/dashboard/users', icon: UsersIcon },
-  { name: 'Products', href: '/dashboard/products', icon: ShoppingBagIcon },
+  // { name: 'Products', href: '/dashboard/products', icon: ShoppingBagIcon },
   { name: 'Subscription', href: '/dashboard/subscription', icon: CreditCardIcon },
 ]
 

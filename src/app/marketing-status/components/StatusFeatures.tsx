@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/utils/animations';
-import { CalendarDays, Repeat, Image as ImageIcon, Zap } from 'lucide-react';
+import { CalendarDays, Repeat, Image as ImageIcon, Zap, Clock, Smartphone, BarChart3, Shield } from 'lucide-react';
 import { useTranslationNamespace } from '@/contexts/TranslationContext';
 
 const featureKeys = [
@@ -10,35 +10,85 @@ const featureKeys = [
     key: "precision",
     icon: CalendarDays,
     color: "text-blue-400",
-    bg: "bg-blue-400/10"
+    bg: "bg-gradient-to-br from-blue-500/10 to-blue-600/5",
+    border: "border-blue-500/20",
+    size: "large" // Takes 2 columns
   },
   {
     key: "recurring",
     icon: Repeat,
     color: "text-purple-400",
-    bg: "bg-purple-400/10"
+    bg: "bg-gradient-to-br from-purple-500/10 to-purple-600/5",
+    border: "border-purple-500/20",
+    size: "medium"
   },
   {
     key: "media",
     icon: ImageIcon,
     color: "text-pink-400",
-    bg: "bg-pink-400/10"
+    bg: "bg-gradient-to-br from-pink-500/10 to-pink-600/5",
+    border: "border-pink-500/20",
+    size: "medium"
   },
   {
     key: "background",
     icon: Zap,
     color: "text-yellow-400",
-    bg: "bg-yellow-400/10"
+    bg: "bg-gradient-to-br from-yellow-500/10 to-yellow-600/5",
+    border: "border-yellow-500/20",
+    size: "large" // Takes 2 columns
+  },
+  {
+    key: "analytics",
+    icon: BarChart3,
+    color: "text-green-400",
+    bg: "bg-gradient-to-br from-green-500/10 to-green-600/5",
+    border: "border-green-500/20",
+    size: "small"
+  },
+  {
+    key: "security",
+    icon: Shield,
+    color: "text-red-400",
+    bg: "bg-gradient-to-br from-red-500/10 to-red-600/5",
+    border: "border-red-500/20",
+    size: "small"
   }
 ];
 
 export default function StatusFeatures() {
   const { t } = useTranslationNamespace('marketing.statusFeatures');
 
+  const getGridClass = (size: string, index: number) => {
+    switch (size) {
+      case 'large':
+        return 'md:col-span-2 md:row-span-2';
+      case 'medium':
+        return 'md:col-span-1 md:row-span-2';
+      case 'small':
+        return 'md:col-span-1 md:row-span-1';
+      default:
+        return 'md:col-span-1 md:row-span-1';
+    }
+  };
+
   return (
-    <section className="py-24 bg-black relative">
-      {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-green-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+    <section className="py-32 relative overflow-hidden">
+      {/* Enhanced Background Effects */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-green-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      
+      {/* Floating Elements */}
+      <motion.div
+        className="absolute top-20 right-10 w-20 h-20 border border-green-500/20 rounded-2xl"
+        animate={{ rotate: 360, y: [0, -20, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.div
+        className="absolute bottom-20 left-10 w-16 h-16 border border-purple-500/20 rounded-full"
+        animate={{ rotate: -360, x: [0, 20, 0] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
@@ -46,48 +96,119 @@ export default function StatusFeatures() {
           whileInView="animate"
           viewport={{ once: true, amount: 0.3 }}
           variants={staggerContainer}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <motion.h2 
             variants={fadeInUp} 
-            className="text-3xl md:text-5xl font-bold text-white mb-6"
+            className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
           >
-            {t('title')} <span className="text-green-400">{t('titleHighlight')}</span>
+            {t('title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400">{t('titleHighlight')}</span>
           </motion.h2>
           <motion.p 
             variants={fadeInUp} 
-            className="text-xl text-gray-400 max-w-3xl mx-auto"
+            className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed"
           >
             {t('subtitle')}
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        {/* Bento Grid Layout */}
+        <motion.div 
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-fr"
+        >
           {featureKeys.map((feature, index) => {
             const Icon = feature.icon;
+            const isLarge = feature.size === 'large';
+            const isMedium = feature.size === 'medium';
+            
             return (
               <motion.div 
                 key={index}
                 variants={fadeInUp}
-                className="bg-gray-900 border border-gray-800 rounded-3xl p-10 hover:border-green-500/30 hover:bg-gray-900/80 transition-all duration-300 group"
+                className={`
+                  ${getGridClass(feature.size, index)}
+                  ${feature.bg} ${feature.border}
+                  backdrop-blur-sm border rounded-3xl p-8 
+                  hover:border-opacity-50 hover:scale-[1.02] 
+                  transition-all duration-500 group cursor-pointer
+                  shadow-2xl hover:shadow-3xl
+                  ${isLarge ? 'min-h-[400px]' : isMedium ? 'min-h-[300px]' : 'min-h-[200px]'}
+                  flex flex-col justify-between
+                `}
+                whileHover={{ y: -5 }}
               >
-                <div className="flex items-start gap-6">
-                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 ${feature.bg}`}>
-                    <Icon className={`w-8 h-8 ${feature.color}`} />
+                <div className="flex flex-col h-full">
+                  {/* Icon Section */}
+                  <div className="flex items-start justify-between mb-6">
+                    <motion.div 
+                      className={`
+                        ${isLarge ? 'w-20 h-20' : 'w-16 h-16'} 
+                        rounded-2xl flex items-center justify-center shrink-0 
+                        ${feature.bg} ${feature.border} border backdrop-blur-sm
+                        group-hover:scale-110 transition-transform duration-300
+                      `}
+                      whileHover={{ rotate: 5 }}
+                    >
+                      <Icon className={`${isLarge ? 'w-10 h-10' : 'w-8 h-8'} ${feature.color}`} />
+                    </motion.div>
+                    
+                    {/* Decorative dots for large cards */}
+                    {isLarge && (
+                      <div className="flex gap-2">
+                        <div className={`w-2 h-2 rounded-full ${feature.color.replace('text-', 'bg-')}/30`}></div>
+                        <div className={`w-2 h-2 rounded-full ${feature.color.replace('text-', 'bg-')}/20`}></div>
+                        <div className={`w-2 h-2 rounded-full ${feature.color.replace('text-', 'bg-')}/10`}></div>
+                      </div>
+                    )}
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors">
+
+                  {/* Content Section */}
+                  <div className="flex-1 flex flex-col justify-center">
+                    <h3 className={`
+                      ${isLarge ? 'text-3xl' : isMedium ? 'text-2xl' : 'text-xl'} 
+                      font-bold text-white mb-4 
+                      group-hover:${feature.color} transition-colors duration-300
+                    `}>
                       {t(`items.${feature.key}.title`)}
                     </h3>
-                    <p className="text-gray-400 leading-relaxed text-lg">
+                    <p className={`
+                      text-gray-400 leading-relaxed 
+                      ${isLarge ? 'text-lg' : 'text-base'}
+                      group-hover:text-gray-300 transition-colors duration-300
+                    `}>
                       {t(`items.${feature.key}.description`)}
                     </p>
                   </div>
+
+                  {/* Bottom accent for large cards */}
+                  {isLarge && (
+                    <div className="mt-6 pt-4 border-t border-gray-800/50">
+                      <div className={`w-full h-1 rounded-full ${feature.color.replace('text-', 'bg-')}/20 group-hover:${feature.color.replace('text-', 'bg-')}/40 transition-all duration-300`}></div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
+
+        {/* Bottom CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="text-center mt-20"
+        >
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20 rounded-full text-green-400 text-sm font-medium mb-8">
+            <Clock className="w-4 h-4" />
+            <span>Setup takes less than 5 minutes</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

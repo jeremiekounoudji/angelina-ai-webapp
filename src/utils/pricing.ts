@@ -14,10 +14,18 @@ export function calculateMonthlySavings(plan: SubscriptionPlan): number {
   return monthlyPrice - yearlyMonthlyEquivalent
 }
 
-export function formatPrice(price: number): string {
+export function formatPrice(price: number, currency: string = 'USD'): string {
+  // Handle FCFA specially since it's not a standard ISO currency code
+  if (currency === 'FCFA') {
+    return `${price.toLocaleString('fr-FR', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })} FCFA`
+  }
+  
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
+    currency: currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   }).format(price)

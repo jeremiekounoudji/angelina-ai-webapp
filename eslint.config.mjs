@@ -1,26 +1,53 @@
-const eslintConfig = [
+import tseslint from 'typescript-eslint';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+
+const eslintConfig = tseslint.config(
   {
     ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
-      "*.config.js",
-      "*.config.ts",
-      "*.config.mjs",
+      'node_modules/**',
+      '.next/**',
+      'out/**',
+      'build/**',
+      'next-env.d.ts',
+      '*.config.js',
+      '*.config.mjs',
+      'Dockerfile',
+      '.dockerignore',
     ],
   },
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
-    rules: {
-      // Temporarily disabled due to missing plugin configuration in Flat Config:
-      // "@typescript-eslint/no-unused-vars": "error",
-      // "@typescript-eslint/no-explicit-any": "error",
-      // "react-hooks/exhaustive-deps": "error",
-      // "@next/next/no-img-element": "warn",
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+        project: './tsconfig.json',
+      },
     },
-  },
-];
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+      'react': reactPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
+    },
+  }
+);
 
 export default eslintConfig;

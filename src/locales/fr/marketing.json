@@ -70,6 +70,14 @@
       "background": {
         "title": "Exécution Instantanée en Arrière-plan",
         "description": "Zéro plantage de chevauchement et zéro retard. Notre moteur d'interrogation robuste s'exécute en arrière-plan absolu pendant que vous vous concentrez sur la conclusion de ventes avec les clients."
+      },
+      "analytics": {
+        "title": "Analyses Intelligentes",
+        "description": "Suivez l'engagement, les heures de publication optimales et les insights d'audience pour maximiser l'impact de vos statuts."
+      },
+      "security": {
+        "title": "Sécurité Entreprise",
+        "description": "Chiffrement de niveau bancaire et connexions API sécurisées garantissent que votre contenu et vos données sont toujours protégés."
       }
     }
   },

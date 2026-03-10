@@ -12,8 +12,11 @@ export default function PrivacyPage() {
     'intro',
     'dataCollection',
     'dataUsage',
+    'whatsappData',
     'dataSecurity',
+    'dataRetention',
     'userRights',
+    'thirdParty',
     'contact'
   ];
 

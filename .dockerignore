@@ -1,0 +1,73 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+.next
+out
+build
+dist
+
+# Environment files
+.env*.local
+.env.local
+.env
+
+# Testing
+coverage
+.nyc_output
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation and summaries
+*.md
+!README.md
+!SETUP.md
+
+# Screenshots
+*.png
+*.jpg
+*.jpeg
+*.gif
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.jpeg
+!public/**/*.gif
+!src/design/**/*.png
+
+# Logs
+*.log
+
+# Misc
+.husky
+.qoder
+summaries
+docs/evolution-api
+my-redis
+
+# TypeScript
+*.tsbuildinfo
+
+# Database
+*.sql
+database-setup.sql
+
+# Config files (keep essential ones)
+eslint-errors.txt
+angelinaAI.json
+tables_schema.md

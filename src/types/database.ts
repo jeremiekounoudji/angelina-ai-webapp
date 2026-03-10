@@ -82,12 +82,16 @@ export interface Complaint {
 export interface SubscriptionPlan {
   id: string
   title: string
+  title_fr?: string
   description: string
+  description_fr?: string
   price_monthly: number
+  currency?: string
   yearly_discount_percent: number
   token_allowance_monthly: number
   max_users: number
   max_products: number
+  max_status?: number
   support_type: string
   has_dashboard: boolean
   estimated_chats: number
@@ -101,6 +105,7 @@ export interface SubscriptionFeature {
   id: string
   plan_id?: string
   feature: string
+  feature_fr?: string
 }
 
 export interface Payment {

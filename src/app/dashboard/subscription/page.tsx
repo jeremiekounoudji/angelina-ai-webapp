@@ -21,7 +21,7 @@ import { useSubscriptionContext } from "@/contexts/SubscriptionContext";
 import PaymentModal from "./components/PaymentModal";
 import BuyTokensModal from "./components/BuyTokensModal";
 import PaymentHistory from "../components/PaymentHistory";
-import { SubscriptionPlan } from "@/types/database";
+import { SubscriptionPlan, SubscriptionFeature } from "@/types/database";
 import {
   calculateYearlyPrice,
   formatPrice,
@@ -40,11 +40,26 @@ export default function SubscriptionPage() {
   const { company,user } = useAuth();
   const { plans, loading, error } = useSubscriptionContext();
   const { usage, loading: tokenLoading } = useTokenUsage(company?.id);
-  const { t } = useTranslationNamespace("dashboard.subscription");
+  const { t, locale } = useTranslationNamespace("dashboard.subscription");
 
   const currentPlan =
     plans.find((plan) => plan.id.toString() === company?.subscription_id) ||
     null;
+
+  // Helper function to get translated plan title
+  const getPlanTitle = (plan: SubscriptionPlan) => {
+    return locale === 'fr' && plan.title_fr ? plan.title_fr : plan.title;
+  };
+
+  // Helper function to get translated plan description
+  const getPlanDescription = (plan: SubscriptionPlan) => {
+    return locale === 'fr' && plan.description_fr ? plan.description_fr : plan.description;
+  };
+
+  // Helper function to get translated feature
+  const getFeatureText = (feature: SubscriptionFeature) => {
+    return locale === 'fr' && feature.feature_fr ? feature.feature_fr : feature.feature;
+  };
 
   const handleSelectPlan = (plan: SubscriptionPlan) => {
     setSelectedPlan(plan);
@@ -113,7 +128,7 @@ export default function SubscriptionPage() {
                   <p className="text-sm text-gray-600">{t("currentPlan.plan")}</p>
                   <p className="text-lg font-semibold text-gray-900">
                     {currentPlan
-                      ? currentPlan.title
+                      ? getPlanTitle(currentPlan)
                       : t("currentPlan.noActivePlan")}
                   </p>
                 </div>
@@ -131,7 +146,7 @@ export default function SubscriptionPage() {
                 <div>
                   <p className="text-sm text-gray-600">{t('billing.monthlyCost')}</p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {currentPlan ? `$${currentPlan.price_monthly}` : "$0"}
+                    {currentPlan ? formatPrice(currentPlan.price_monthly, currentPlan.currency || 'USD') : formatPrice(0, 'USD')}
                   </p>
                 </div>
               </div>
@@ -170,8 +185,8 @@ export default function SubscriptionPage() {
         )}
       </div>
 
-      {/* Token Usage */}
-      <div className="mb-8">
+      {/* Token Usage - Hidden for now */}
+      <div className="mb-8 hidden">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">{t('tokens.usage')}</h2>
         {tokenLoading ? (
           <div className="flex items-center justify-center py-8">
@@ -365,16 +380,16 @@ export default function SubscriptionPage() {
             <CardHeader className="text-center pb-2">
               <div className="w-full">
                 <h3 className="text-2xl font-bold text-gray-900">
-                  {plan.title}
+                  {getPlanTitle(plan)}
                 </h3>
                 <p className="text-gray-600 mt-1">
-                  {plan.description}
+                  {getPlanDescription(plan)}
                 </p>
                 <div className="mt-4">
                   <span className="text-4xl font-bold text-gray-900">
                     {isAnnual
-                      ? formatPrice(calculateYearlyPrice(plan) / 12)
-                      : formatPrice(plan.price_monthly)}
+                      ? formatPrice(calculateYearlyPrice(plan) / 12, plan.currency || 'USD')
+                      : formatPrice(plan.price_monthly, plan.currency || 'USD')}
                   </span>
                   <span className="text-gray-600">{t('plans.perMonth')}</span>
                   {isAnnual && plan.yearly_discount_percent > 0 && (
@@ -395,7 +410,7 @@ export default function SubscriptionPage() {
                   <li key={index} className="flex items-center space-x-3">
                     <CheckIcon className="w-5 h-5 text-[#328E6E] flex-shrink-0" />
                     <span className="text-sm text-gray-700">
-                      {feature.feature}
+                      {getFeatureText(feature)}
                     </span>
                   </li>
                 ))}
@@ -432,15 +447,18 @@ export default function SubscriptionPage() {
         companyId={company?.id || ""}
       />
 
-      <BuyTokensModal
-        isOpen={isBuyTokensOpen}
-        onClose={() => setIsBuyTokensOpen(false)}
-        companyId={company?.id || ""}
-        onSuccess={() => {
-          // Refresh token usage data
-          window.location.reload();
-        }}
-      />
+      {/* Buy Tokens Modal - Hidden for now */}
+      <div className="hidden">
+        <BuyTokensModal
+          isOpen={isBuyTokensOpen}
+          onClose={() => setIsBuyTokensOpen(false)}
+          companyId={company?.id || ""}
+          onSuccess={() => {
+            // Refresh token usage data
+            window.location.reload();
+          }}
+        />
+      </div>
     </div>
   );
 }

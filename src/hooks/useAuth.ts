@@ -86,14 +86,13 @@ export function useAuthActions() {
     router, setError, setLoading,  supabase.auth
   ]);
 
-  const signUp = useCallback(async (step1Data: RegisterStep1Data, step2Data: RegisterStep2Data) => {
+  const signUp = useCallback(async (step1Data: RegisterStep1Data) => {
     try {
       setLoading('users', true);
       setError('users', null);
 
-      console.log("Starting registration process");
+      console.log("Starting registration process - creating user account");
 
-      // Step 1: Create user account
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: step1Data.email,
         password: step1Data.password,
@@ -102,6 +101,7 @@ export function useAuthActions() {
             first_name: step1Data.firstName,
             last_name: step1Data.lastName,
           },
+          emailRedirectTo: undefined, // We'll handle verification manually
         },
       });
 
@@ -118,54 +118,7 @@ export function useAuthActions() {
         return { success: false, error: errorMessage };
       }
 
-      console.log("Calling RPC to finalize registration", authData, {
-        p_auth_user_id: authData.user.id,
-        p_email: step1Data.email,
-        p_first_name: step1Data.firstName,
-        p_last_name: step1Data.lastName,
-        p_phone: step1Data.phone,
-        p_company_name: step2Data.companyName,
-        p_company_type: step2Data.companyType,
-        p_company_address: step2Data.address || null,
-        p_company_phone: step2Data.phone || null,
-        p_company_email: step2Data.companyEmail || null,
-        p_company_description: step2Data.description || null,
-      });
-
-      // Step 2: Call RPC function to create company and user record atomically
-      const { data: rpcData, error: rpcError } = await supabase.rpc(
-        "register_user_and_company",
-        {
-          p_auth_user_id: authData.user.id,
-          p_email: step1Data.email,
-          p_first_name: step1Data.firstName,
-          p_last_name: step1Data.lastName,
-          p_phone: step1Data.phone,
-          p_company_name: step2Data.companyName,
-          p_company_type: step2Data.companyType,
-          p_company_address: step2Data.address || null,
-          p_company_phone: step2Data.phone || null,
-          p_company_email: step2Data.companyEmail || null,
-          p_company_description: step2Data.description || null,
-        }
-      );
-
-      console.log("RPC result", rpcData, rpcError);
-
-      if (rpcError) {
-        const errorMessage = "Registration failed: " + rpcError.message;
-        toast.error(errorMessage);
-        return { success: false, error: errorMessage };
-      }
-
-      if (!rpcData[0].success) {
-        const errorMessage = "Registration failed: " + rpcData.message;
-        toast.error(errorMessage);
-        return { success: false, error: errorMessage };
-      }
-
-      toast.success('Account created successfully!');
-      router.push("/dashboard");
+      toast.success('Verification code sent to your email!');
       return { success: true };
     } catch (err) {
       console.error("Unexpected error:", err);
@@ -175,7 +128,7 @@ export function useAuthActions() {
     } finally {
       setLoading('users', false);
     }
-  }, [supabase, router, setLoading, setError]);
+  }, [supabase, setLoading, setError]);
 
   const signOut = useCallback(async () => {
     try {
@@ -285,6 +238,75 @@ export function useAuthActions() {
     }
   }, [supabase]);
 
+  const verifyOtp = useCallback(async (email: string, token: string) => {
+    try {
+      console.log('verifyOtp: Setting loading to true');
+      setLoading('users', true);
+      setError('users', null);
+
+      console.log('verifyOtp: Calling supabase.auth.verifyOtp');
+      const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token,
+        type: 'email',
+      });
+
+      console.log('verifyOtp: Result:', { data, error });
+
+      if (error) {
+        console.log('verifyOtp: Error occurred:', error.message);
+        toast.error(error.message);
+        return { success: false, error: error.message };
+      }
+
+      if (!data.user) {
+        const errorMessage = "Failed to verify email";
+        console.log('verifyOtp: No user in response');
+        toast.error(errorMessage);
+        return { success: false, error: errorMessage };
+      }
+
+      console.log('verifyOtp: Success!');
+      toast.success('Email verified successfully!');
+      return { success: true, user: data.user, session: data.session };
+    } catch (err) {
+      console.error('verifyOtp: Unexpected error:', err);
+      const errorMessage = "Failed to verify email";
+      toast.error(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      console.log('verifyOtp: Setting loading to false');
+      setLoading('users', false);
+    }
+  }, [supabase, setLoading, setError]);
+
+  const resendOtp = useCallback(async (email: string) => {
+    try {
+      setLoading('users', true);
+      setError('users', null);
+
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email,
+      });
+
+      if (error) {
+        toast.error(error.message);
+        return { success: false, error: error.message };
+      }
+
+      toast.success('Verification code sent!');
+      return { success: true };
+    } catch (err) {
+      console.error('Unexpected error resending OTP:', err);
+      const errorMessage = "Failed to resend verification code";
+      toast.error(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading('users', false);
+    }
+  }, [supabase, setLoading, setError]);
+
   return {
     signIn,
     signUp,
@@ -293,5 +315,7 @@ export function useAuthActions() {
     updatePassword,
     refreshSession,
     getCurrentUser,
+    verifyOtp,
+    resendOtp,
   };
 }

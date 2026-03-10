@@ -92,5 +92,13 @@
     "logout": "Déconnexion",
     "login": "Connexion",
     "signup": "Inscription"
+  },
+  "planList": {
+    "title": "Choisissez votre plan",
+    "subtitle": "Sélectionnez le plan qui correspond le mieux à vos besoins",
+    "skipButton": "Passer et utiliser le plan gratuit",
+    "continueWithFree": "Continuer avec Gratuit",
+    "changeAnytime": "Vous pouvez changer de plan à tout moment depuis votre tableau de bord",
+    "errorGoToDashboard": "Aller au tableau de bord"
   }
 }

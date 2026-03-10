@@ -70,6 +70,14 @@
       "background": {
         "title": "Instant Background Execution",
         "description": "Zero overlap crashes and zero delays. Our robust polling engine runs in the absolute background while you focus on sealing deals with customers."
+      },
+      "analytics": {
+        "title": "Smart Analytics",
+        "description": "Track engagement, optimal posting times, and audience insights to maximize your status impact."
+      },
+      "security": {
+        "title": "Enterprise Security",
+        "description": "Bank-level encryption and secure API connections ensure your content and data are always protected."
       }
     }
   },
@@ -258,65 +266,85 @@
   "legal": {
     "privacy": {
       "title": "Privacy Policy",
-      "lastUpdated": "Last updated: November 12, 2025",
+      "lastUpdated": "Last updated: March 9, 2026",
       "sections": {
         "intro": {
           "title": "Introduction",
-          "content": "At Angelina AI, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your data when you use our WhatsApp AI agent service for restaurant management."
+          "content": "At Angelina AI, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your data when you use our WhatsApp automation service for business status management and communications."
         },
         "dataCollection": {
           "title": "Information We Collect",
-          "content": "We collect information that you provide directly to us, including restaurant details, menu information, inventory data, customer orders, and WhatsApp communication data. We also automatically collect usage data, device information, and analytics to improve our service."
+          "content": "We collect: (1) Account Information - name, email, phone number, company details provided during registration, (2) WhatsApp Connection Data - WhatsApp Business account credentials and connection tokens, (3) Content Data - status images, captions, and scheduling information you upload, (4) Usage Data - feature usage, status posting history, and analytics, (5) Technical Data - device information, IP addresses, browser type, and access logs, and (6) Payment Information - billing details processed securely through FedaPay (we do not store full payment card details)."
         },
         "dataUsage": {
           "title": "How We Use Your Information",
-          "content": "We use your information to provide and maintain our AI agent service, process orders, manage inventory, handle customer complaints, coordinate deliveries, and improve our platform. We also use data for analytics, customer support, and to comply with legal obligations."
+          "content": "We use your information to: (1) provide and maintain the WhatsApp automation service, (2) post scheduled statuses to your WhatsApp Business account, (3) process payments and manage subscriptions, (4) send service notifications and updates, (5) provide customer support, (6) improve our platform through analytics, (7) detect and prevent fraud or abuse, and (8) comply with legal obligations. We do not sell your personal information to third parties."
+        },
+        "whatsappData": {
+          "title": "WhatsApp Integration",
+          "content": "When you connect your WhatsApp Business account, we access only the permissions necessary to post statuses on your behalf. We do not read your WhatsApp messages, access your contact list beyond what's necessary for service operation, or store your WhatsApp conversations. Your WhatsApp connection can be revoked at any time from your dashboard."
         },
         "dataSecurity": {
           "title": "Data Security",
-          "content": "We implement industry-standard security measures to protect your data, including encryption, secure servers, and access controls. Your data is stored securely and we maintain a 99.9% SLA with 24/7 monitoring. We are GDPR compliant and follow international data protection regulations."
+          "content": "We implement industry-standard security measures including: (1) end-to-end encryption for data transmission, (2) secure cloud storage with Supabase, (3) regular security audits and monitoring, (4) access controls and authentication, (5) encrypted database backups, and (6) secure payment processing through certified partners. While we strive to protect your data, no method of transmission over the internet is 100% secure."
+        },
+        "dataRetention": {
+          "title": "Data Retention",
+          "content": "We retain your account data for as long as your account is active. Status content is retained for 90 days after posting. After account deletion, we retain minimal data for 30 days for recovery purposes, then permanently delete all personal information except what we're legally required to keep for accounting or compliance purposes (typically 7 years for financial records)."
         },
         "userRights": {
           "title": "Your Rights",
-          "content": "You have the right to access, correct, or delete your personal information. You can request data portability, object to processing, and withdraw consent at any time. To exercise these rights, please contact our support team."
+          "content": "You have the right to: (1) access your personal data, (2) correct inaccurate information, (3) delete your account and data, (4) export your data (data portability), (5) object to certain processing activities, (6) withdraw consent at any time, and (7) lodge a complaint with a data protection authority. To exercise these rights, contact us through your dashboard or at privacy@angelina-ai.com."
+        },
+        "thirdParty": {
+          "title": "Third-Party Services",
+          "content": "We use trusted third-party services: (1) Supabase for database and authentication, (2) FedaPay for payment processing, (3) WhatsApp Business API for status posting, and (4) analytics tools for service improvement. These partners are contractually obligated to protect your data and use it only for specified purposes."
         },
         "contact": {
           "title": "Contact Us",
-          "content": "If you have any questions about this Privacy Policy or our data practices, please contact us at privacy@angelina-ai.com or through our support channels."
+          "content": "If you have any questions about this Privacy Policy or our data practices, please contact us at privacy@angelina-ai.com or through our support channels in the dashboard. We will respond to all requests within 30 days."
         }
       }
     },
     "terms": {
       "title": "Terms & Conditions",
-      "lastUpdated": "Last updated: November 12, 2025",
+      "lastUpdated": "Last updated: March 9, 2026",
       "sections": {
         "intro": {
           "title": "Agreement to Terms",
-          "content": "By accessing and using Angelina AI's WhatsApp AI agent service, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our service."
+          "content": "By accessing and using Angelina AI's WhatsApp automation service, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our service."
         },
         "serviceDescription": {
           "title": "Service Description",
-          "content": "Angelina AI provides an intelligent WhatsApp-based AI agent that automates restaurant operations including order taking, inventory management, complaint handling, and delivery coordination. We offer various subscription plans with different features and usage limits."
+          "content": "Angelina AI provides an intelligent WhatsApp automation platform that helps businesses automate their WhatsApp status updates and manage their WhatsApp business communications. We offer various subscription plans with different features including automated status posting, scheduling capabilities, and analytics. Our service integrates with WhatsApp Business API to deliver reliable automation."
         },
         "userObligations": {
           "title": "User Obligations",
-          "content": "You agree to provide accurate restaurant information, maintain the security of your account credentials, use the service in compliance with applicable laws, and not misuse or attempt to disrupt our platform. You are responsible for all activities under your account."
+          "content": "You agree to: (1) provide accurate business information during registration, (2) maintain the security of your account credentials and WhatsApp connection, (3) use the service in compliance with WhatsApp's Terms of Service and applicable laws, (4) not misuse or attempt to disrupt our platform, (5) not use the service for spam or unauthorized marketing, and (6) ensure you have proper rights to any content you post through our service. You are responsible for all activities under your account."
         },
         "payment": {
           "title": "Payment Terms",
-          "content": "Subscription fees are billed monthly or annually based on your chosen plan. Payments are processed securely through our payment partners. You can upgrade, downgrade, or cancel your subscription at any time. Refunds are provided according to our refund policy."
+          "content": "Subscription fees are billed monthly in FCFA based on your chosen plan: Free (0 FCFA, 0 statuses), Popular (2,000 FCFA, 15 statuses/month), or Pro (5,000 FCFA, unlimited statuses). Payments are processed securely through FedaPay. You can upgrade, downgrade, or cancel your subscription at any time from your dashboard. Refunds are provided according to our refund policy. Unused status credits do not roll over to the next billing period."
+        },
+        "whatsappIntegration": {
+          "title": "WhatsApp Integration",
+          "content": "Our service requires connection to your WhatsApp Business account. You authorize us to access your WhatsApp account for the purpose of posting statuses and managing your business communications. We do not store your WhatsApp messages or contact information beyond what is necessary for service operation. You can disconnect your WhatsApp account at any time from your dashboard."
+        },
+        "dataUsage": {
+          "title": "Content and Data Usage",
+          "content": "You retain all rights to the content you upload and post through our service. By using our service, you grant us a limited license to process, store, and transmit your content solely for the purpose of providing the service. We do not claim ownership of your content and will not use it for any purpose other than service delivery."
         },
         "liability": {
           "title": "Limitation of Liability",
-          "content": "Angelina AI is provided 'as is' without warranties of any kind. We are not liable for indirect, incidental, or consequential damages. Our total liability is limited to the amount you paid for the service in the past 12 months."
+          "content": "Angelina AI is provided 'as is' without warranties of any kind. We strive for 99.9% uptime but cannot guarantee uninterrupted service. We are not liable for: (1) WhatsApp API downtime or changes, (2) failed status posts due to WhatsApp restrictions, (3) account suspensions by WhatsApp, (4) indirect, incidental, or consequential damages, or (5) loss of business or revenue. Our total liability is limited to the amount you paid for the service in the past 12 months."
         },
         "termination": {
           "title": "Termination",
-          "content": "We reserve the right to suspend or terminate your account for violation of these terms, non-payment, or misuse of the service. You may cancel your subscription at any time. Upon termination, your access to the service will cease."
+          "content": "We reserve the right to suspend or terminate your account for: (1) violation of these terms, (2) non-payment, (3) misuse of the service, (4) violation of WhatsApp's policies, or (5) fraudulent activity. You may cancel your subscription at any time from your dashboard. Upon termination, your access to the service will cease immediately, and scheduled statuses will not be posted. We will retain your data for 30 days after termination for recovery purposes."
         },
         "contact": {
           "title": "Contact Information",
-          "content": "For questions about these Terms & Conditions, please contact us at legal@angelina-ai.com or through our support channels."
+          "content": "For questions about these Terms & Conditions, please contact us at support@angelina-ai.com or through our support channels in the dashboard."
         }
       }
     }

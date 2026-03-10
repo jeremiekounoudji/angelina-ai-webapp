@@ -16,11 +16,11 @@ export default function Home() {
       redirectedRef.current = true;
       
       // If user is authenticated, go to dashboard
-      // Otherwise, go to marketing page
+      // Otherwise, go to status marketing page
       if (user) {
         router.push("/dashboard");
       } else {
-        router.push("/marketing");
+        router.push("/marketing-status");
       }
     }
   }, [user, loading, router]);

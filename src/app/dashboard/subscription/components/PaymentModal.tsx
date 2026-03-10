@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   Modal,
   ModalContent,
@@ -51,6 +52,7 @@ export default function PaymentModal({
   const [errorMessage, setErrorMessage] = useState("");
   const { refreshUser } = useAuth();
   const { t } = useTranslationNamespace('dashboard.payment');
+  const pathname = usePathname();
 
   const calculateAmount = () => {
     if (!plan) return 0;
@@ -148,7 +150,12 @@ export default function PaymentModal({
           await refreshUser();
           setTimeout(() => {
             onClose();
-            window.location.reload(); // Refresh to show updated subscription
+            // If on plan-list page, redirect to dashboard, otherwise reload
+            if (pathname === "/plan-list") {
+              window.location.href = "/dashboard";
+            } else {
+              window.location.reload();
+            }
           }, 2000);
           return;
         }

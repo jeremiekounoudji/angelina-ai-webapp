@@ -28,8 +28,6 @@ export function useSubscriptions() {
   const fetchPlans = 
   useCallback(async (forceRefresh = false) => {
     // Return cached data if available and not forcing refresh
-    console.log("debug-1");
-
     if (subscriptionPlans.length > 0 && !forceRefresh) {
       setLoading( false);
 
@@ -37,14 +35,10 @@ export function useSubscriptions() {
     }
 
     try {
-      console.log("debug-2");
-
       setLoading( true);
       setError("subscriptionPlans", null);
 
       // Fetch subscription plans with their features
-        console.log("debug 3-a");
-
       const { data: plansData, error: plansError } = await supabase
         .from("subscription_plans")
         .select(
@@ -52,13 +46,12 @@ export function useSubscriptions() {
           *,
           subscription_features (
             id,
-            feature
+            feature,
+            feature_fr
           )
         `
         )
         .order("price_monthly", { ascending: true });
-
-        console.log("debug 3-a");
         
       if (plansError) throw plansError;
 
@@ -70,7 +63,6 @@ export function useSubscriptions() {
             features: plan.subscription_features || [],
           })
         ) || [];
-console.log("debug-3",transformedPlans);
 
       setSubscriptionPlans(transformedPlans);
       console.log("Fetched subscription plans:", transformedPlans);
@@ -130,7 +122,6 @@ console.log("debug-3",transformedPlans);
               plan: payment.subscription_plans,
             })
           ) || [];
-        console.log("debug-1");
 
         setPayments(transformedPayments);
         return transformedPayments;
@@ -139,7 +130,6 @@ console.log("debug-3",transformedPlans);
           error instanceof Error ? error.message : "Failed to fetch payments";
         setError("payments", errorMessage);
         toast.error(errorMessage);
-        console.log("debug-1");
 
         return [];
       } finally {

@@ -92,5 +92,13 @@
     "logout": "Logout",
     "login": "Login",
     "signup": "Sign Up"
+  },
+  "planList": {
+    "title": "Choose Your Plan",
+    "subtitle": "Select the plan that best fits your needs",
+    "skipButton": "Skip and use free plan",
+    "continueWithFree": "Continue with Free",
+    "changeAnytime": "You can change your plan anytime from your dashboard",
+    "errorGoToDashboard": "Go to Dashboard"
   }
 }

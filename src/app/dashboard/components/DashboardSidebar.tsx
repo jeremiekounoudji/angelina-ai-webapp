@@ -20,13 +20,14 @@ import {
   ChatBubbleBottomCenterTextIcon
 } from '@heroicons/react/24/outline'
 import { useAuth } from '@/contexts/AuthContext'
-import { useTranslationNamespace } from '@/contexts/TranslationContext'
+import { useTranslationNamespace, useTranslation } from '@/contexts/TranslationContext'
 
 export function DashboardSidebar() {
   const pathname = usePathname()
   const { user, company, signOut } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslationNamespace('dashboard.sidebar')
+  const { locale, setLocale } = useTranslation()
 
   const navigation = [
     {
@@ -44,11 +45,11 @@ export function DashboardSidebar() {
       href: '/dashboard/subscription',
       icon: CreditCardIcon
     },
-    {
-      name: t('products'),
-      href: '/dashboard/products',
-      icon: ShoppingBagIcon
-    },
+    // {
+    //   name: t('products'),
+    //   href: '/dashboard/products',
+    //   icon: ShoppingBagIcon
+    // },
     {
       name: t('status'),
       href: '/dashboard/status',
@@ -164,6 +165,36 @@ export function DashboardSidebar() {
 
       {/* User Info & Sign Out */}
       <div className="p-4 border-t border-white/10">
+        {/* Language Switcher */}
+        <div className="mb-3 flex justify-center">
+          <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-1">
+            <button
+              onClick={() => locale === 'en' ? null : setLocale('en')}
+              className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors ${
+                locale === 'en' 
+                  ? 'bg-white text-[#328E6E] shadow-sm' 
+                  : 'text-white hover:bg-white/10'
+              }`}
+              aria-label="Switch to English"
+            >
+              <span className="text-base">🇺🇸</span>
+              <span className="text-xs font-medium">EN</span>
+            </button>
+            <button
+              onClick={() => locale === 'fr' ? null : setLocale('fr')}
+              className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors ${
+                locale === 'fr' 
+                  ? 'bg-white text-[#328E6E] shadow-sm' 
+                  : 'text-white hover:bg-white/10'
+              }`}
+              aria-label="Switch to French"
+            >
+              <span className="text-base">🇫🇷</span>
+              <span className="text-xs font-medium">FR</span>
+            </button>
+          </div>
+        </div>
+        
         <div className="flex items-center space-x-3 mb-3">
           <Avatar
             name={user?.email || 'User'}

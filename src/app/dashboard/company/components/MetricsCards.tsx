@@ -9,6 +9,7 @@ import {
   CpuChipIcon,
   UserGroupIcon,
   ShoppingCartIcon,
+  ChatBubbleBottomCenterTextIcon,
 } from "@heroicons/react/24/outline";
 
 const defaultMetrics = {
@@ -23,6 +24,8 @@ const defaultMetrics = {
   tokens_used_current_month: 0,
   tokens_allowance_monthly: 0,
   tokens_purchased_total: 0,
+  status_created_total: 0,
+  status_allowed_total: 0,
 };
 
 export function MetricsCards() {
@@ -32,48 +35,63 @@ export function MetricsCards() {
   const data = metrics || defaultMetrics;
 
   const metricsConfig = [
+    // Token metrics - Hidden for now
+    // {
+    //   title: "Tokens Used",
+    //   icon: CpuChipIcon,
+    //   value: data.tokens_used_current_month || 0,
+    //   color: "bg-blue-500",
+    // },
+    // {
+    //   title: "Token Allowance",
+    //   icon: CpuChipIcon,
+    //   value: data.tokens_allowance_monthly || 0,
+    //   color: "bg-blue-600",
+    // },
+    // {
+    //   title: "Tokens Purchased",
+    //   icon: ShoppingCartIcon,
+    //   value: data.tokens_purchased_total || 0,
+    //   color: "bg-indigo-500",
+    // },
     {
-      title: "Tokens Used",
-      icon: CpuChipIcon,
-      value: data.tokens_used_current_month || 0,
-      color: "bg-blue-500",
+      title: "Status Created",
+      icon: ChatBubbleBottomCenterTextIcon,
+      value: data.status_created_total || 0,
+      color: "bg-teal-500",
     },
     {
-      title: "Token Allowance",
-      icon: CpuChipIcon,
-      value: data.tokens_allowance_monthly || 0,
-      color: "bg-blue-600",
+      title: "Status Allowed",
+      icon: ChatBubbleBottomCenterTextIcon,
+      value: data.status_allowed_total === -1 ? "Unlimited" : data.status_allowed_total || 0,
+      color: "bg-teal-600",
     },
-    {
-      title: "Tokens Purchased",
-      icon: ShoppingCartIcon,
-      value: data.tokens_purchased_total || 0,
-      color: "bg-indigo-500",
-    },
-    {
-      title: "Messages Sent",
-      icon: ChatBubbleLeftRightIcon,
-      value: data.messages_sent_total || 0,
-      color: "bg-orange-500",
-    },
-    {
-      title: "Messages Allowed",
-      icon: ChatBubbleLeftRightIcon,
-      value: data.messages_allowed_total || 0,
-      color: "bg-orange-600",
-    },
-    {
-      title: "Products Created",
-      icon: CubeIcon,
-      value: data.products_created_total || 0,
-      color: "bg-amber-500",
-    },
-    {
-      title: "Products Allowed",
-      icon: CubeIcon,
-      value: data.products_allowed_total || 0,
-      color: "bg-amber-600",
-    },
+    // Message metrics - Hidden for now
+    // {
+    //   title: "Messages Sent",
+    //   icon: ChatBubbleLeftRightIcon,
+    //   value: data.messages_sent_total || 0,
+    //   color: "bg-orange-500",
+    // },
+    // {
+    //   title: "Messages Allowed",
+    //   icon: ChatBubbleLeftRightIcon,
+    //   value: data.messages_allowed_total || 0,
+    //   color: "bg-orange-600",
+    // },
+    // Product metrics - Hidden for now
+    // {
+    //   title: "Products Created",
+    //   icon: CubeIcon,
+    //   value: data.products_created_total || 0,
+    //   color: "bg-amber-500",
+    // },
+    // {
+    //   title: "Products Allowed",
+    //   icon: CubeIcon,
+    //   value: data.products_allowed_total || 0,
+    //   color: "bg-amber-600",
+    // },
     {
       title: "Users Created",
       icon: UsersIcon,
@@ -103,7 +121,7 @@ export function MetricsCards() {
   if (metricsLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {[...Array(11)].map((_, i) => (
+        {[...Array(6)].map((_, i) => (
           <Card
             key={i}
             className="animate-pulse bg-white border border-gray-200"
@@ -133,7 +151,7 @@ export function MetricsCards() {
             </CardHeader>
             <CardBody className="pt-0">
               <div className="text-3xl font-bold text-white">
-                {metric.value.toLocaleString()}
+                {typeof metric.value === 'string' ? metric.value : metric.value.toLocaleString()}
               </div>
             </CardBody>
           </Card>
