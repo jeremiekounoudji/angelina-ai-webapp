@@ -3,7 +3,7 @@ import { featuresData } from './features';
 
 export const landingPageContent: LandingPageContent = {
   hero: {
-    title: 'Révolutionnez votre restaurant avec Angelina AI',
+    title: 'Révolutionnez votre restaurant avec Aangelina AI',
     subtitle: 'Transformez les opérations de votre restaurant avec notre assistant IA basé sur WhatsApp. Gérez les commandes, les stocks, les livraisons et les plaintes de manière fluide.',
     ctaPrimary: 'Commencer l\'essai gratuit',
     ctaSecondary: 'Voir la démo',
@@ -14,7 +14,7 @@ export const landingPageContent: LandingPageContent = {
     {
       id: 'configure',
       number: 1,
-      title: 'Configurez Angelina AI',
+      title: 'Configurez Aangelina AI',
       description: 'Fournissez les détails de votre restaurant : menu, horaires, localisation et préférences en quelques minutes.',
     },
     {
@@ -33,7 +33,7 @@ export const landingPageContent: LandingPageContent = {
       id: 'marketplace',
       number: 4,
       title: 'Rejoignez le Marketplace',
-      description: 'Votre agent Angelina AI est ajouté au réseau pour que les clients puissent découvrir, discuter et commander dans votre restaurant.',
+      description: 'Votre agent Aangelina AI est ajouté au réseau pour que les clients puissent découvrir, discuter et commander dans votre restaurant.',
     },
   ],
   benefits: {
@@ -41,7 +41,7 @@ export const landingPageContent: LandingPageContent = {
       {
         value: '500+',
         label: 'Restaurants Actifs',
-        description: 'Restaurants au Bénin font confiance à Angelina AI',
+        description: 'Restaurants au Bénin font confiance à Aangelina AI',
       },
       {
         value: '50K+',
@@ -71,7 +71,7 @@ export const landingPageContent: LandingPageContent = {
     ],
   },
   demo: {
-    title: 'Voir Angelina AI en Action',
+    title: 'Voir Aangelina AI en Action',
     description: 'Découvrez comment notre assistant IA gère les scénarios réels de restaurant avec des réponses intelligentes et contextuelles.',
     mediaUrl: '/demo-video.mp4',
   },
@@ -81,7 +81,7 @@ export const landingPageContent: LandingPageContent = {
       name: 'Amadou Fall',
       role: 'Propriétaire',
       company: 'Restaurant Le Soleil, Cotonou',
-      content: 'Angelina AI a complètement transformé les opérations de notre restaurant. Nous avons vu une augmentation de 45% de l\'efficacité et nos clients adorent l\'expérience de commande WhatsApp fluide.',
+      content: 'Aangelina AI a complètement transformé les opérations de notre restaurant. Nous avons vu une augmentation de 45% de l\'efficacité et nos clients adorent l\'expérience de commande WhatsApp fluide.',
       rating: 5,
       avatar: '/testimonials/amadou.jpg',
     },

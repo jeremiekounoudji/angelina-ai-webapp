@@ -60,18 +60,25 @@
       "cuisine": "Type de Cuisine",
       "cuisinePlaceholder": "ex: Italien, Chinois, etc.",
       "logo": "Logo",
-      "uploadLogo": "Télécharger le Logo"
+      "uploadLogo": "Télécharger le Logo",
+      "status": "Statut"
     },
     "metrics": {
+      "title": "Métriques de l'Entreprise",
       "totalRevenue": "Chiffre d'Affaires Total",
       "monthlyOrders": "Commandes Mensuelles",
       "activeProducts": "Produits Actifs",
-      "customerSatisfaction": "Satisfaction Client"
+      "customerSatisfaction": "Satisfaction Client",
+      "tokensUsed": "Tokens Utilisés",
+      "productsCreated": "Produits Créés",
+      "usersCreated": "Utilisateurs Créés",
+      "messagesTotal": "Messages Total"
     },
     "actions": {
       "edit": "Modifier l'Entreprise",
       "save": "Enregistrer les Modifications",
-      "cancel": "Annuler"
+      "cancel": "Annuler",
+      "connectWhatsapp": "Connecter WhatsApp"
     },
     "success": {
       "updated": "Informations de l'entreprise mises à jour avec succès",
@@ -80,6 +87,47 @@
     "errors": {
       "updateFailed": "Échec de la mise à jour des informations de l'entreprise",
       "logoUploadFailed": "Échec du téléchargement du logo"
+    },
+    "info": {
+      "companyId": "ID de l'Entreprise",
+      "subscription": "Abonnement",
+      "created": "Créé"
+    },
+    "whatsapp": {
+      "title": "Connecter WhatsApp",
+      "subtitle": "Connectez votre numéro WhatsApp pour commencer à recevoir des commandes",
+      "integration": "Intégration WhatsApp",
+      "connectDescription": "Connectez votre WhatsApp pour recevoir des commandes",
+      "connectedTo": "Connecté : {phone}",
+      "phoneLabel": "Numéro de téléphone WhatsApp",
+      "phonePlaceholder": "33612345678",
+      "phoneHelp": "Entrez le numéro de téléphone avec l'indicatif pays (ex: 33612345678 pour la France)",
+      "scanQrTitle": "Scanner le QR Code",
+      "scanQrDescription": "Ouvrez WhatsApp sur votre téléphone et scannez ce QR code",
+      "instructions": {
+        "step1": "1. Ouvrez WhatsApp sur votre téléphone",
+        "step2": "2. Appuyez sur Menu (⋮) → Appareils liés",
+        "step3": "3. Appuyez sur \"Lier un appareil\"",
+        "step4": "4. Scannez ce QR code"
+      },
+      "orEnterCode": "Ou entrez ce code manuellement :",
+      "waitingConnection": "En attente de connexion...",
+      "successTitle": "WhatsApp connecté avec succès !",
+      "successDescription": "Votre WhatsApp est maintenant connecté et prêt à recevoir des commandes.",
+      "errorTitle": "Échec de la connexion",
+      "errorDescription": "Échec de la connexion WhatsApp. Veuillez réessayer.",
+      "phone": "Téléphone",
+      "status": "Statut",
+      "connected": "Connecté",
+      "connecting": "Connexion en cours",
+      "disconnected": "Déconnecté",
+      "error": "Erreur",
+      "disconnect": "Déconnecter",
+      "reconnect": "Reconnecter",
+      "cancel": "Annuler",
+      "connect": "Connecter WhatsApp",
+      "done": "Terminé",
+      "tryAgain": "Réessayer"
     }
   },
   "products": {
@@ -100,6 +148,8 @@
       "actions": "Actions"
     },
     "form": {
+      "addTitle": "Ajouter un Nouveau Produit",
+      "editTitle": "Modifier le Produit",
       "name": "Nom du Produit",
       "namePlaceholder": "Saisissez le nom du produit",
       "nameRequired": "Le nom du produit est requis",
@@ -146,6 +196,12 @@
     "empty": {
       "title": "Aucun produit pour le moment",
       "description": "Commencez à construire votre catalogue de produits en ajoutant votre premier produit."
+    },
+    "info": {
+      "price": "Prix",
+      "stock": "Stock",
+      "units": "unités",
+      "added": "Ajouté"
     }
   },
   "users": {
@@ -168,7 +224,8 @@
     "roles": {
       "admin": "Administrateur",
       "manager": "Manager",
-      "staff": "Personnel"
+      "staff": "Personnel",
+      "customer": "Client"
     },
     "status": {
       "active": "Actif",
@@ -178,83 +235,33 @@
     "empty": {
       "title": "Aucun membre d'équipe pour le moment",
       "description": "Commencez à construire votre équipe en ajoutant votre premier membre d'équipe."
-    }
-  },
-  "subscription": {
-    "title": "Abonnement et Facturation",
-    "subtitle": "Gérez votre plan d'abonnement et vos informations de facturation",
-    "currentPlan": {
-      "title": "Plan Actuel",
-      "plan": "Plan",
-      "status": "Statut",
-      "nextBilling": "Prochaine Facturation",
-      "amount": "Montant"
     },
-    "usage": {
-      "title": "Utilisation Ce Mois-ci",
-      "orders": "Commandes",
-      "storage": "Stockage",
-      "apiCalls": "Appels API"
-    },
-    "paymentHistory": {
-      "title": "Historique des Paiements",
-      "date": "Date",
-      "amount": "Montant",
-      "status": "Statut",
-      "invoice": "Facture"
-    },
-    "actions": {
-      "upgrade": "Mettre à Niveau le Plan",
-      "downgrade": "Rétrograder le Plan",
-      "cancelSubscription": "Annuler l'Abonnement",
-      "updatePayment": "Mettre à Jour le Mode de Paiement"
-    }
-  },
-  "settings": {
-    "title": "Paramètres",
-    "subtitle": "Gérez votre compte et les préférences de l'application",
-    "sections": {
-      "profile": "Paramètres du Profil",
-      "notifications": "Préférences de Notification",
-      "security": "Paramètres de Sécurité",
-      "integrations": "Intégrations",
-      "preferences": "Préférences Générales"
-    },
-    "profile": {
-      "firstName": "Prénom",
-      "lastName": "Nom",
-      "email": "Adresse Email",
+    "form": {
+      "addTitle": "Ajouter un Nouvel Utilisateur",
+      "editTitle": "Modifier l'Utilisateur",
+      "fullName": "Nom Complet",
+      "enterFullName": "Saisissez le nom complet",
+      "email": "Email",
+      "enterEmail": "Saisissez l'adresse email",
       "phone": "Numéro de Téléphone",
-      "timezone": "Fuseau Horaire",
-      "language": "Langue"
-    },
-    "notifications": {
-      "emailNotifications": "Notifications Email",
-      "pushNotifications": "Notifications Push",
-      "orderAlerts": "Alertes de Commande",
-      "stockAlerts": "Alertes de Stock",
-      "paymentAlerts": "Alertes de Paiement"
-    },
-    "security": {
-      "changePassword": "Changer le Mot de Passe",
-      "twoFactorAuth": "Authentification à Deux Facteurs",
-      "loginHistory": "Historique de Connexion",
-      "activeSessions": "Sessions Actives"
-    },
-    "actions": {
-      "edit": "Modifier les Détails",
-      "contact": "Contacter le Support",
-      "delete": "Supprimer le Compte",
+      "enterPhone": "Saisissez le numéro de téléphone",
+      "role": "Rôle",
+      "selectRole": "Sélectionnez le rôle utilisateur",
+      "avatar": "Cliquez sur l'icône de l'appareil photo pour sélectionner un avatar",
       "cancel": "Annuler",
-      "deleting": "Suppression..."
+      "addUser": "Ajouter l'Utilisateur",
+      "saveChanges": "Enregistrer les Modifications",
+      "uploading": "Téléchargement..."
     },
-    "support": {
-      "description": "Obtenez de l'aide avec votre compte ou signalez des problèmes"
+    "info": {
+      "noName": "Aucun nom",
+      "phone": "Téléphone",
+      "joined": "Rejoint",
+      "users": "utilisateurs"
     },
-    "danger": {
-      "description": "Supprimer définitivement votre compte d'entreprise et toutes les données associées",
-      "confirmTitle": "Supprimer le Compte",
-      "confirmMessage": "Êtes-vous sûr de vouloir supprimer votre compte d'entreprise ? Cette action ne peut pas être annulée et supprimera définitivement toutes vos données."
+    "limits": {
+      "reached": "Limite d'Utilisateurs Atteinte",
+      "message": "Vous avez atteint le nombre maximum d'utilisateurs pour votre plan actuel. Veuillez mettre à niveau votre plan pour ajouter plus d'utilisateurs."
     }
   },
   "subscription": {
@@ -338,102 +345,6 @@
       "mostPopular": "Le Plus Populaire",
       "perMonth": "/mois",
       "annually": "annuellement"
-    }
-  },
-  "company": {
-    "title": "Gestion de l'Entreprise",
-    "subtitle": "Gérez les informations et paramètres de votre restaurant",
-    "form": {
-      "name": "Nom du Restaurant",
-      "namePlaceholder": "Saisissez le nom du restaurant",
-      "description": "Description",
-      "descriptionPlaceholder": "Décrivez votre restaurant",
-      "address": "Adresse",
-      "addressPlaceholder": "Saisissez l'adresse du restaurant",
-      "phone": "Numéro de Téléphone",
-      "phonePlaceholder": "Saisissez le numéro de téléphone",
-      "email": "Email",
-      "emailPlaceholder": "Saisissez l'adresse email",
-      "website": "Site Web",
-      "websitePlaceholder": "Saisissez l'URL du site web",
-      "hours": "Heures d'Ouverture",
-      "hoursPlaceholder": "ex: Lun-Dim: 9h-22h",
-      "cuisine": "Type de Cuisine",
-      "cuisinePlaceholder": "ex: Italien, Chinois, etc.",
-      "logo": "Logo",
-      "uploadLogo": "Télécharger le Logo",
-      "status": "Statut"
-    },
-    "metrics": {
-      "title": "Métriques de l'Entreprise",
-      "totalRevenue": "Chiffre d'Affaires Total",
-      "monthlyOrders": "Commandes Mensuelles",
-      "activeProducts": "Produits Actifs",
-      "customerSatisfaction": "Satisfaction Client",
-      "tokensUsed": "Tokens Utilisés",
-      "productsCreated": "Produits Créés",
-      "usersCreated": "Utilisateurs Créés",
-      "messagesTotal": "Messages Total"
-    },
-    "actions": {
-      "edit": "Modifier l'Entreprise",
-      "save": "Enregistrer les Modifications",
-      "cancel": "Annuler"
-    },
-    "success": {
-      "updated": "Informations de l'entreprise mises à jour avec succès",
-      "logoUploaded": "Logo téléchargé avec succès"
-    },
-    "errors": {
-      "updateFailed": "Échec de la mise à jour des informations de l'entreprise",
-      "logoUploadFailed": "Échec du téléchargement du logo"
-    },
-    "info": {
-      "companyId": "ID de l'Entreprise",
-      "subscription": "Abonnement",
-      "created": "Créé"
-    },
-    "whatsapp": {
-      "title": "Connecter WhatsApp",
-      "subtitle": "Connectez votre numéro WhatsApp pour commencer à recevoir des commandes",
-      "integration": "Intégration WhatsApp",
-      "connectDescription": "Connectez votre WhatsApp pour recevoir des commandes",
-      "connectedTo": "Connecté : {phone}",
-      "phoneLabel": "Numéro de téléphone WhatsApp",
-      "phonePlaceholder": "33612345678",
-      "phoneHelp": "Entrez le numéro de téléphone avec l'indicatif pays (ex: 33612345678 pour la France)",
-      "scanQrTitle": "Scanner le QR Code",
-      "scanQrDescription": "Ouvrez WhatsApp sur votre téléphone et scannez ce QR code",
-      "instructions": {
-        "step1": "1. Ouvrez WhatsApp sur votre téléphone",
-        "step2": "2. Appuyez sur Menu (⋮) → Appareils liés",
-        "step3": "3. Appuyez sur \"Lier un appareil\"",
-        "step4": "4. Scannez ce QR code"
-      },
-      "orEnterCode": "Ou entrez ce code manuellement :",
-      "waitingConnection": "En attente de connexion...",
-      "successTitle": "WhatsApp connecté avec succès !",
-      "successDescription": "Votre WhatsApp est maintenant connecté et prêt à recevoir des commandes.",
-      "errorTitle": "Échec de la connexion",
-      "errorDescription": "Échec de la connexion WhatsApp. Veuillez réessayer.",
-      "phone": "Téléphone",
-      "status": "Statut",
-      "connected": "Connecté",
-      "connecting": "Connexion en cours",
-      "disconnected": "Déconnecté",
-      "error": "Erreur",
-      "disconnect": "Déconnecter",
-      "reconnect": "Reconnecter",
-      "cancel": "Annuler",
-      "connect": "Connecter WhatsApp",
-      "done": "Terminé",
-      "tryAgain": "Réessayer"
-    },
-    "actions": {
-      "edit": "Modifier l'Entreprise",
-      "save": "Enregistrer les Modifications",
-      "cancel": "Annuler",
-      "connectWhatsapp": "Connecter WhatsApp"
     }
   },
   "settings": {
@@ -531,138 +442,6 @@
       "saveDiscount": "Économisez {percent}% avec la facturation annuelle"
     }
   },
-  "users": {
-    "title": "Gestion des Utilisateurs",
-    "subtitle": "Gérez les membres de votre équipe et leurs permissions",
-    "actions": {
-      "addUser": "Ajouter un Utilisateur",
-      "editUser": "Modifier l'Utilisateur",
-      "deleteUser": "Supprimer l'Utilisateur",
-      "viewProfile": "Voir le Profil"
-    },
-    "table": {
-      "name": "Nom",
-      "email": "Email",
-      "role": "Rôle",
-      "status": "Statut",
-      "lastLogin": "Dernière Connexion",
-      "actions": "Actions"
-    },
-    "roles": {
-      "admin": "Administrateur",
-      "manager": "Manager",
-      "staff": "Personnel",
-      "customer": "Client"
-    },
-    "status": {
-      "active": "Actif",
-      "inactive": "Inactif",
-      "pending": "En Attente"
-    },
-    "empty": {
-      "title": "Aucun membre d'équipe pour le moment",
-      "description": "Commencez à construire votre équipe en ajoutant votre premier membre d'équipe."
-    },
-    "form": {
-      "addTitle": "Ajouter un Nouvel Utilisateur",
-      "editTitle": "Modifier l'Utilisateur",
-      "fullName": "Nom Complet",
-      "enterFullName": "Saisissez le nom complet",
-      "email": "Email",
-      "enterEmail": "Saisissez l'adresse email",
-      "phone": "Numéro de Téléphone",
-      "enterPhone": "Saisissez le numéro de téléphone",
-      "role": "Rôle",
-      "selectRole": "Sélectionnez le rôle utilisateur",
-      "avatar": "Cliquez sur l'icône de l'appareil photo pour sélectionner un avatar",
-      "cancel": "Annuler",
-      "addUser": "Ajouter l'Utilisateur",
-      "saveChanges": "Enregistrer les Modifications",
-      "uploading": "Téléchargement..."
-    },
-    "info": {
-      "noName": "Aucun nom",
-      "phone": "Téléphone",
-      "joined": "Rejoint",
-      "users": "utilisateurs"
-    },
-    "limits": {
-      "reached": "Limite d'Utilisateurs Atteinte",
-      "message": "Vous avez atteint le nombre maximum d'utilisateurs pour votre plan actuel. Veuillez mettre à niveau votre plan pour ajouter plus d'utilisateurs."
-    }
-  },
-  "products": {
-    "title": "Gestion des Produits",
-    "subtitle": "Gérez vos articles de menu et votre inventaire",
-    "actions": {
-      "addProduct": "Ajouter un Produit",
-      "editProduct": "Modifier le Produit",
-      "deleteProduct": "Supprimer le Produit",
-      "viewDetails": "Voir les Détails"
-    },
-    "table": {
-      "name": "Nom",
-      "category": "Catégorie",
-      "price": "Prix",
-      "stock": "Stock",
-      "status": "Statut",
-      "actions": "Actions"
-    },
-    "form": {
-      "name": "Nom du Produit",
-      "namePlaceholder": "Saisissez le nom du produit",
-      "nameRequired": "Le nom du produit est requis",
-      "description": "Description",
-      "descriptionPlaceholder": "Décrivez le produit",
-      "category": "Catégorie",
-      "categoryPlaceholder": "Sélectionnez une catégorie",
-      "price": "Prix",
-      "pricePlaceholder": "Saisissez le prix",
-      "priceRequired": "Le prix doit être positif",
-      "stock": "Quantité en Stock",
-      "stockPlaceholder": "Saisissez la quantité en stock",
-      "stockRequired": "La quantité en stock doit être positive",
-      "image": "Image du Produit",
-      "uploadImage": "Télécharger une Image",
-      "status": "Statut",
-      "active": "Actif",
-      "inactive": "Inactif",
-      "emailInvalid": "Adresse email invalide"
-    },
-    "categories": {
-      "appetizers": "Entrées",
-      "mainCourse": "Plats Principaux",
-      "desserts": "Desserts",
-      "beverages": "Boissons",
-      "sides": "Accompagnements"
-    },
-    "status": {
-      "inStock": "En Stock",
-      "lowStock": "Stock Faible",
-      "outOfStock": "Rupture de Stock"
-    },
-    "success": {
-      "created": "Produit créé avec succès",
-      "updated": "Produit mis à jour avec succès",
-      "deleted": "Produit supprimé avec succès"
-    },
-    "errors": {
-      "createFailed": "Échec de la création du produit",
-      "updateFailed": "Échec de la mise à jour du produit",
-      "deleteFailed": "Échec de la suppression du produit",
-      "loadFailed": "Échec du chargement des produits"
-    },
-    "empty": {
-      "title": "Aucun produit pour le moment",
-      "description": "Commencez à construire votre catalogue de produits en ajoutant votre premier produit."
-    },
-    "info": {
-      "price": "Prix",
-      "stock": "Stock",
-      "units": "unités",
-      "added": "Ajouté"
-    }
-  },
   "status": {
     "title": "Gestion des Statuts",
     "description": "Gérez vos publications de statut WhatsApp pour une publication automatisée",
@@ -711,5 +490,27 @@
       "videoTooLong": "La vidéo doit durer 1 minute ou moins",
       "uploadFailed": "Échec du téléchargement du média"
     }
+  },
+  "subscriptionExpired": {
+    "title": "Abonnement Expiré",
+    "message": "Votre abonnement a expiré le {date}. Pour continuer à utiliser Aangelina AI, veuillez renouveler votre plan.",
+    "goToSubscription": "Renouveler l'abonnement",
+    "goToSettings": "Paramètres",
+    "signOut": "Se déconnecter"
+  },
+  "support": {
+    "modalTitle": "Contacter le Support",
+    "modalSubtitle": "Nous sommes là pour vous aider. Contactez-nous via l'un des canaux ci-dessous.",
+    "email": "Envoyer un Email",
+    "whatsapp": "Chatter sur WhatsApp",
+    "call": "Nous Appeler",
+    "close": "Fermer",
+    "helpText": "Besoin d'aide ? Contactez-nous"
+  },
+  "legal": {
+    "title": "Légal",
+    "terms": "Conditions Générales",
+    "privacy": "Politique de Confidentialité"
   }
 }
+

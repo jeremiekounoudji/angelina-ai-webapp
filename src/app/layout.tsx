@@ -5,8 +5,8 @@ import { Toaster } from 'react-hot-toast';
 import { TranslationProvider } from "@/contexts/TranslationContext";
 
 export const metadata: Metadata = {
-  title: "AngelinaAI - WhatsApp Restaurant Management",
-  description: "Revolutionize your restaurant management with AngelinaAI, a WhatsApp-based agent for orders, stock, delivery, and complaints.",
+  title: "Aangelina AI - WhatsApp Restaurant Management",
+  description: "Revolutionize your restaurant management with Aangelina AI, a WhatsApp-based agent for orders, stock, delivery, and complaints.",
 };
 
 export default function RootLayout({

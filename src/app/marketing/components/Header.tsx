@@ -26,6 +26,9 @@ export default function Header() {
         behavior: 'smooth',
         block: 'start'
       });
+    } else {
+      // Not on the right page — navigate to marketing-status with the hash
+      router.push(`/marketing-status${sectionId}`);
     }
     setIsMenuOpen(false);
   };
@@ -81,12 +84,6 @@ export default function Header() {
               className="text-gray-300 hover:text-green-400 transition-all duration-300 hover:scale-105"
             >
               {t('links.pricing')}
-            </button>
-            <button 
-              onClick={() => scrollToSection('#contact')}
-              className="text-gray-300 hover:text-green-400 transition-all duration-300 hover:scale-105"
-            >
-              Contact
             </button>
           </motion.nav>
 
@@ -249,12 +246,6 @@ export default function Header() {
                 className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400 transition-all duration-300"
               >
                 {t('links.pricing')}
-              </button>
-              <button 
-                onClick={() => scrollToSection('#contact')}
-                className="block w-full text-left px-3 py-2 text-gray-300 hover:text-green-400 transition-all duration-300"
-              >
-                Contact
               </button>
               <div className="pt-4 space-y-2">
                 {user ? (

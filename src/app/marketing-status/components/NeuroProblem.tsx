@@ -22,7 +22,7 @@ export default function NeuroProblem() {
             variants={fadeInUp} 
             className="text-3xl md:text-5xl font-bold text-white mb-6"
           >
-            {t('title')} <span className="text-red-400">{t('titleHighlight')}</span>
+            {t('title')} <span className="text-[#328E6E]">{t('titleHighlight')}</span>
           </motion.h2>
           <motion.p 
             variants={fadeInUp} 
@@ -35,10 +35,10 @@ export default function NeuroProblem() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <motion.div 
             variants={fadeInLeft}
-            className="bg-black border border-gray-800 rounded-3xl p-10 hover:border-red-500/30 transition-all duration-300"
+            className="bg-black border border-gray-800 rounded-3xl p-10 hover:border-[#328E6E]/40 transition-all duration-300"
           >
-            <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center mb-8">
-              <Brain className="w-8 h-8 text-red-500" />
+            <div className="w-16 h-16 bg-[#328E6E]/10 rounded-2xl flex items-center justify-center mb-8">
+              <Brain className="w-8 h-8 text-[#328E6E]" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-4">{t('cards.zeigarnik.title')}</h3>
             <p className="text-gray-400 leading-relaxed text-lg">
@@ -48,10 +48,10 @@ export default function NeuroProblem() {
 
           <motion.div 
             variants={fadeInUp}
-            className="bg-black border border-gray-800 rounded-3xl p-10 hover:border-orange-500/30 transition-all duration-300"
+            className="bg-black border border-gray-800 rounded-3xl p-10 hover:border-[#328E6E]/40 transition-all duration-300"
           >
-            <div className="w-16 h-16 bg-orange-500/10 rounded-2xl flex items-center justify-center mb-8">
-              <AlertTriangle className="w-8 h-8 text-orange-500" />
+            <div className="w-16 h-16 bg-[#328E6E]/10 rounded-2xl flex items-center justify-center mb-8">
+              <AlertTriangle className="w-8 h-8 text-[#328E6E]" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-4">{t('cards.decision.title')}</h3>
             <p className="text-gray-400 leading-relaxed text-lg">
@@ -61,10 +61,10 @@ export default function NeuroProblem() {
 
           <motion.div 
             variants={fadeInRight}
-            className="bg-black border border-gray-800 rounded-3xl p-10 hover:border-yellow-500/30 transition-all duration-300"
+            className="bg-black border border-gray-800 rounded-3xl p-10 hover:border-[#328E6E]/40 transition-all duration-300"
           >
-            <div className="w-16 h-16 bg-yellow-500/10 rounded-2xl flex items-center justify-center mb-8">
-              <BatteryWarning className="w-8 h-8 text-yellow-500" />
+            <div className="w-16 h-16 bg-[#328E6E]/10 rounded-2xl flex items-center justify-center mb-8">
+              <BatteryWarning className="w-8 h-8 text-[#328E6E]" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-4">{t('cards.inconsistency.title')}</h3>
             <p className="text-gray-400 leading-relaxed text-lg">

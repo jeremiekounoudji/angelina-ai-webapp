@@ -1,7 +1,7 @@
 export const translations = {
   fr: {
     header: {
-      logo: "Angelina AI",
+      logo: "Aangelina AI",
       links: {
         home: "Accueil",
         pricing: "Tarifs",
@@ -18,7 +18,7 @@ export const translations = {
       language: "🇫🇷"
     },
     hero: {
-      title: "Angelina AI: L'agent IA WhatsApp qui \nautomatise vos",
+      title: "Aangelina AI: L'agent IA WhatsApp qui \nautomatise vos",
       subtitle: "Révolutionnez la gestion de votre restaurant. Automatisez vos commandes, gérez vos stocks, traitez les plaintes et coordonnez vos livraisons avec notre agent IA intelligent spécialisé pour les restaurants",
       animatedFunctions: ["commandes", "stocks", "plaintes"],
       cta: "Commencer gratuitement",
@@ -85,7 +85,7 @@ export const translations = {
       items: {
         orders: {
           question: "Comment l'agent gère-t-il les commandes ?",
-          answer: "Angelina AI présente votre menu, prend les commandes via numéros, vérifie les stocks automatiquement et envoie la facture numérique."
+          answer: "Aangelina AI présente votre menu, prend les commandes via numéros, vérifie les stocks automatiquement et envoie la facture numérique."
         },
         stocks: {
           question: "Comment fonctionne la gestion des stocks ?",
@@ -97,7 +97,7 @@ export const translations = {
         },
         marketplace: {
           question: "Qu'est-ce que le Marketplace Mode ?",
-          answer: "Le mode Marketplace permet à l'assistant principal Angelina AI de gérer tous les agents restaurants pour aider les clients à voir, discuter et commander dans n'importe quel restaurant."
+          answer: "Le mode Marketplace permet à l'assistant principal Aangelina AI de gérer tous les agents restaurants pour aider les clients à voir, discuter et commander dans n'importe quel restaurant."
         }
       }
     },
@@ -108,7 +108,7 @@ export const translations = {
           name: "Amadou Fall",
           role: "Propriétaire",
           company: "Restaurant Le Soleil, Cotonou",
-          content: "Angelina AI a révolutionné notre service client. Les commandes sont prises automatiquement, plus de perte de clients ! Nos ventes ont augmenté de 45%."
+          content: "Aangelina AI a révolutionné notre service client. Les commandes sont prises automatiquement, plus de perte de clients ! Nos ventes ont augmenté de 45%."
         },
         fatou: {
           name: "Fatou Diallo",
@@ -126,7 +126,7 @@ export const translations = {
           name: "Marie Agbessi",
           role: "Propriétaire",
           company: "Snack Marie, Parakou",
-          content: "Angelina AI coordonne nos livraisons selon l'urgence et la localisation. Plus de retard, plus de clients mécontents !"
+          content: "Aangelina AI coordonne nos livraisons selon l'urgence et la localisation. Plus de retard, plus de clients mécontents !"
         },
         kossi: {
           name: "Kossi Togbe",
@@ -147,8 +147,8 @@ export const translations = {
       steps: {
         configure: {
           number: "1",
-          title: "Configurez Angelina AI",
-          description: "Le restaurant configure Angelina AI en fournissant les détails du restaurant : menu, horaires, localisation et préférences en quelques minutes"
+          title: "Configurez Aangelina AI",
+          description: "Le restaurant configure Aangelina AI en fournissant les détails du restaurant : menu, horaires, localisation et préférences en quelques minutes"
         },
         generate: {
           number: "2",
@@ -163,7 +163,7 @@ export const translations = {
         marketplace: {
           number: "4",
           title: "Rejoignez le Mode Marketplace",
-          description: "Votre agent Angelina AI est ajouté au réseau d'agents où l'assistant principal Angelina AI gère tous les agents restaurants pour aider les utilisateurs finaux à voir, discuter et commander dans n'importe quel restaurant"
+          description: "Votre agent Aangelina AI est ajouté au réseau d'agents où l'assistant principal Aangelina AI gère tous les agents restaurants pour aider les utilisateurs finaux à voir, discuter et commander dans n'importe quel restaurant"
         }
       },
       cta: "Commencer gratuitement"
@@ -188,18 +188,18 @@ export const translations = {
     },
     footer: {
       rgpd: "RGPD",
-      company: "Angelina AI - Tous droits réservés",
+      company: "Aangelina AI - Tous droits réservés",
       socialLinks: {
         twitter: "Twitter",
         linkedin: "LinkedIn",
         facebook: "Facebook"
       },
-      copyright: "© 2024 Angelina AI. Tous droits réservés."
+      copyright: "© 2024 Aangelina AI. Tous droits réservés."
     }
   },
   en: {
     header: {
-      logo: "Angelina AI",
+      logo: "Aangelina AI",
       links: {
         home: "Home",
         pricing: "Pricing",
@@ -216,7 +216,7 @@ export const translations = {
       language: "🇺🇸"
     },
     hero: {
-      title: "Angelina AI: The WhatsApp AI agent that\nautomates your",
+      title: "Aangelina AI: The WhatsApp AI agent that\nautomates your",
       subtitle: "Revolutionize your restaurant management. Automate your orders, manage your inventory, handle complaints and coordinate deliveries with our intelligent AI agent specialized for restaurants",
       animatedFunctions: ["ordering", "inventory", "complaints"],
       cta: "Start Free",
@@ -283,7 +283,7 @@ export const translations = {
       items: {
         orders: {
           question: "How does the agent handle orders?",
-          answer: "Angelina AI presents your menu, takes orders via numbers, automatically checks stock and sends digital invoices."
+          answer: "Aangelina AI presents your menu, takes orders via numbers, automatically checks stock and sends digital invoices."
         },
         stocks: {
           question: "How does inventory management work?",
@@ -295,7 +295,7 @@ export const translations = {
         },
         marketplace: {
           question: "What is Marketplace Mode?",
-          answer: "Marketplace mode allows the main Angelina AI assistant to manage all restaurant agents to help customers view, discuss and order from any restaurant."
+          answer: "Marketplace mode allows the main Aangelina AI assistant to manage all restaurant agents to help customers view, discuss and order from any restaurant."
         }
       }
     },
@@ -306,7 +306,7 @@ export const translations = {
           name: "Amadou Fall",
           role: "Owner",
           company: "Le Soleil Restaurant, Cotonou",
-          content: "Angelina AI revolutionized our customer service. Orders are taken automatically, no more lost customers! Our sales increased by 45%."
+          content: "Aangelina AI revolutionized our customer service. Orders are taken automatically, no more lost customers! Our sales increased by 45%."
         },
         fatou: {
           name: "Fatou Diallo",
@@ -324,7 +324,7 @@ export const translations = {
           name: "Marie Agbessi",
           role: "Owner",
           company: "Marie's Snack, Parakou",
-          content: "Angelina AI coordinates our deliveries according to urgency and location. No more delays, no more unhappy customers!"
+          content: "Aangelina AI coordinates our deliveries according to urgency and location. No more delays, no more unhappy customers!"
         },
         kossi: {
           name: "Kossi Togbe",
@@ -345,8 +345,8 @@ export const translations = {
       steps: {
         configure: {
           number: "1",
-          title: "Configure Angelina AI",
-          description: "Restaurant configures Angelina AI by providing restaurant details: menu, hours, location, and preferences in just a few minutes"
+          title: "Configure Aangelina AI",
+          description: "Restaurant configures Aangelina AI by providing restaurant details: menu, hours, location, and preferences in just a few minutes"
         },
         generate: {
           number: "2",
@@ -361,7 +361,7 @@ export const translations = {
         marketplace: {
           number: "4",
           title: "Join the Marketplace Mode",
-          description: "Your Angelina AI agent is added to the agents network where the main Angelina AI assistant manages all restaurant agents to help end users view, discuss, and order from any restaurant"
+          description: "Your Aangelina AI agent is added to the agents network where the main Aangelina AI assistant manages all restaurant agents to help end users view, discuss, and order from any restaurant"
         }
       },
       cta: "Start Free"
@@ -386,13 +386,14 @@ export const translations = {
     },
     footer: {
       rgpd: "GDPR",
-      company: "Angelina AI - All rights reserved",
+      company: "Aangelina AI - All rights reserved",
       socialLinks: {
         twitter: "Twitter",
         linkedin: "LinkedIn",
         facebook: "Facebook"
       },
-      copyright: "© 2024 Angelina AI. All rights reserved."
+      copyright: "© 2024 Aangelina AI. All rights reserved."
     }
   }
 };
+

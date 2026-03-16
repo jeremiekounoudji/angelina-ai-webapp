@@ -14,7 +14,7 @@ export default function FreedomCTA() {
   };
 
   return (
-    <section className="py-24 bg-gradient-to-br from-green-900 via-black to-black relative border-t border-green-500/20">
+    <section className="py-24 bg-gradient-to-br from-[#328E6E]/20 via-black to-black relative border-t border-[#328E6E]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial="initial"
@@ -27,7 +27,7 @@ export default function FreedomCTA() {
             variants={fadeInUp} 
             className="text-4xl md:text-6xl font-bold text-white mb-8 leading-tight"
           >
-            {t('title')} <span className="text-green-400">{t('titleHighlight')}</span> {t('titleEnd')}
+            {t('title')} <span className="text-[#328E6E]">{t('titleHighlight')}</span> {t('titleEnd')}
           </motion.h2>
           <motion.p 
             variants={fadeInUp} 
@@ -41,7 +41,7 @@ export default function FreedomCTA() {
           >
             <button 
               onClick={handleCTAClick}
-              className="w-full sm:w-auto bg-green-500 text-black px-12 py-5 rounded-full text-xl font-bold hover:bg-green-400 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-green-500/30"
+              className="w-full sm:w-auto bg-[#328E6E] hover:bg-[#267a5e] text-white px-12 py-5 rounded-full text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-xl shadow-[#328E6E]/30"
             >
               {t('cta')}
             </button>

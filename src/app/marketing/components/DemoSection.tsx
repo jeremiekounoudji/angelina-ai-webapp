@@ -22,7 +22,7 @@ export default function DemoSection({ className = "" }: DemoSectionProps) {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            Voir Angelina AI en
+            Voir Aangelina AI en
             <span className="bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
               {" "}
               Action
@@ -94,3 +94,4 @@ export default function DemoSection({ className = "" }: DemoSectionProps) {
     </section>
   );
 }
+

@@ -2,56 +2,56 @@
 
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/utils/animations';
-import { CalendarDays, Repeat, Image as ImageIcon, Zap, Clock, Smartphone, BarChart3, Shield } from 'lucide-react';
+import { CalendarDays, Repeat, Image as ImageIcon, Zap, Clock, LayoutDashboard, Shield } from 'lucide-react';
 import { useTranslationNamespace } from '@/contexts/TranslationContext';
 
 const featureKeys = [
   {
     key: "precision",
     icon: CalendarDays,
-    color: "text-blue-400",
-    bg: "bg-gradient-to-br from-blue-500/10 to-blue-600/5",
-    border: "border-blue-500/20",
-    size: "large" // Takes 2 columns
+    color: "text-[#328E6E]",
+    bg: "bg-[#328E6E]/10",
+    border: "border-[#328E6E]/20",
+    size: "large"
   },
   {
     key: "recurring",
     icon: Repeat,
-    color: "text-purple-400",
-    bg: "bg-gradient-to-br from-purple-500/10 to-purple-600/5",
-    border: "border-purple-500/20",
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/10",
+    border: "border-emerald-500/20",
     size: "medium"
   },
   {
     key: "media",
     icon: ImageIcon,
-    color: "text-pink-400",
-    bg: "bg-gradient-to-br from-pink-500/10 to-pink-600/5",
-    border: "border-pink-500/20",
+    color: "text-[#328E6E]",
+    bg: "bg-[#328E6E]/10",
+    border: "border-[#328E6E]/20",
     size: "medium"
   },
   {
     key: "background",
     icon: Zap,
-    color: "text-yellow-400",
-    bg: "bg-gradient-to-br from-yellow-500/10 to-yellow-600/5",
-    border: "border-yellow-500/20",
-    size: "large" // Takes 2 columns
+    color: "text-emerald-300",
+    bg: "bg-emerald-400/10",
+    border: "border-emerald-400/20",
+    size: "large"
   },
   {
     key: "analytics",
-    icon: BarChart3,
-    color: "text-green-400",
-    bg: "bg-gradient-to-br from-green-500/10 to-green-600/5",
-    border: "border-green-500/20",
+    icon: LayoutDashboard,
+    color: "text-[#328E6E]",
+    bg: "bg-[#328E6E]/10",
+    border: "border-[#328E6E]/20",
     size: "small"
   },
   {
     key: "security",
     icon: Shield,
-    color: "text-red-400",
-    bg: "bg-gradient-to-br from-red-500/10 to-red-600/5",
-    border: "border-red-500/20",
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/10",
+    border: "border-emerald-500/20",
     size: "small"
   }
 ];
@@ -75,17 +75,17 @@ export default function StatusFeatures() {
   return (
     <section className="py-32 relative overflow-hidden">
       {/* Enhanced Background Effects */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-green-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#328E6E]/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#328E6E]/5 rounded-full blur-[120px] pointer-events-none"></div>
       
       {/* Floating Elements */}
       <motion.div
-        className="absolute top-20 right-10 w-20 h-20 border border-green-500/20 rounded-2xl"
+        className="absolute top-20 right-10 w-20 h-20 border border-[#328E6E]/20 rounded-2xl"
         animate={{ rotate: 360, y: [0, -20, 0] }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
       />
       <motion.div
-        className="absolute bottom-20 left-10 w-16 h-16 border border-purple-500/20 rounded-full"
+        className="absolute bottom-20 left-10 w-16 h-16 border border-[#328E6E]/20 rounded-full"
         animate={{ rotate: -360, x: [0, 20, 0] }}
         transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
       />
@@ -102,7 +102,7 @@ export default function StatusFeatures() {
             variants={fadeInUp} 
             className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
           >
-            {t('title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400">{t('titleHighlight')}</span>
+            {t('title')} <span className="text-[#328E6E]">{t('titleHighlight')}</span>
           </motion.h2>
           <motion.p 
             variants={fadeInUp} 
@@ -204,7 +204,7 @@ export default function StatusFeatures() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="text-center mt-20"
         >
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20 rounded-full text-green-400 text-sm font-medium mb-8">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-[#328E6E]/10 border border-[#328E6E]/30 rounded-full text-[#328E6E] text-sm font-medium mb-8">
             <Clock className="w-4 h-4" />
             <span>Setup takes less than 5 minutes</span>
           </div>

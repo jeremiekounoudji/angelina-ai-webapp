@@ -1,6 +1,6 @@
 {
   "header": {
-    "logo": "Angelina AI",
+    "logo": "Aangelina AI",
     "links": {
       "home": "Accueil",
       "pricing": "Tarifs",
@@ -17,7 +17,7 @@
     "language": "🇫🇷"
   },
   "hero": {
-    "title": "Angelina AI: L'agent IA WhatsApp qui \nautomatise vos",
+    "title": "Aangelina AI: L'agent IA WhatsApp qui \nautomatise vos",
     "subtitle": "Révolutionnez la gestion de votre restaurant. Automatisez vos commandes, gérez vos stocks, traitez les plaintes et coordonnez vos livraisons avec notre agent IA intelligent spécialisé pour les restaurants",
     "animatedFunctions": ["commandes", "stocks", "plaintes"],
     "cta": "Commencer gratuitement",
@@ -28,8 +28,7 @@
     "title": "Arrêtez de gaspiller de l'énergie mentale sur vos",
     "titleHighlight": "Statuts WhatsApp.",
     "subtitle": "Votre cerveau n'est pas fait pour les tâches répétitives et banales. Automatisez vos statuts WhatsApp quotidiens, éliminez l'anxiété du 'j'ai oublié de poster' et retrouvez votre concentration absolue.",
-    "cta": "Automatiser mes statuts maintenant",
-    "trialText": "Essai gratuit de 14 jours. Aucune carte de crédit requise."
+    "cta": "Commencer gratuitement"
   },
   "statusNeuro": {
     "title": "Le coût caché des",
@@ -72,8 +71,8 @@
         "description": "Zéro plantage de chevauchement et zéro retard. Notre moteur d'interrogation robuste s'exécute en arrière-plan absolu pendant que vous vous concentrez sur la conclusion de ventes avec les clients."
       },
       "analytics": {
-        "title": "Analyses Intelligentes",
-        "description": "Suivez l'engagement, les heures de publication optimales et les insights d'audience pour maximiser l'impact de vos statuts."
+        "title": "Tableau de Bord Statuts & Compte",
+        "description": "Visualisez tous vos statuts programmés et publiés en un seul endroit. Suivez l'historique des publications, gérez l'état de votre connexion WhatsApp et gardez le contrôle total de votre compte depuis un tableau de bord central et épuré."
       },
       "security": {
         "title": "Sécurité Entreprise",
@@ -85,7 +84,7 @@
     "title": "Récupérez",
     "titleHighlight": "Plus de 10 heures",
     "titleEnd": "de productivité mentale chaque mois",
-    "subtitle": "La vraie liberté, ce n'est pas seulement avoir plus de temps ; c'est avoir plus de paix. Arrêtez de servir l'algorithme manuellement et laissez Angelina AI faire le gros du travail.",
+    "subtitle": "La vraie liberté, ce n'est pas seulement avoir plus de temps ; c'est avoir plus de paix. Arrêtez de servir l'algorithme manuellement et laissez Aangelina AI faire le gros du travail.",
     "cta": "Commencez à automatiser gratuitement"
   },
   "features": {
@@ -148,7 +147,7 @@
     "items": {
       "orders": {
         "question": "Comment l'agent gère-t-il les commandes ?",
-        "answer": "Angelina AI présente votre menu, prend les commandes via numéros, vérifie les stocks automatiquement et envoie la facture numérique."
+        "answer": "Aangelina AI présente votre menu, prend les commandes via numéros, vérifie les stocks automatiquement et envoie la facture numérique."
       },
       "stocks": {
         "question": "Comment fonctionne la gestion des stocks ?",
@@ -160,7 +159,7 @@
       },
       "marketplace": {
         "question": "Qu'est-ce que le Marketplace Mode ?",
-        "answer": "Le mode Marketplace permet à l'assistant principal Angelina AI de gérer tous les agents restaurants pour aider les clients à voir, discuter et commander dans n'importe quel restaurant."
+        "answer": "Le mode Marketplace permet à l'assistant principal Aangelina AI de gérer tous les agents restaurants pour aider les clients à voir, discuter et commander dans n'importe quel restaurant."
       }
     }
   },
@@ -171,7 +170,7 @@
         "name": "Amadou Fall",
         "role": "Propriétaire",
         "company": "Restaurant Le Soleil, Cotonou",
-        "content": "Angelina AI a révolutionné notre service client. Les commandes sont prises automatiquement, plus de perte de clients ! Nos ventes ont augmenté de 45%."
+        "content": "Aangelina AI a révolutionné notre service client. Les commandes sont prises automatiquement, plus de perte de clients ! Nos ventes ont augmenté de 45%."
       },
       "fatou": {
         "name": "Fatou Diallo",
@@ -189,7 +188,7 @@
         "name": "Marie Agbessi",
         "role": "Propriétaire",
         "company": "Snack Marie, Parakou",
-        "content": "Angelina AI coordonne nos livraisons selon l'urgence et la localisation. Plus de retard, plus de clients mécontents !"
+        "content": "Aangelina AI coordonne nos livraisons selon l'urgence et la localisation. Plus de retard, plus de clients mécontents !"
       },
       "kossi": {
         "name": "Kossi Togbe",
@@ -210,8 +209,8 @@
     "steps": {
       "configure": {
         "number": "1",
-        "title": "Configurez Angelina AI",
-        "description": "Le restaurant configure Angelina AI en fournissant les détails du restaurant : menu, horaires, localisation et préférences en quelques minutes"
+        "title": "Configurez Aangelina AI",
+        "description": "Le restaurant configure Aangelina AI en fournissant les détails du restaurant : menu, horaires, localisation et préférences en quelques minutes"
       },
       "generate": {
         "number": "2",
@@ -226,7 +225,7 @@
       "marketplace": {
         "number": "4",
         "title": "Rejoignez le Mode Marketplace",
-        "description": "Votre agent Angelina AI est ajouté au réseau d'agents où l'assistant principal Angelina AI gère tous les agents restaurants pour aider les utilisateurs finaux à voir, discuter et commander dans n'importe quel restaurant"
+        "description": "Votre agent Aangelina AI est ajouté au réseau d'agents où l'assistant principal Aangelina AI gère tous les agents restaurants pour aider les utilisateurs finaux à voir, discuter et commander dans n'importe quel restaurant"
       }
     },
     "cta": "Commencer gratuitement"
@@ -251,14 +250,16 @@
   },
   "footer": {
     "rgpd": "RGPD",
-    "company": "Angelina AI - Tous droits réservés",
-    "socialLinks": {
-      "twitter": "Twitter",
-      "linkedin": "LinkedIn",
-      "facebook": "Facebook"
-    },
-    "copyright": "© 2024 Angelina AI. Tous droits réservés.",
+    "company": "Aangelina AI - Tous droits réservés",
+    "tagline": "L'agent IA qui transforme votre WhatsApp en assistant commercial. Automatisez vos ventes et boostez votre chiffre d'affaires.",
+    "copyright": "© 2026 Aangelina AI. Tous droits réservés.",
     "links": {
+      "quickLinks": "Liens rapides",
+      "legal": "Légal",
+      "home": "Accueil",
+      "features": "Fonctionnalités",
+      "pricing": "Tarifs",
+      "howItWorks": "Comment ça marche",
       "privacy": "Politique de confidentialité",
       "terms": "Conditions générales"
     }
@@ -270,7 +271,7 @@
       "sections": {
         "intro": {
           "title": "Introduction",
-          "content": "Chez Angelina AI, nous nous engageons à protéger votre vie privée et à assurer la sécurité de vos informations personnelles. Cette Politique de confidentialité explique comment nous collectons, utilisons, divulguons et protégeons vos données lorsque vous utilisez notre service d'agent IA WhatsApp pour la gestion de restaurant."
+          "content": "Chez Aangelina AI, nous nous engageons à protéger votre vie privée et à assurer la sécurité de vos informations personnelles. Cette Politique de confidentialité explique comment nous collectons, utilisons, divulguons et protégeons vos données lorsque vous utilisez notre service d'agent IA WhatsApp pour la gestion de restaurant."
         },
         "dataCollection": {
           "title": "Informations que nous collectons",
@@ -300,11 +301,11 @@
       "sections": {
         "intro": {
           "title": "Acceptation des conditions",
-          "content": "En accédant et en utilisant le service d'agent IA WhatsApp d'Angelina AI, vous acceptez d'être lié par ces Conditions générales. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre service."
+          "content": "En accédant et en utilisant le service d'agent IA WhatsApp d'Aangelina AI, vous acceptez d'être lié par ces Conditions générales. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre service."
         },
         "serviceDescription": {
           "title": "Description du service",
-          "content": "Angelina AI fournit un agent IA intelligent basé sur WhatsApp qui automatise les opérations de restaurant, y compris la prise de commandes, la gestion des stocks, le traitement des plaintes et la coordination des livraisons. Nous proposons différents plans d'abonnement avec différentes fonctionnalités et limites d'utilisation."
+          "content": "Aangelina AI fournit un agent IA intelligent basé sur WhatsApp qui automatise les opérations de restaurant, y compris la prise de commandes, la gestion des stocks, le traitement des plaintes et la coordination des livraisons. Nous proposons différents plans d'abonnement avec différentes fonctionnalités et limites d'utilisation."
         },
         "userObligations": {
           "title": "Obligations de l'utilisateur",
@@ -316,7 +317,7 @@
         },
         "liability": {
           "title": "Limitation de responsabilité",
-          "content": "Angelina AI est fourni 'tel quel' sans garantie d'aucune sorte. Nous ne sommes pas responsables des dommages indirects, accessoires ou consécutifs. Notre responsabilité totale est limitée au montant que vous avez payé pour le service au cours des 12 derniers mois."
+          "content": "Aangelina AI est fourni 'tel quel' sans garantie d'aucune sorte. Nous ne sommes pas responsables des dommages indirects, accessoires ou consécutifs. Notre responsabilité totale est limitée au montant que vous avez payé pour le service au cours des 12 derniers mois."
         },
         "termination": {
           "title": "Résiliation",

@@ -2,7 +2,7 @@ import { MarketingPageData } from '@/interfaces/marketing';
 
 export const marketingData: MarketingPageData = {
   header: {
-    logo: "Angelina AI",
+    logo: "Aangelina AI",
     links: [
       { id: "home", label: "Accueil", href: "#home" },
       { id: "pricing", label: "Tarifs", href: "#pricing" },
@@ -16,7 +16,7 @@ export const marketingData: MarketingPageData = {
     language: "🇫🇷"
   },
   hero: {
-    title: "Angelina AI : L'agent IA qui révolutionne la gestion de votre restaurant",
+    title: "Aangelina AI : L'agent IA qui révolutionne la gestion de votre restaurant",
     subtitle: "Automatisez vos commandes, gérez vos stocks, traitez les plaintes et coordonnez vos livraisons avec notre agent IA intelligent spécialisé pour les restaurants",
     ctaText: "Commencer gratuitement",
     rating: 4.9,
@@ -81,7 +81,7 @@ export const marketingData: MarketingPageData = {
       {
         id: "orders",
         question: "Comment l'agent gère-t-il les commandes ?",
-        answer: "Angelina AI présente votre menu, prend les commandes via numéros, vérifie les stocks automatiquement et envoie la facture numérique."
+        answer: "Aangelina AI présente votre menu, prend les commandes via numéros, vérifie les stocks automatiquement et envoie la facture numérique."
       },
       {
         id: "stocks",
@@ -96,7 +96,7 @@ export const marketingData: MarketingPageData = {
       {
         id: "marketplace",
         question: "Qu'est-ce que le Marketplace Mode ?",
-        answer: "Le mode Marketplace permet à l'assistant principal Angelina AI de gérer tous les agents restaurants pour aider les clients à voir, discuter et commander dans n'importe quel restaurant."
+        answer: "Le mode Marketplace permet à l'assistant principal Aangelina AI de gérer tous les agents restaurants pour aider les clients à voir, discuter et commander dans n'importe quel restaurant."
       }
     ]
   },
@@ -108,7 +108,7 @@ export const marketingData: MarketingPageData = {
         name: "Amadou Fall",
         role: "Propriétaire",
         company: "Restaurant Le Soleil, Cotonou",
-        content: "Angelina AI a révolutionné notre service client. Les commandes sont prises automatiquement, plus de perte de clients ! Nos ventes ont augmenté de 45%.",
+        content: "Aangelina AI a révolutionné notre service client. Les commandes sont prises automatiquement, plus de perte de clients ! Nos ventes ont augmenté de 45%.",
         rating: 5,
         avatar: "amadou-avatar"
       },
@@ -135,7 +135,7 @@ export const marketingData: MarketingPageData = {
         name: "Marie Agbessi",
         role: "Propriétaire",
         company: "Snack Marie, Parakou",
-        content: "Angelina AI coordonne nos livraisons selon l'urgence et la localisation. Plus de retard, plus de clients mécontents !",
+        content: "Aangelina AI coordonne nos livraisons selon l'urgence et la localisation. Plus de retard, plus de clients mécontents !",
         rating: 5,
         avatar: "marie-avatar"
       },
@@ -165,7 +165,7 @@ export const marketingData: MarketingPageData = {
       {
         id: "configure",
         number: "1",
-        title: "Configurez Angelina AI",
+        title: "Configurez Aangelina AI",
         description: "Fournissez les détails de votre restaurant : menu, horaires, localisation et préférences",
         videoUrl: "configure-restaurant.mp4"
       },
@@ -187,7 +187,7 @@ export const marketingData: MarketingPageData = {
         id: "marketplace",
         number: "4",
         title: "Rejoignez le Marketplace",
-        description: "Votre agent Angelina AI est ajouté au réseau pour que les clients puissent découvrir, discuter et commander dans votre restaurant",
+        description: "Votre agent Aangelina AI est ajouté au réseau pour que les clients puissent découvrir, discuter et commander dans votre restaurant",
         videoUrl: "marketplace-mode.mp4"
       }
     ]
@@ -218,12 +218,13 @@ export const marketingData: MarketingPageData = {
   },
   footer: {
     rgpd: "RGPD",
-    company: "Angelina AI - Tous droits réservés",
+    company: "Aangelina AI - Tous droits réservés",
     socialLinks: [
       { id: "twitter", label: "Twitter", href: "#" },
       { id: "linkedin", label: "LinkedIn", href: "#" },
       { id: "facebook", label: "Facebook", href: "#" }
     ],
-    copyright: "© 2024 Angelina AI. Tous droits réservés."
+    copyright: "© 2024 Aangelina AI. Tous droits réservés."
   }
 };
+

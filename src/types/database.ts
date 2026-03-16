@@ -21,6 +21,8 @@ export interface Company {
   avatar_url?: string
   subscription_id?: string
   subscription_status?: SubscriptionStatus
+  subscription_expiry?: string | null
+  reminder_sent_at?: string | null
   created_at: string
 }
 

@@ -36,7 +36,7 @@ export const featuresData: Feature[] = [
     id: 'marketplace-integration',
     icon: 'automation',
     title: 'Intégration Marketplace',
-    description: 'Votre agent rejoint le réseau Angelina AI pour que les clients puissent découvrir, discuter et commander dans votre restaurant depuis n\'importe où.',
+    description: 'Votre agent rejoint le réseau Aangelina AI pour que les clients puissent découvrir, discuter et commander dans votre restaurant depuis n\'importe où.',
   },
 ];
 

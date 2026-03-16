@@ -1,28 +1,24 @@
 'use client'
 
 import { Card, CardHeader, Button } from '@heroui/react'
-import { 
-  CogIcon, 
-  TrashIcon, 
-  QuestionMarkCircleIcon, 
-  UserIcon 
-} from '@heroicons/react/24/outline'
+import { CogIcon, TrashIcon, QuestionMarkCircleIcon, UserIcon } from '@heroicons/react/24/outline'
 import { useCompany } from '@/hooks/useCompany'
 import { useState } from 'react'
 import { EditCompanyModal } from '../company/components/EditCompanyModal'
 import { ConfirmationModal } from '@/components/ConfirmationModal'
+import { SupportModal } from '@/components/SupportModal'
 import { useDisclosure } from '@heroui/react'
 import { useTranslationNamespace } from '@/contexts/TranslationContext'
 
 export default function SettingsPage() {
   const { company, deleteCompany, loading } = useCompany()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [supportOpen, setSupportOpen] = useState(false)
   const { isOpen: isEditOpen, onOpen: onEditOpen, onOpenChange: onEditOpenChange } = useDisclosure()
   const { t } = useTranslationNamespace('dashboard.settings')
 
   const handleDeleteCompany = async () => {
     if (await deleteCompany()) {
-      // Redirect to login or home page after deletion
       window.location.href = '/login'
     }
   }
@@ -34,15 +30,15 @@ export default function SettingsPage() {
       icon: UserIcon,
       action: () => onEditOpen(),
       buttonText: t('actions.edit'),
-      buttonColor: 'primary' as const
+      buttonColor: 'primary' as const,
     },
     {
       title: t('sections.support'),
       description: t('support.description'),
       icon: QuestionMarkCircleIcon,
-      action: () => window.open('mailto:support@company.com', '_blank'),
+      action: () => setSupportOpen(true),
       buttonText: t('actions.contact'),
-      buttonColor: 'default' as const
+      buttonColor: 'default' as const,
     },
     {
       title: t('sections.danger'),
@@ -50,8 +46,8 @@ export default function SettingsPage() {
       icon: TrashIcon,
       action: () => setShowDeleteConfirm(true),
       buttonText: t('actions.delete'),
-      buttonColor: 'danger' as const
-    }
+      buttonColor: 'danger' as const,
+    },
   ]
 
   return (
@@ -74,9 +70,7 @@ export default function SettingsPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">{option.title}</h3>
-                      <p className="text-gray-600 mt-1">
-                        {option.description}
-                      </p>
+                      <p className="text-gray-600 mt-1">{option.description}</p>
                     </div>
                   </div>
                   <Button
@@ -106,14 +100,11 @@ export default function SettingsPage() {
         variant="danger"
       />
 
-      {/* Edit Company Modal */}
       {company && (
-        <EditCompanyModal
-          isOpen={isEditOpen}
-          onOpenChange={onEditOpenChange}
-          company={company}
-        />
+        <EditCompanyModal isOpen={isEditOpen} onOpenChange={onEditOpenChange} company={company} />
       )}
+
+      <SupportModal isOpen={supportOpen} onClose={() => setSupportOpen(false)} />
     </div>
   )
 }

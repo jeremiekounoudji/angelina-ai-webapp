@@ -60,18 +60,25 @@
       "cuisine": "Cuisine Type",
       "cuisinePlaceholder": "e.g., Italian, Chinese, etc.",
       "logo": "Logo",
-      "uploadLogo": "Upload Logo"
+      "uploadLogo": "Upload Logo",
+      "status": "Status"
     },
     "metrics": {
+      "title": "Company Metrics",
       "totalRevenue": "Total Revenue",
       "monthlyOrders": "Monthly Orders",
       "activeProducts": "Active Products",
-      "customerSatisfaction": "Customer Satisfaction"
+      "customerSatisfaction": "Customer Satisfaction",
+      "tokensUsed": "Tokens Used",
+      "productsCreated": "Products Created",
+      "usersCreated": "Users Created",
+      "messagesTotal": "Messages Total"
     },
     "actions": {
       "edit": "Edit Company",
       "save": "Save Changes",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "connectWhatsapp": "Connect WhatsApp"
     },
     "success": {
       "updated": "Company information updated successfully",
@@ -80,6 +87,47 @@
     "errors": {
       "updateFailed": "Failed to update company information",
       "logoUploadFailed": "Failed to upload logo"
+    },
+    "info": {
+      "companyId": "Company ID",
+      "subscription": "Subscription",
+      "created": "Created"
+    },
+    "whatsapp": {
+      "title": "Connect WhatsApp",
+      "subtitle": "Connect your WhatsApp number to start receiving orders",
+      "integration": "WhatsApp Integration",
+      "connectDescription": "Connect your WhatsApp to receive orders",
+      "connectedTo": "Connected: {phone}",
+      "phoneLabel": "WhatsApp Phone Number",
+      "phonePlaceholder": "33612345678",
+      "phoneHelp": "Enter the phone number with country code (e.g., 33612345678 for France)",
+      "scanQrTitle": "Scan QR Code",
+      "scanQrDescription": "Open WhatsApp on your phone and scan this QR code",
+      "instructions": {
+        "step1": "1. Open WhatsApp on your phone",
+        "step2": "2. Tap Menu (⋮) → Linked Devices",
+        "step3": "3. Tap \"Link a Device\"",
+        "step4": "4. Scan this QR code"
+      },
+      "orEnterCode": "Or enter this code manually:",
+      "waitingConnection": "Waiting for connection...",
+      "successTitle": "WhatsApp Connected Successfully!",
+      "successDescription": "Your WhatsApp is now connected and ready to receive orders.",
+      "errorTitle": "Connection Failed",
+      "errorDescription": "Failed to connect WhatsApp. Please try again.",
+      "phone": "Phone",
+      "status": "Status",
+      "connected": "Connected",
+      "connecting": "Connecting",
+      "disconnected": "Disconnected",
+      "error": "Error",
+      "disconnect": "Disconnect",
+      "reconnect": "Reconnect",
+      "cancel": "Cancel",
+      "connect": "Connect WhatsApp",
+      "done": "Done",
+      "tryAgain": "Try Again"
     }
   },
   "products": {
@@ -100,6 +148,8 @@
       "actions": "Actions"
     },
     "form": {
+      "addTitle": "Add New Product",
+      "editTitle": "Edit Product",
       "name": "Product Name",
       "namePlaceholder": "Enter product name",
       "nameRequired": "Product name is required",
@@ -146,6 +196,12 @@
     "empty": {
       "title": "No products yet",
       "description": "Start building your product catalog by adding your first product."
+    },
+    "info": {
+      "price": "Price",
+      "stock": "Stock",
+      "units": "units",
+      "added": "Added"
     }
   },
   "users": {
@@ -168,7 +224,8 @@
     "roles": {
       "admin": "Admin",
       "manager": "Manager",
-      "staff": "Staff"
+      "staff": "Staff",
+      "customer": "Customer"
     },
     "status": {
       "active": "Active",
@@ -178,83 +235,38 @@
     "empty": {
       "title": "No team members yet",
       "description": "Start building your team by adding your first team member."
-    }
-  },
-  "subscription": {
-    "title": "Subscription & Billing",
-    "subtitle": "Manage your subscription plan and billing information",
-    "currentPlan": {
-      "title": "Current Plan",
-      "plan": "Plan",
-      "status": "Status",
-      "nextBilling": "Next Billing",
-      "amount": "Amount"
     },
-    "usage": {
-      "title": "Usage This Month",
-      "orders": "Orders",
-      "storage": "Storage",
-      "apiCalls": "API Calls"
-    },
-    "paymentHistory": {
-      "title": "Payment History",
-      "date": "Date",
-      "amount": "Amount",
-      "status": "Status",
-      "invoice": "Invoice"
-    },
-    "actions": {
-      "upgrade": "Upgrade Plan",
-      "downgrade": "Downgrade Plan",
-      "cancelSubscription": "Cancel Subscription",
-      "updatePayment": "Update Payment Method"
-    }
-  },
-  "settings": {
-    "title": "Settings",
-    "subtitle": "Manage your account and application preferences",
-    "sections": {
-      "profile": "Profile Settings",
-      "notifications": "Notification Preferences",
-      "security": "Security Settings",
-      "integrations": "Integrations",
-      "preferences": "General Preferences"
-    },
-    "profile": {
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "email": "Email Address",
+    "form": {
+      "addTitle": "Add New User",
+      "editTitle": "Edit User",
+      "fullName": "Full Name",
+      "enterFullName": "Enter full name",
+      "email": "Email",
+      "enterEmail": "Enter email address",
       "phone": "Phone Number",
-      "timezone": "Timezone",
-      "language": "Language"
-    },
-    "notifications": {
-      "emailNotifications": "Email Notifications",
-      "pushNotifications": "Push Notifications",
-      "orderAlerts": "Order Alerts",
-      "stockAlerts": "Stock Alerts",
-      "paymentAlerts": "Payment Alerts"
-    },
-    "security": {
-      "changePassword": "Change Password",
-      "twoFactorAuth": "Two-Factor Authentication",
-      "loginHistory": "Login History",
-      "activeSessions": "Active Sessions"
-    },
-    "actions": {
-      "edit": "Edit Details",
-      "contact": "Contact Support",
-      "delete": "Delete Account",
+      "enterPhone": "Enter phone number",
+      "role": "Role",
+      "selectRole": "Select user role",
+      "avatar": "Click the camera icon to select an avatar",
       "cancel": "Cancel",
-      "deleting": "Deleting..."
+      "addUser": "Add User",
+      "saveChanges": "Save Changes",
+      "uploading": "Uploading...",
+      "updateFailed": "Failed to update user",
+      "unsavedChanges": "Unsaved Changes",
+      "unsavedChangesMessage": "You have unsaved changes. Are you sure you want to close?",
+      "discardChanges": "Discard Changes",
+      "keepEditing": "Keep Editing"
     },
-    "support": {
-      "description": "Get help with your account or report issues"
+    "info": {
+      "noName": "No name",
+      "phone": "Phone",
+      "joined": "Joined",
+      "users": "users"
     },
-    "danger": {
-      "description": "Permanently delete your company account and all associated data",
-      "confirmTitle": "Delete Account",
-      "confirmMessage": "Are you sure you want to delete your company account? This action cannot be undone and will permanently delete all your data."
+    "limits": {
+      "reached": "User Limit Reached",
+      "message": "You have reached the maximum number of users for your current plan. Please upgrade your plan to add more users."
     }
   },
   "subscription": {
@@ -338,97 +350,6 @@
       "mostPopular": "Most Popular",
       "perMonth": "/month",
       "annually": "annually"
-    }
-  },
-  "company": {
-    "title": "Company Management",
-    "subtitle": "Manage your restaurant information and settings",
-    "form": {
-      "name": "Restaurant Name",
-      "namePlaceholder": "Enter restaurant name",
-      "description": "Description",
-      "descriptionPlaceholder": "Describe your restaurant",
-      "address": "Address",
-      "addressPlaceholder": "Enter restaurant address",
-      "phone": "Phone Number",
-      "phonePlaceholder": "Enter phone number",
-      "email": "Email",
-      "emailPlaceholder": "Enter email address",
-      "website": "Website",
-      "websitePlaceholder": "Enter website URL",
-      "hours": "Operating Hours",
-      "hoursPlaceholder": "e.g., Mon-Sun: 9AM-10PM",
-      "cuisine": "Cuisine Type",
-      "cuisinePlaceholder": "e.g., Italian, Chinese, etc.",
-      "logo": "Logo",
-      "uploadLogo": "Upload Logo",
-      "status": "Status"
-    },
-    "metrics": {
-      "title": "Company Metrics",
-      "totalRevenue": "Total Revenue",
-      "monthlyOrders": "Monthly Orders",
-      "activeProducts": "Active Products",
-      "customerSatisfaction": "Customer Satisfaction",
-      "tokensUsed": "Tokens Used",
-      "productsCreated": "Products Created",
-      "usersCreated": "Users Created",
-      "messagesTotal": "Messages Total"
-    },
-    "actions": {
-      "edit": "Edit Company",
-      "save": "Save Changes",
-      "cancel": "Cancel",
-      "connectWhatsapp": "Connect WhatsApp"
-    },
-    "success": {
-      "updated": "Company information updated successfully",
-      "logoUploaded": "Logo uploaded successfully"
-    },
-    "errors": {
-      "updateFailed": "Failed to update company information",
-      "logoUploadFailed": "Failed to upload logo"
-    },
-    "info": {
-      "companyId": "Company ID",
-      "subscription": "Subscription",
-      "created": "Created"
-    },
-    "whatsapp": {
-      "title": "Connect WhatsApp",
-      "subtitle": "Connect your WhatsApp number to start receiving orders",
-      "integration": "WhatsApp Integration",
-      "connectDescription": "Connect your WhatsApp to receive orders",
-      "connectedTo": "Connected: {phone}",
-      "phoneLabel": "WhatsApp Phone Number",
-      "phonePlaceholder": "33612345678",
-      "phoneHelp": "Enter the phone number with country code (e.g., 33612345678 for France)",
-      "scanQrTitle": "Scan QR Code",
-      "scanQrDescription": "Open WhatsApp on your phone and scan this QR code",
-      "instructions": {
-        "step1": "1. Open WhatsApp on your phone",
-        "step2": "2. Tap Menu (⋮) → Linked Devices",
-        "step3": "3. Tap \"Link a Device\"",
-        "step4": "4. Scan this QR code"
-      },
-      "orEnterCode": "Or enter this code manually:",
-      "waitingConnection": "Waiting for connection...",
-      "successTitle": "WhatsApp Connected Successfully!",
-      "successDescription": "Your WhatsApp is now connected and ready to receive orders.",
-      "errorTitle": "Connection Failed",
-      "errorDescription": "Failed to connect WhatsApp. Please try again.",
-      "phone": "Phone",
-      "status": "Status",
-      "connected": "Connected",
-      "connecting": "Connecting",
-      "disconnected": "Disconnected",
-      "error": "Error",
-      "disconnect": "Disconnect",
-      "reconnect": "Reconnect",
-      "cancel": "Cancel",
-      "connect": "Connect WhatsApp",
-      "done": "Done",
-      "tryAgain": "Try Again"
     }
   },
   "settings": {
@@ -526,145 +447,6 @@
       "saveDiscount": "Save {percent}% with yearly billing"
     }
   },
-  "users": {
-    "title": "User Management",
-    "subtitle": "Manage your team members and their permissions",
-    "actions": {
-      "addUser": "Add User",
-      "editUser": "Edit User",
-      "deleteUser": "Delete User",
-      "viewProfile": "View Profile"
-    },
-    "table": {
-      "name": "Name",
-      "email": "Email",
-      "role": "Role",
-      "status": "Status",
-      "lastLogin": "Last Login",
-      "actions": "Actions"
-    },
-    "roles": {
-      "admin": "Admin",
-      "manager": "Manager",
-      "staff": "Staff",
-      "customer": "Customer"
-    },
-    "status": {
-      "active": "Active",
-      "inactive": "Inactive",
-      "pending": "Pending"
-    },
-    "empty": {
-      "title": "No team members yet",
-      "description": "Start building your team by adding your first team member."
-    },
-    "form": {
-      "addTitle": "Add New User",
-      "editTitle": "Edit User",
-      "fullName": "Full Name",
-      "enterFullName": "Enter full name",
-      "email": "Email",
-      "enterEmail": "Enter email address",
-      "phone": "Phone Number",
-      "enterPhone": "Enter phone number",
-      "role": "Role",
-      "selectRole": "Select user role",
-      "avatar": "Click the camera icon to select an avatar",
-      "cancel": "Cancel",
-      "addUser": "Add User",
-      "saveChanges": "Save Changes",
-      "uploading": "Uploading...",
-      "updateFailed": "Failed to update user",
-      "unsavedChanges": "Unsaved Changes",
-      "unsavedChangesMessage": "You have unsaved changes. Are you sure you want to close?",
-      "discardChanges": "Discard Changes",
-      "keepEditing": "Keep Editing"
-    },
-    "info": {
-      "noName": "No name",
-      "phone": "Phone",
-      "joined": "Joined",
-      "users": "users"
-    },
-    "limits": {
-      "reached": "User Limit Reached",
-      "message": "You have reached the maximum number of users for your current plan. Please upgrade your plan to add more users."
-    }
-  },
-  "products": {
-    "title": "Product Management",
-    "subtitle": "Manage your menu items and inventory",
-    "actions": {
-      "addProduct": "Add Product",
-      "editProduct": "Edit Product",
-      "deleteProduct": "Delete Product",
-      "viewDetails": "View Details"
-    },
-    "table": {
-      "name": "Name",
-      "category": "Category",
-      "price": "Price",
-      "stock": "Stock",
-      "status": "Status",
-      "actions": "Actions"
-    },
-    "form": {
-      "addTitle": "Add New Product",
-      "editTitle": "Edit Product",
-      "name": "Product Name",
-      "namePlaceholder": "Enter product name",
-      "nameRequired": "Product name is required",
-      "description": "Description",
-      "descriptionPlaceholder": "Describe the product",
-      "category": "Category",
-      "categoryPlaceholder": "Select category",
-      "price": "Price",
-      "pricePlaceholder": "Enter price",
-      "priceRequired": "Price must be positive",
-      "stock": "Stock Quantity",
-      "stockPlaceholder": "Enter stock quantity",
-      "stockRequired": "Stock quantity must be positive",
-      "image": "Product Image",
-      "uploadImage": "Upload Image",
-      "status": "Status",
-      "active": "Active",
-      "inactive": "Inactive",
-      "emailInvalid": "Invalid email address"
-    },
-    "categories": {
-      "appetizers": "Appetizers",
-      "mainCourse": "Main Course",
-      "desserts": "Desserts",
-      "beverages": "Beverages",
-      "sides": "Sides"
-    },
-    "status": {
-      "inStock": "In Stock",
-      "lowStock": "Low Stock",
-      "outOfStock": "Out of Stock"
-    },
-    "success": {
-      "created": "Product created successfully",
-      "updated": "Product updated successfully",
-      "deleted": "Product deleted successfully"
-    },
-    "errors": {
-      "createFailed": "Failed to create product",
-      "updateFailed": "Failed to update product",
-      "deleteFailed": "Failed to delete product",
-      "loadFailed": "Failed to load products"
-    },
-    "empty": {
-      "title": "No products yet",
-      "description": "Start building your product catalog by adding your first product."
-    },
-    "info": {
-      "price": "Price",
-      "stock": "Stock",
-      "units": "units",
-      "added": "Added"
-    }
-  },
   "status": {
     "title": "Status Management",
     "description": "Manage your WhatsApp status posts for automated publishing",
@@ -713,5 +495,27 @@
       "videoTooLong": "Video must be 1 minute or less",
       "uploadFailed": "Failed to upload media"
     }
+  },
+  "subscriptionExpired": {
+    "title": "Subscription Expired",
+    "message": "Your subscription expired on {date}. To continue using Aangelina AI, please renew your plan.",
+    "goToSubscription": "Renew Subscription",
+    "goToSettings": "Settings",
+    "signOut": "Sign Out"
+  },
+  "support": {
+    "modalTitle": "Contact Support",
+    "modalSubtitle": "We're here to help. Reach us through any channel below.",
+    "email": "Send an Email",
+    "whatsapp": "Chat on WhatsApp",
+    "call": "Call Us",
+    "close": "Close",
+    "helpText": "Need help? Contact us"
+  },
+  "legal": {
+    "title": "Legal",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy"
   }
 }
+

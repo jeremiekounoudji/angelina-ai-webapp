@@ -1,6 +1,6 @@
 {
   "header": {
-    "logo": "Angelina AI",
+    "logo": "Aangelina AI",
     "links": {
       "home": "Home",
       "pricing": "Pricing",
@@ -17,7 +17,7 @@
     "language": "🇺🇸"
   },
   "hero": {
-    "title": "Angelina AI: The WhatsApp AI agent that\nautomates your",
+    "title": "Aangelina AI: The WhatsApp AI agent that\nautomates your",
     "subtitle": "Revolutionize your restaurant management. Automate your orders, manage your inventory, handle complaints and coordinate deliveries with our intelligent AI agent specialized for restaurants",
     "animatedFunctions": ["ordering", "inventory", "complaints"],
     "cta": "Start Free",
@@ -28,8 +28,7 @@
     "title": "Stop Wasting Mental Energy on",
     "titleHighlight": "WhatsApp Statuses.",
     "subtitle": "Your brain wasn't built for repetitive, mundane tasks. Automate your daily WhatsApp statuses, eliminate the anxiety of \"forgetting to post,\" and reclaim your ultimate focus.",
-    "cta": "Automate My Statuses Now",
-    "trialText": "Free 14-day trial. No credit card required."
+    "cta": "Get Started Free"
   },
   "statusNeuro": {
     "title": "The Hidden Cost of",
@@ -72,8 +71,8 @@
         "description": "Zero overlap crashes and zero delays. Our robust polling engine runs in the absolute background while you focus on sealing deals with customers."
       },
       "analytics": {
-        "title": "Smart Analytics",
-        "description": "Track engagement, optimal posting times, and audience insights to maximize your status impact."
+        "title": "Status & Account Dashboard",
+        "description": "Monitor all your scheduled and published statuses in one place. Track posting history, manage your WhatsApp connection status, and keep full control of your account from a clean central dashboard."
       },
       "security": {
         "title": "Enterprise Security",
@@ -85,7 +84,7 @@
     "title": "Reclaim",
     "titleHighlight": "10+ Hours",
     "titleEnd": "of Mental Output Every Month",
-    "subtitle": "True freedom isn't just about having more time; it's about having more peace. Stop serving the algorithm manually and start letting Angelina AI do the heavy lifting.",
+    "subtitle": "True freedom isn't just about having more time; it's about having more peace. Stop serving the algorithm manually and start letting Aangelina AI do the heavy lifting.",
     "cta": "Start Automating for Free"
   },
   "features": {
@@ -148,7 +147,7 @@
     "items": {
       "orders": {
         "question": "How does the agent handle orders?",
-        "answer": "Angelina AI presents your menu, takes orders via numbers, automatically checks stock and sends digital invoices."
+        "answer": "Aangelina AI presents your menu, takes orders via numbers, automatically checks stock and sends digital invoices."
       },
       "stocks": {
         "question": "How does inventory management work?",
@@ -160,7 +159,7 @@
       },
       "marketplace": {
         "question": "What is Marketplace Mode?",
-        "answer": "Marketplace mode allows the main Angelina AI assistant to manage all restaurant agents to help customers view, discuss and order from any restaurant."
+        "answer": "Marketplace mode allows the main Aangelina AI assistant to manage all restaurant agents to help customers view, discuss and order from any restaurant."
       }
     }
   },
@@ -171,7 +170,7 @@
         "name": "Amadou Fall",
         "role": "Owner",
         "company": "Le Soleil Restaurant, Cotonou",
-        "content": "Angelina AI revolutionized our customer service. Orders are taken automatically, no more lost customers! Our sales increased by 45%."
+        "content": "Aangelina AI revolutionized our customer service. Orders are taken automatically, no more lost customers! Our sales increased by 45%."
       },
       "fatou": {
         "name": "Fatou Diallo",
@@ -189,7 +188,7 @@
         "name": "Marie Agbessi",
         "role": "Owner",
         "company": "Marie's Snack, Parakou",
-        "content": "Angelina AI coordinates our deliveries according to urgency and location. No more delays, no more unhappy customers!"
+        "content": "Aangelina AI coordinates our deliveries according to urgency and location. No more delays, no more unhappy customers!"
       },
       "kossi": {
         "name": "Kossi Togbe",
@@ -210,8 +209,8 @@
     "steps": {
       "configure": {
         "number": "1",
-        "title": "Configure Angelina AI",
-        "description": "Restaurant configures Angelina AI by providing restaurant details: menu, hours, location, and preferences in just a few minutes"
+        "title": "Configure Aangelina AI",
+        "description": "Restaurant configures Aangelina AI by providing restaurant details: menu, hours, location, and preferences in just a few minutes"
       },
       "generate": {
         "number": "2",
@@ -226,7 +225,7 @@
       "marketplace": {
         "number": "4",
         "title": "Join the Marketplace Mode",
-        "description": "Your Angelina AI agent is added to the agents network where the main Angelina AI assistant manages all restaurant agents to help end users view, discuss, and order from any restaurant"
+        "description": "Your Aangelina AI agent is added to the agents network where the main Aangelina AI assistant manages all restaurant agents to help end users view, discuss, and order from any restaurant"
       }
     },
     "cta": "Start Free"
@@ -251,14 +250,16 @@
   },
   "footer": {
     "rgpd": "GDPR",
-    "company": "Angelina AI - All rights reserved",
-    "socialLinks": {
-      "twitter": "Twitter",
-      "linkedin": "LinkedIn",
-      "facebook": "Facebook"
-    },
-    "copyright": "© 2024 Angelina AI. All rights reserved.",
+    "company": "Aangelina AI - All rights reserved",
+    "tagline": "The AI agent that turns your WhatsApp into a sales assistant. Automate your sales and boost your revenue.",
+    "copyright": "© 2026 Aangelina AI. All rights reserved.",
     "links": {
+      "quickLinks": "Quick Links",
+      "legal": "Legal",
+      "home": "Home",
+      "features": "Features",
+      "pricing": "Pricing",
+      "howItWorks": "How it Works",
       "privacy": "Privacy Policy",
       "terms": "Terms & Conditions"
     }
@@ -270,7 +271,7 @@
       "sections": {
         "intro": {
           "title": "Introduction",
-          "content": "At Angelina AI, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your data when you use our WhatsApp automation service for business status management and communications."
+          "content": "At Aangelina AI, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your data when you use our WhatsApp automation service for business status management and communications."
         },
         "dataCollection": {
           "title": "Information We Collect",
@@ -312,11 +313,11 @@
       "sections": {
         "intro": {
           "title": "Agreement to Terms",
-          "content": "By accessing and using Angelina AI's WhatsApp automation service, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our service."
+          "content": "By accessing and using Aangelina AI's WhatsApp automation service, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our service."
         },
         "serviceDescription": {
           "title": "Service Description",
-          "content": "Angelina AI provides an intelligent WhatsApp automation platform that helps businesses automate their WhatsApp status updates and manage their WhatsApp business communications. We offer various subscription plans with different features including automated status posting, scheduling capabilities, and analytics. Our service integrates with WhatsApp Business API to deliver reliable automation."
+          "content": "Aangelina AI provides an intelligent WhatsApp automation platform that helps businesses automate their WhatsApp status updates and manage their WhatsApp business communications. We offer various subscription plans with different features including automated status posting, scheduling capabilities, and analytics. Our service integrates with WhatsApp Business API to deliver reliable automation."
         },
         "userObligations": {
           "title": "User Obligations",
@@ -336,7 +337,7 @@
         },
         "liability": {
           "title": "Limitation of Liability",
-          "content": "Angelina AI is provided 'as is' without warranties of any kind. We strive for 99.9% uptime but cannot guarantee uninterrupted service. We are not liable for: (1) WhatsApp API downtime or changes, (2) failed status posts due to WhatsApp restrictions, (3) account suspensions by WhatsApp, (4) indirect, incidental, or consequential damages, or (5) loss of business or revenue. Our total liability is limited to the amount you paid for the service in the past 12 months."
+          "content": "Aangelina AI is provided 'as is' without warranties of any kind. We strive for 99.9% uptime but cannot guarantee uninterrupted service. We are not liable for: (1) WhatsApp API downtime or changes, (2) failed status posts due to WhatsApp restrictions, (3) account suspensions by WhatsApp, (4) indirect, incidental, or consequential damages, or (5) loss of business or revenue. Our total liability is limited to the amount you paid for the service in the past 12 months."
         },
         "termination": {
           "title": "Termination",
