@@ -25,7 +25,6 @@ import { CompanyType } from "@/types/database";
 import { useAuthActions } from "@/hooks/useAuth";
 import { useAppStore } from "@/store";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
-import { useAuth } from "@/contexts/AuthContext";
 import { TranslationFunction } from "@/locales";
 import { createClient } from "@/lib/supabase/client";
 import toast from 'react-hot-toast';
@@ -100,14 +99,6 @@ export default function RegisterPage() {
   const { signUp, verifyOtp, resendOtp } = useAuthActions();
   const { loading, setLoading, setError } = useAppStore();
   const { t } = useTranslationNamespace('auth.register');
-  const { user, loading: authLoading } = useAuth();
-
-  // Redirect authenticated users to dashboard
-  useEffect(() => {
-    if (!authLoading && user) {
-      router.replace("/dashboard");
-    }
-  }, [user, authLoading, router]);
 
   const step1Schema = useMemo(() => createStep1Schema(t), [t]);
   const otpSchema = useMemo(() => createOtpSchema(t), [t]);
@@ -142,6 +133,7 @@ export default function RegisterPage() {
         phone: data.phone,
         password: data.password,
       });
+      otpForm.reset({ otp: '' });
       setCurrentStep(2); // Move to OTP verification
       startOtpCountdown();
     }
@@ -529,6 +521,7 @@ export default function RegisterPage() {
                   errorMessage={otpForm.formState.errors.otp?.message}
                   isRequired
                   maxLength={6}
+                  autoComplete="one-time-code"
                   classNames={{
                     input: "text-white text-center text-lg tracking-widest",
                     label: "text-gray-50",
