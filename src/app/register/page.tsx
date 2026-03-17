@@ -85,6 +85,7 @@ type Step2FormData = {
 export default function RegisterPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isVisible, setIsVisible] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [userCredentials, setUserCredentials] = useState<{
     firstName: string;
     lastName: string;
@@ -134,23 +135,25 @@ export default function RegisterPage() {
         password: data.password,
       });
       otpForm.reset({ otp: '' });
-      setCurrentStep(2); // Move to OTP verification
+      setCurrentStep(2);
       startOtpCountdown();
+      // Defeat delayed browser autofill (browsers inject values ~1s after render)
+      setTimeout(() => otpForm.setValue('otp', ''), 500);
+      setTimeout(() => otpForm.setValue('otp', ''), 1500);
     }
   };
 
   const onOtpSubmit = async (data: OtpFormData) => {
     if (!userCredentials) return;
     
-    console.log('Starting OTP verification...');
-    const result = await verifyOtp(userCredentials.email, data.otp);
-    console.log('OTP verification result:', result);
-    
-    if (result.success) {
-      console.log('OTP verified successfully, moving to step 3');
-      setCurrentStep(3); // Move to company information
-    } else {
-      console.log('OTP verification failed:', result.error);
+    setIsVerifyingOtp(true);
+    try {
+      const result = await verifyOtp(userCredentials.email, data.otp);
+      if (result.success) {
+        setCurrentStep(3);
+      }
+    } finally {
+      setIsVerifyingOtp(false);
     }
   };
 
@@ -505,6 +508,7 @@ export default function RegisterPage() {
               <form
                 onSubmit={otpForm.handleSubmit(onOtpSubmit)}
                 className="space-y-6"
+                autoComplete="off"
               >
                 <div className="text-center">
                   <p className="text-sm text-gray-50 mb-4">
@@ -521,7 +525,8 @@ export default function RegisterPage() {
                   errorMessage={otpForm.formState.errors.otp?.message}
                   isRequired
                   maxLength={6}
-                  autoComplete="one-time-code"
+                  autoComplete="off"
+                  name="otp-code"
                   classNames={{
                     input: "text-white text-center text-lg tracking-widest",
                     label: "text-gray-50",
@@ -551,15 +556,15 @@ export default function RegisterPage() {
                     className="flex-1 bg-transparent border border-secondary text-gray-50 hover:text-white hover:border-primary transition-colors duration-200"
                     startContent={<ArrowLeftIcon className="w-4 h-4" />}
                     onPress={goBack}
-                    isDisabled={loading.users}
+                    isDisabled={isVerifyingOtp}
                   >
                     {t('form.back')}
                   </Button>
                   <Button
                     type="submit"
                     className="flex-1 bg-primary hover:bg-primary/80 text-white font-semibold transition-all duration-300 shadow-lg shadow-secondary/20"
-                    isLoading={loading.users}
-                    isDisabled={loading.users}
+                    isLoading={isVerifyingOtp}
+                    isDisabled={isVerifyingOtp}
                   >
                     {t('form.verify')}
                   </Button>

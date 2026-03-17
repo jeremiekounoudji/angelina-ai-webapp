@@ -120,7 +120,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log("Auth state change:", event, session?.user?.id);
       
       if (event === "SIGNED_IN" && session?.user) {
-        // Refresh user and company data when signed in
+        // Skip refreshUser during registration flow — the register page manages its own
+        // step progression and will call refreshUser after company setup is complete.
+        const isRegistering = typeof window !== "undefined" &&
+          window.location.pathname.startsWith("/register");
+        if (isRegistering) {
+          // Just set the user, don't fetch company (it doesn't exist yet)
+          setUser(session.user);
+          return;
+        }
         await refreshUser();
       } else if (event === "SIGNED_OUT") {
         setUser(null);
