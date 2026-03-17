@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -49,11 +50,17 @@ export default function Header() {
           {/* Logo */}
           <motion.div
             variants={fadeInLeft}
-            className="flex-shrink-0"
+            className="flex-shrink-0 cursor-pointer"
+            onClick={() => router.push('/marketing-status')}
           >
-            <h1 className="text-2xl font-bold text-white">
-              {t('logo')}
-            </h1>
+            <Image
+              src="/angelina-logo-full.png"
+              alt="Aangelina AI"
+              width={200}
+              height={100}
+              className="object-contain"
+              priority
+            />
           </motion.div>
 
           {/* Desktop Navigation */}

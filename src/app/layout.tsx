@@ -5,8 +5,12 @@ import { Toaster } from 'react-hot-toast';
 import { TranslationProvider } from "@/contexts/TranslationContext";
 
 export const metadata: Metadata = {
-  title: "Aangelina AI - WhatsApp Restaurant Management",
-  description: "Revolutionize your restaurant management with Aangelina AI, a WhatsApp-based agent for orders, stock, delivery, and complaints.",
+  title: "Aangelina AI - Automatic WhatsApp Status Posting for Businesses",
+  description: "Schedule and automate your WhatsApp status posts for your business. Aangelina AI handles your daily status publishing so you can focus on growing your business.",
+  icons: {
+    icon: '/angelina-logo-with-bg.png',
+    apple: '/angelina-logo-with-bg.png',
+  },
 };
 
 export default function RootLayout({

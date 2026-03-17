@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useTranslationNamespace } from '@/contexts/TranslationContext';
@@ -93,7 +94,13 @@ export default function Footer() {
           >
             {/* Company info */}
             <div className="md:col-span-2">
-              <h3 className="text-2xl font-bold mb-4">Aangelina AI</h3>
+              <Image
+                src="/angelina-logo-full.png"
+                alt="Aangelina AI"
+                width={200}
+                height={100}
+                className="object-contain mb-4"
+              />
               <p className="text-gray-400 mb-6 max-w-md">
                 {t('tagline') as string}
               </p>
