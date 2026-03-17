@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
      
     if (!isSent) {
       isSent=true
-      const { planId, companyId, billingInterval, phoneNumber, provider, customerEmail } = body;
+      const { planId, companyId, billingInterval, phoneNumber, provider, customerEmail, customerName, customerPhone } = body;
 
     console.log('User authenticated:', user.id);
     console.log('Request body:', { planId, companyId, billingInterval, phoneNumber, provider });
@@ -67,7 +67,9 @@ export async function POST(request: NextRequest) {
         billingInterval,
         phoneNumber,
         provider,
-        customerEmail
+        customerEmail,
+        customerName,
+        customerPhone,
       }),
     });
 

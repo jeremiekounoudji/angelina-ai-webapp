@@ -25,14 +25,39 @@ interface PaymentModalProps {
   billingInterval: "monthly" | "yearly";
   companyId: string;
   customerEmail: string;
+  customerName?: string;
+  customerPhone?: string;
 }
 
 const mobileProviders = [
-  { key: "mtn_benin", label: "MTN Benin", country: "BJ" },
-  { key: "moov_benin", label: "Moov Benin", country: "BJ" },
-  { key: "mtn_togo", label: "MTN Togo", country: "TG" },
-  { key: "moov_togo", label: "Moov Togo", country: "TG" },
-  { key: "mtn_ci", label: "MTN Côte d'Ivoire", country: "CI" },
+  // Benin
+  { key: "mtn_open", label: "MTN Bénin", country: "BJ", group: "Bénin 🇧🇯" },
+  { key: "moov", label: "Moov Bénin", country: "BJ", group: "Bénin 🇧🇯" },
+  { key: "sbin", label: "Celtiis Bénin", country: "BJ", group: "Bénin 🇧🇯" },
+  { key: "coris", label: "Coris Bénin", country: "BJ", group: "Bénin 🇧🇯" },
+  // Togo
+  { key: "moov_tg", label: "Moov Togo", country: "TG", group: "Togo 🇹🇬" },
+  { key: "togocel", label: "T-Money (Togocel)", country: "TG", group: "Togo 🇹🇬" },
+  { key: "mixx", label: "Mixx Togo", country: "TG", group: "Togo 🇹🇬" },
+  // Côte d'Ivoire
+  { key: "mtn_ci", label: "MTN Côte d'Ivoire", country: "CI", group: "Côte d'Ivoire 🇨🇮" },
+  { key: "moov_ci", label: "Moov Côte d'Ivoire", country: "CI", group: "Côte d'Ivoire 🇨🇮" },
+  { key: "wave_ci", label: "Wave Côte d'Ivoire", country: "CI", group: "Côte d'Ivoire 🇨🇮" },
+  { key: "orange_ci", label: "Orange Côte d'Ivoire", country: "CI", group: "Côte d'Ivoire 🇨🇮" },
+  // Senegal
+  { key: "free_sn", label: "Free Sénégal", country: "SN", group: "Sénégal 🇸🇳" },
+  { key: "wave_sn", label: "Wave Sénégal", country: "SN", group: "Sénégal 🇸🇳" },
+  { key: "orange_sn", label: "Orange Sénégal", country: "SN", group: "Sénégal 🇸🇳" },
+  // Burkina Faso
+  { key: "orange_bf", label: "Orange Burkina Faso", country: "BF", group: "Burkina Faso 🇧🇫" },
+  { key: "moov_bf", label: "Moov Burkina Faso", country: "BF", group: "Burkina Faso 🇧🇫" },
+  // Guinea
+  { key: "mtn_open_gn", label: "MTN Guinée", country: "GN", group: "Guinée 🇬🇳" },
+  // Niger
+  { key: "airtel_ne", label: "Airtel Niger", country: "NE", group: "Niger 🇳🇪" },
+  // Cards
+  { key: "visa", label: "Visa", country: "", group: "Carte bancaire 💳" },
+  { key: "mastercard", label: "Mastercard", country: "", group: "Carte bancaire 💳" },
 ];
 
 export default function PaymentModal({
@@ -42,6 +67,8 @@ export default function PaymentModal({
   billingInterval,
   companyId,
   customerEmail,
+  customerName,
+  customerPhone,
 }: PaymentModalProps) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [provider, setProvider] = useState("");
@@ -85,6 +112,8 @@ export default function PaymentModal({
           phoneNumber,
           provider,
           customerEmail,
+          customerName,
+          customerPhone,
         }),
       });
 
@@ -197,38 +226,17 @@ export default function PaymentModal({
   const formatPhoneNumber = (value: string) => {
     // Remove all non-digits
     const digits = value.replace(/\D/g, "");
-
-    // Format based on selected provider's country
     const selectedProvider = mobileProviders.find((p) => p.key === provider);
     if (selectedProvider) {
       switch (selectedProvider.country) {
-        case "BJ": // Benin: +229 XX XX XX XX
-          return digits.length > 10
-            ? `+229 ${digits.slice(-10, -8)} ${digits.slice(
-                -8,
-                -6
-              )} ${digits.slice(-6, -4)} ${digits.slice(-4, -2)} ${digits.slice(
-                -2
-              )}`
-            : digits;
-        case "TG": // Togo: +228 XX XX XX XX
-          return digits.length > 8
-            ? `+228 ${digits.slice(-8, -6)} ${digits.slice(
-                -6,
-                -4
-              )} ${digits.slice(-4, -2)} ${digits.slice(-2)}`
-            : digits;
-        case "CI": // Côte d'Ivoire: +225 XX XX XX XX XX
-          return digits.length > 10
-            ? `+225 ${digits.slice(-10, -8)} ${digits.slice(
-                -8,
-                -6
-              )} ${digits.slice(-6, -4)} ${digits.slice(-4, -2)} ${digits.slice(
-                -2
-              )}`
-            : digits;
-        default:
-          return digits;
+        case "BJ": return digits; // +229 format
+        case "TG": return digits; // +228 format
+        case "CI": return digits; // +225 format
+        case "SN": return digits; // +221 format
+        case "BF": return digits; // +226 format
+        case "GN": return digits; // +224 format
+        case "NE": return digits; // +227 format
+        default: return digits;
       }
     }
     return digits;

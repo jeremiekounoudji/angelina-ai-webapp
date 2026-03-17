@@ -438,6 +438,8 @@ export default function SubscriptionPage() {
       <PaymentModal
         isOpen={isOpen}
         customerEmail={user?.email || ""}
+        customerName={user?.user_metadata?.full_name || user?.user_metadata?.first_name ? `${user?.user_metadata?.first_name || ""} ${user?.user_metadata?.last_name || ""}`.trim() : undefined}
+        customerPhone={company?.phone || undefined}
         onClose={() => {
           setSelectedPlan(null);
           setIsOpen(false);
