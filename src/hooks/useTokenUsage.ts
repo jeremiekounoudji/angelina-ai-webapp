@@ -51,9 +51,9 @@ export function useTokenUsage(companyId?: string) {
         .eq("company_id", companyId)
         .eq("usage_month", currentMonth)
         .eq("usage_year", currentYear)
-       ;
+        .maybeSingle();
 
-      if (usageError && usageError.code !== 'PGRST116') {
+      if (usageError) {
         throw usageError;
       }
 
