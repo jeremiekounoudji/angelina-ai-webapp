@@ -17,13 +17,12 @@ export class TokenService {
       });
 
       if (error) {
-        console.error('Error consuming tokens:', error);
+        console.error('Error consuming tokens:', error.message);
         return false;
       }
 
       return data === true;
-    } catch (error) {
-      console.error('Error consuming tokens:', error);
+    } catch {
       return false;
     }
   }
@@ -47,13 +46,12 @@ export class TokenService {
         .single();
 
       if (error && error.code !== 'PGRST116') {
-        console.error('Error fetching token usage:', error);
+        console.error('Error fetching token usage:', error.message);
         return null;
       }
 
       return data;
-    } catch (error) {
-      console.error('Error fetching token usage:', error);
+    } catch {
       return null;
     }
   }
@@ -83,15 +81,13 @@ export class TokenService {
   }
 
   /**
-   * Purchase additional tokens
-   * @param companyId - The company ID
-   * @param tokenAmount - Number of tokens to purchase
-   * @param paymentData - Payment information
-   * @returns Promise<boolean> - true if successful
+   * Purchase additional tokens — token grants must happen server-side via
+   * the FedaPay webhook. This method only records the purchase row; the
+   * actual token increment is handled by the webhook handler.
    */
   async purchaseTokens(
-    companyId: string, 
-    tokenAmount: number, 
+    companyId: string,
+    tokenAmount: number,
     paymentData: {
       amount: number;
       currency?: string;
@@ -99,45 +95,26 @@ export class TokenService {
     }
   ): Promise<boolean> {
     try {
-      // Record the purchase
       const { error: purchaseError } = await this.supabase
         .from('token_purchases')
         .insert({
           company_id: companyId,
           tokens_purchased: tokenAmount,
           amount_paid: paymentData.amount,
-          currency: paymentData.currency || 'USD',
+          currency: paymentData.currency || 'XOF',
           transaction_id: paymentData.transactionId,
-          payment_status: 'completed'
+          payment_status: 'completed',
         });
 
       if (purchaseError) {
-        console.error('Error recording token purchase:', purchaseError);
+        console.error('Error recording token purchase:', purchaseError.message);
         return false;
       }
 
-      // Update current usage with purchased tokens
-      const currentMonth = new Date().getMonth() + 1;
-      const currentYear = new Date().getFullYear();
-
-      const { error: updateError } = await this.supabase
-        .from('token_usage')
-        .update({
-          tokens_purchased: this.supabase.sql`tokens_purchased + ${tokenAmount}`,
-          tokens_remaining: this.supabase.sql`tokens_remaining + ${tokenAmount}`
-        })
-        .eq('company_id', companyId)
-        .eq('usage_month', currentMonth)
-        .eq('usage_year', currentYear);
-
-      if (updateError) {
-        console.error('Error updating token usage:', updateError);
-        return false;
-      }
-
+      // Token balance increment is handled server-side via the add_purchased_tokens RPC
+      // (called by the FedaPay webhook handler — not here)
       return true;
-    } catch (error) {
-      console.error('Error purchasing tokens:', error);
+    } catch {
       return false;
     }
   }

@@ -44,7 +44,7 @@ export function useTokenUsage(companyId?: string) {
       const currentMonth = new Date().getMonth() + 1;
       const currentYear = new Date().getFullYear();
 
-      // Fetch current month usage
+      // Fetch current month usage — maybeSingle returns TokenUsage | null (no row = null, not error)
       const { data: usageData, error: usageError } = await supabase
         .from("token_usage")
         .select("*")
