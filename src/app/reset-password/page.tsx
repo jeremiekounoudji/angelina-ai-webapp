@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { Suspense, useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardBody, CardHeader, Button, Input } from "@heroui/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
@@ -13,13 +13,13 @@ import toast from "react-hot-toast";
 import { createTranslationFunction, DEFAULT_LOCALE, type Locale } from "@/locales";
 
 function getT() {
-  const locale = (typeof window !== 'undefined' ? localStorage.getItem('locale') : null) as Locale | null;
+  const locale = (typeof window !== "undefined" ? localStorage.getItem("locale") : null) as Locale | null;
   return createTranslationFunction(locale ?? DEFAULT_LOCALE);
 }
 
 type FormData = { password: string; confirmPassword: string };
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const [exchanging, setExchanging] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
@@ -31,7 +31,8 @@ export default function ResetPasswordPage() {
 
   const schema = z
     .object({
-      password: z.string()
+      password: z
+        .string()
         .min(8, t("errors.passwordTooShort"))
         .regex(/[A-Z]/, t("errors.passwordNeedsUppercase"))
         .regex(/[0-9]/, t("errors.passwordNeedsNumber")),
@@ -42,22 +43,21 @@ export default function ResetPasswordPage() {
       path: ["confirmPassword"],
     });
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  // Exchange the ?code= param for a valid session
   useEffect(() => {
     const code = searchParams.get("code");
     if (!code) {
       setExchanging(false);
-      setSessionReady(false);
       return;
     }
-
     supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
       if (error) {
-        toast.error(getT()('hooks.auth.errors.invalidResetLink'));
+        toast.error(getT()("hooks.auth.errors.invalidResetLink"));
         router.replace("/forgot-password");
       } else {
         setSessionReady(true);
@@ -74,7 +74,7 @@ export default function ResetPasswordPage() {
         toast.error(error.message);
         return;
       }
-      toast.success(getT()('hooks.auth.success.passwordUpdated'));
+      toast.success(getT()("hooks.auth.success.passwordUpdated"));
       router.push("/login");
     } finally {
       setLoading(false);
@@ -109,7 +109,9 @@ export default function ResetPasswordPage() {
               </div>
             ) : !sessionReady ? (
               <div className="space-y-4 text-center">
-                <p className="text-sm text-gray-50">This reset link is invalid or has expired.</p>
+                <p className="text-sm text-gray-50">
+                  This reset link is invalid or has expired.
+                </p>
                 <Button
                   className="w-full bg-primary hover:bg-primary/80 text-white font-semibold py-3 rounded-lg"
                   onPress={() => router.push("/forgot-password")}
@@ -119,64 +121,78 @@ export default function ResetPasswordPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <Input
-                label={t("form.password")}
-                placeholder={t("form.passwordPlaceholder")}
-                variant="bordered"
-                {...register("password")}
-                isInvalid={!!errors.password}
-                errorMessage={errors.password?.message}
-                type={isVisible ? "text" : "password"}
-                isRequired
-                endContent={
-                  <button
-                    type="button"
-                    className="focus:outline-none"
-                    onClick={() => setIsVisible(!isVisible)}
-                  >
-                    {isVisible ? (
-                      <EyeSlashIcon className="w-5 h-5 text-gray-50" />
-                    ) : (
-                      <EyeIcon className="w-5 h-5 text-gray-50" />
-                    )}
-                  </button>
-                }
-                classNames={{
-                  input: "text-white",
-                  label: "text-gray-50",
-                  inputWrapper: "border-secondary bg-background",
-                }}
-              />
+                <Input
+                  label={t("form.password")}
+                  placeholder={t("form.passwordPlaceholder")}
+                  variant="bordered"
+                  {...register("password")}
+                  isInvalid={!!errors.password}
+                  errorMessage={errors.password?.message}
+                  type={isVisible ? "text" : "password"}
+                  isRequired
+                  endContent={
+                    <button
+                      type="button"
+                      className="focus:outline-none"
+                      onClick={() => setIsVisible(!isVisible)}
+                    >
+                      {isVisible ? (
+                        <EyeSlashIcon className="w-5 h-5 text-gray-50" />
+                      ) : (
+                        <EyeIcon className="w-5 h-5 text-gray-50" />
+                      )}
+                    </button>
+                  }
+                  classNames={{
+                    input: "text-white",
+                    label: "text-gray-50",
+                    inputWrapper: "border-secondary bg-background",
+                  }}
+                />
 
-              <Input
-                label={t("form.confirmPassword")}
-                placeholder={t("form.confirmPasswordPlaceholder")}
-                variant="bordered"
-                {...register("confirmPassword")}
-                isInvalid={!!errors.confirmPassword}
-                errorMessage={errors.confirmPassword?.message}
-                type={isVisible ? "text" : "password"}
-                isRequired
-                classNames={{
-                  input: "text-white",
-                  label: "text-gray-50",
-                  inputWrapper: "border-secondary bg-background",
-                }}
-              />
+                <Input
+                  label={t("form.confirmPassword")}
+                  placeholder={t("form.confirmPasswordPlaceholder")}
+                  variant="bordered"
+                  {...register("confirmPassword")}
+                  isInvalid={!!errors.confirmPassword}
+                  errorMessage={errors.confirmPassword?.message}
+                  type={isVisible ? "text" : "password"}
+                  isRequired
+                  classNames={{
+                    input: "text-white",
+                    label: "text-gray-50",
+                    inputWrapper: "border-secondary bg-background",
+                  }}
+                />
 
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/80 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg shadow-secondary/20"
-                isLoading={loading}
-                isDisabled={loading}
-              >
-                {t("form.submit")}
-              </Button>
-            </form>
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/80 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg shadow-secondary/20"
+                  isLoading={loading}
+                  isDisabled={loading}
+                >
+                  {t("form.submit")}
+                </Button>
+              </form>
             )}
           </CardBody>
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
