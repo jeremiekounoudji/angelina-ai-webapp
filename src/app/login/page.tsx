@@ -15,7 +15,7 @@ import { TranslationFunction } from "@/locales";
 const createLoginSchema = (t: TranslationFunction) =>
   z.object({
     email: z.string().email(t("errors.invalidCredentials")),
-    password: z.string().min(6, t("errors.invalidCredentials")),
+    password: z.string().min(8, t("errors.invalidCredentials")),
   });
 
 type LoginFormData = {
@@ -57,8 +57,8 @@ export default function LoginPage() {
       <div 
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop')"
-         }}
+          backgroundImage: "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')"
+        }}
       />
       {/* Dark Blur Overlay */}
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>

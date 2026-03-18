@@ -3,26 +3,32 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
-import { useTranslationNamespace } from '@/contexts/TranslationContext'
+import { LoadingErrorState } from '@/components/LoadingErrorState'
+import { Spinner } from '@heroui/react'
 
 export default function DashboardPage() {
   const router = useRouter()
-  const { loading } = useAuth()
-  const { t } = useTranslationNamespace('dashboard.overview')
+  const { loading, error, retry } = useAuth()
 
   useEffect(() => {
-    if (!loading) {
-      // Redirect to company tab by default
+    if (!loading && !error) {
       router.replace('/dashboard/company')
     }
-  }, [router, loading])
+  }, [router, loading, error])
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-full min-h-[400px]">
+        <LoadingErrorState error={error} onRetry={retry} title="Failed to load dashboard" />
+      </div>
+    )
+  }
 
   return (
-    <div className="flex items-center justify-center h-full bg-background">
+    <div className="flex items-center justify-center h-full min-h-[400px]">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-        <h1 className="text-2xl font-bold text-white">{t('title')}</h1>
-        <p className="text-gray-50 mt-2">{t('subtitle')}</p>
+        <Spinner size="lg" color="success" />
+        <p className="mt-4 text-gray-600">Loading...</p>
       </div>
     </div>
   )

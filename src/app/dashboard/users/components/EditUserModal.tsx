@@ -210,12 +210,12 @@ export function EditUserModal({
                         src={avatarUrl}
                         name={user.full_name || user.email || "User"}
                         size="lg"
-                        className="w-24 h-24 bg-green-100 text-[#328E6E]"
+                        className="w-24 h-24 bg-green-100 text-[#091413]"
                       />
                       <Button
                         isIconOnly
                         size="sm"
-                        className="absolute -bottom-1 -right-1 bg-[#328E6E] text-white hover:bg-[#15803d]"
+                        className="absolute -bottom-1 -right-1 bg-[#091413] text-white hover:bg-[#15803d]"
                         onPress={() => fileInputRef.current?.click()}
                         isDisabled={uploading}
                       >
@@ -252,7 +252,7 @@ export function EditUserModal({
                     classNames={{
                       input: "text-gray-900",
                       label: "text-gray-700",
-                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]",
                     }}
                   />
 
@@ -268,7 +268,7 @@ export function EditUserModal({
                     classNames={{
                       input: "text-gray-900",
                       label: "text-gray-700",
-                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]",
                     }}
                   />
 
@@ -283,7 +283,7 @@ export function EditUserModal({
                     classNames={{
                       input: "text-gray-900",
                       label: "text-gray-700",
-                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]",
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]",
                     }}
                   />
 
@@ -301,7 +301,7 @@ export function EditUserModal({
                     isRequired
                     isDisabled={isEditingSelf && isOwner && user.role === 'admin'}
                     classNames={{
-                      trigger: "border-gray-300 bg-white hover:border-[#328E6E]",
+                      trigger: "border-gray-300 bg-white hover:border-[#091413]",
                       label: "text-gray-700",
                       value: "text-gray-900",
                     }}
@@ -322,7 +322,7 @@ export function EditUserModal({
                   {t("form.cancel")}
                 </Button>
                 <Button
-                  className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+                  className="bg-[#091413] text-white hover:bg-[#15803d]"
                   type="submit"
                   isLoading={isLoading}
                   isDisabled={!isDirty}

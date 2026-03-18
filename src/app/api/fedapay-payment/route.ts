@@ -1,60 +1,66 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createTranslationFunction } from '@/locales';
+import { z } from 'zod';
+
+const PaymentBodySchema = z.object({
+  planId: z.string().uuid(),
+  companyId: z.string().uuid(),
+  billingInterval: z.enum(['monthly', 'annual']),
+  phoneNumber: z.string().min(8).max(20),
+  provider: z.string().min(1).max(50),
+  customerEmail: z.string().email().optional(),
+  customerName: z.string().min(1).max(100).optional(),
+  customerPhone: z.string().min(8).max(20).optional(),
+});
 
 export async function POST(request: NextRequest) {
-    let isSent=false;
-
   try {
     const supabase = await createClient();
-    
+
     // Get locale from request headers
     const locale = (request.headers.get('Accept-Language')?.split('-')[0] as 'en' | 'fr') || 'en';
     const t = createTranslationFunction(locale);
-    
-    // Get the current user and session
+
+    // Authenticate user
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
-      console.error('Authentication error:', authError);
       return NextResponse.json({ error: t('api.general.errors.unauthorized') }, { status: 401 });
     }
 
-    // Get the session to extract the JWT token
+    // Get session for JWT forwarding to edge function
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
     if (sessionError || !session?.access_token) {
-      console.error('Session error:', sessionError);
       return NextResponse.json({ error: t('api.general.errors.unauthorized') }, { status: 401 });
     }
 
-    const body = await request.json();
-     
-    if (!isSent) {
-      isSent=true
-      const { planId, companyId, billingInterval, phoneNumber, provider, customerEmail, customerName, customerPhone } = body;
+    // Validate request body
+    const rawBody = await request.json();
+    const parsed = PaymentBodySchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: t('api.general.errors.missingParameters') },
+        { status: 400 }
+      );
+    }
 
-    console.log('User authenticated:', user.id);
-    console.log('Request body:', { planId, companyId, billingInterval, phoneNumber, provider });
+    const { planId, companyId, billingInterval, phoneNumber, provider, customerEmail, customerName, customerPhone } = parsed.data;
 
-    // Verify the company belongs to the user
+    // Verify the company belongs to the authenticated user
     const { data: company, error: companyError } = await supabase
       .from('companies')
-      .select('*')
+      .select('id')
       .eq('id', companyId)
       .eq('user_id', user.id)
       .single();
-    
+
     if (companyError || !company) {
-      console.error('Company error:', companyError);
       return NextResponse.json({ error: t('api.general.errors.notFound') }, { status: 404 });
     }
 
-    console.log('Company verified:', company.id);
-
-    // Call the edge function with user's JWT token
+    // Forward to edge function with user's JWT
     const edgeFunctionUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/fedapay-payment`;
-    
-    console.log('Calling edge function:', edgeFunctionUrl);
-    
+
     const response = await fetch(edgeFunctionUrl, {
       method: 'POST',
       headers: {
@@ -73,32 +79,20 @@ export async function POST(request: NextRequest) {
       }),
     });
 
-    console.log('Edge function response status:', response.status);
-    
     const data = await response.json();
-    console.log('Edge function response data:', data);
 
     if (!response.ok) {
-     isSent=false;
-
-      console.error('Edge function error:', data.error || 'Unknown error');
-      console.error('Response status:', response.status);
-      return NextResponse.json({ 
-        error: data.error || t('api.payment.fedapay.errors.paymentFailed'),
-        details: data 
-      }, { status: response.status });
+      return NextResponse.json(
+        { error: data.error || t('api.payment.fedapay.errors.paymentFailed') },
+        { status: response.status }
+      );
     }
-     isSent=false;
 
     return NextResponse.json(data);
-  } 
-      
-    }catch (error) {
-    console.error('Payment API error:', error);
-    isSent=false
-    return NextResponse.json({ 
-      error: 'Server error occurred',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+
+  } catch (error) {
+    // Log full error server-side only — never expose to client
+    console.error('Payment API error:', error instanceof Error ? error.message : 'Unknown error');
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

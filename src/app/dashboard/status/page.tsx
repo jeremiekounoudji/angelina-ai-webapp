@@ -108,7 +108,7 @@ export default function StatusPage() {
           </p>
         </div>
         <Button
-          className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+          className="bg-[#091413] text-white hover:bg-[#15803d]"
           startContent={<PlusIcon className="w-4 h-4" />}
           onPress={handleAddClick}
         >
@@ -136,7 +136,7 @@ export default function StatusPage() {
               {t('description')}
             </p>
             <Button
-              className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+              className="bg-[#091413] text-white hover:bg-[#15803d]"
               size="sm"
               startContent={<PlusIcon className="w-4 h-4" />}
               onPress={handleAddClick}

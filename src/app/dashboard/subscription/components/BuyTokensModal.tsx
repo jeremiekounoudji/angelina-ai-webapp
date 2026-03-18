@@ -17,6 +17,12 @@ import { CpuChipIcon, CreditCardIcon } from "@heroicons/react/24/outline";
 import { tokenService } from "@/lib/tokenService";
 import toast from 'react-hot-toast';
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
+import { createTranslationFunction, DEFAULT_LOCALE, type Locale } from "@/locales";
+
+function getT() {
+  const locale = (typeof window !== 'undefined' ? localStorage.getItem('locale') : null) as Locale | null;
+  return createTranslationFunction(locale ?? DEFAULT_LOCALE);
+}
 
 interface BuyTokensModalProps {
   isOpen: boolean;
@@ -83,11 +89,11 @@ export default function BuyTokensModal({
         onSuccess?.();
         onClose();
       } else {
-        toast.error('Failed to purchase tokens. Please try again.');
+        toast.error(getT()('hooks.tokens.errors.purchaseFailed'));
       }
     } catch (error) {
       console.error('Error purchasing tokens:', error);
-      toast.error('An error occurred. Please try again.');
+      toast.error(getT()('hooks.tokens.errors.genericError'));
     } finally {
       setLoading(false);
     }

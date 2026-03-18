@@ -12,8 +12,7 @@ import {
   Chip,
   Spinner
 } from '@heroui/react'
-import { useState, useEffect, useCallback } from 'react'
-import { useWhatsAppConnect } from '@/hooks/useWhatsAppConnect'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { PhoneIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import QRCode from 'qrcode'
 import { useAuth } from '@/contexts/AuthContext'
@@ -23,21 +22,20 @@ import Image from 'next/image'
 interface WhatsAppConnectModalProps {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
+  connectWhatsApp: (phone: string) => Promise<{ pairingCode: string; qrCodeData: string; instanceId: string }>
+  connectionStatus: 'disconnected' | 'connecting' | 'connected' | 'error'
+  whatsappInstance: import('@/types/database').WhatsAppInstance | null
 }
 
-export function WhatsAppConnectModal({ isOpen, onOpenChange }: WhatsAppConnectModalProps) {
+export function WhatsAppConnectModal({ isOpen, onOpenChange, connectWhatsApp, connectionStatus, whatsappInstance }: WhatsAppConnectModalProps) {
   const [step, setStep] = useState<'qr' | 'success' | 'error'>('qr')
   const [qrCodeUrl, setQrCodeUrl] = useState('')
-  const [pairingCode, setPairingCode] = useState('')  // Short code for manual entry
-  const [qrCodeData, setQrCodeData] = useState('')    // Actual QR data for scanning
+  const [pairingCode, setPairingCode] = useState('')
+  const [qrCodeData, setQrCodeData] = useState('')
+  const [isConnecting, setIsConnecting] = useState(false)
+  const isConnectingRef = useRef(false)
   const { t } = useTranslationNamespace('dashboard.company.whatsapp')
   const { company } = useAuth()
-  
-  const { 
-    connectionStatus, 
-    connectWhatsApp,
-    whatsappInstance 
-  } = useWhatsAppConnect()
 
   // Generate QR code from the actual QR code data (not the pairing code)
   useEffect(() => {
@@ -69,8 +67,10 @@ export function WhatsAppConnectModal({ isOpen, onOpenChange }: WhatsAppConnectMo
 
   // Automatically connect when modal opens using company phone
   const handleAutoConnect = useCallback(async () => {
-    if (!company?.phone) return
+    if (!company?.phone || isConnectingRef.current) return
 
+    isConnectingRef.current = true
+    setIsConnecting(true)
     try {
       const cleanPhone = getCleanPhoneNumber(company.phone)
       const result = await connectWhatsApp(cleanPhone)
@@ -79,20 +79,25 @@ export function WhatsAppConnectModal({ isOpen, onOpenChange }: WhatsAppConnectMo
       setStep('qr')
     } catch {
       setStep('error')
+    } finally {
+      isConnectingRef.current = false
+      setIsConnecting(false)
     }
   }, [company?.phone, connectWhatsApp])
 
   useEffect(() => {
-    if (isOpen && company?.phone && !qrCodeData) {
+    if (isOpen && company?.phone && !qrCodeData && !isConnectingRef.current && step !== 'error') {
       handleAutoConnect()
     }
-  }, [isOpen, company?.phone, qrCodeData, handleAutoConnect])
+  }, [isOpen, company?.phone, qrCodeData, step, handleAutoConnect])
 
   const handleClose = () => {
     setStep('qr')
     setPairingCode('')
     setQrCodeData('')
     setQrCodeUrl('')
+    setIsConnecting(false)
+    isConnectingRef.current = false
     onOpenChange(false)
   }
 

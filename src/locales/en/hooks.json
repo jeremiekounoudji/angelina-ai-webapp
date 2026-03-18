@@ -16,7 +16,8 @@
       "imageUploadFailed": "Failed to upload product image",
       "invalidData": "Invalid product data",
       "duplicateName": "A product with this name already exists",
-      "insufficientStock": "Insufficient stock available"
+      "insufficientStock": "Insufficient stock available",
+      "planLimitReached": "You have reached the maximum number of products for your current plan. Please upgrade to add more products."
     }
   },
   "subscriptions": {
@@ -54,8 +55,12 @@
     }
   },
   "metrics": {
+    "success": {
+      "updated": "Metrics updated successfully"
+    },
     "errors": {
       "loadFailed": "Failed to load metrics",
+      "updateFailed": "Failed to update metrics",
       "dataUnavailable": "Metrics data is currently unavailable",
       "calculationError": "Error calculating metrics",
       "invalidDateRange": "Invalid date range selected"
@@ -65,13 +70,15 @@
     "success": {
       "updated": "Company information updated successfully",
       "logoUploaded": "Company logo uploaded successfully",
-      "settingsSaved": "Company settings saved successfully"
+      "settingsSaved": "Company settings saved successfully",
+      "policyUpdated": "Company policy updated successfully"
     },
     "errors": {
       "updateFailed": "Failed to update company information",
       "logoUploadFailed": "Failed to upload company logo",
       "settingsSaveFailed": "Failed to save company settings",
-      "invalidCompanyData": "Invalid company data provided"
+      "invalidCompanyData": "Invalid company data provided",
+      "policyUpdateFailed": "Failed to update company policy"
     }
   },
   "users": {
@@ -83,25 +90,44 @@
       "statusChanged": "User status changed successfully"
     },
     "errors": {
+      "noCompany": "No company selected",
       "createFailed": "Failed to create user",
       "updateFailed": "Failed to update user",
       "deleteFailed": "Failed to delete user",
+      "fetchFailed": "Failed to fetch users",
       "roleChangeFailed": "Failed to change user role",
       "statusChangeFailed": "Failed to change user status",
       "emailExists": "A user with this email already exists",
-      "invalidUserData": "Invalid user data provided"
+      "invalidUserData": "Invalid user data provided",
+      "planLimitReached": "You have reached the maximum number of users for your current plan. Please upgrade to add more users."
     }
   },
   "auth": {
     "success": {
       "loginSuccess": "Login successful",
       "logoutSuccess": "Logout successful",
+      "signedIn": "Successfully signed in!",
+      "signedOut": "Successfully signed out",
+      "verificationSent": "Verification code sent to your email!",
+      "emailVerified": "Email verified successfully!",
+      "codeSent": "Verification code sent!",
+      "passwordUpdated": "Password updated successfully!",
+      "passwordResetSent": "Password reset email sent!",
+      "accountCreated": "Account created successfully!",
       "passwordChanged": "Password changed successfully",
       "profileUpdated": "Profile updated successfully"
     },
     "errors": {
       "loginFailed": "Login failed",
       "logoutFailed": "Logout failed",
+      "unexpectedError": "An unexpected error occurred",
+      "signInTimeout": "Sign in timeout after 30 seconds",
+      "createAccountFailed": "Failed to create user account",
+      "verifyEmailFailed": "Failed to verify email",
+      "resendFailed": "Failed to resend verification code",
+      "passwordResetFailed": "Failed to send password reset email",
+      "passwordUpdateFailed": "Failed to update password",
+      "invalidResetLink": "Invalid or expired reset link. Please request a new one.",
       "passwordChangeFailed": "Failed to change password",
       "profileUpdateFailed": "Failed to update profile",
       "sessionExpired": "Your session has expired. Please login again.",
@@ -120,6 +146,32 @@
       "deleteFailed": "Failed to delete status",
       "fetchFailed": "Failed to load status posts",
       "limitReached": "Status limit reached for your plan"
+    }
+  },
+  "tokens": {
+    "success": {
+      "consumed": "{count} tokens consumed",
+      "purchased": "{count} tokens purchased successfully"
+    },
+    "errors": {
+      "notEnough": "Not enough tokens available",
+      "fetchFailed": "Failed to fetch token usage",
+      "consumeFailed": "Failed to consume tokens",
+      "purchaseFailed": "Failed to purchase tokens",
+      "genericError": "An error occurred. Please try again."
+    }
+  },
+  "whatsapp": {
+    "success": {
+      "connected": "WhatsApp connected successfully!",
+      "disconnected": "WhatsApp disconnected successfully",
+      "instanceCreated": "Instance created! Scan the QR code to connect."
+    },
+    "errors": {
+      "connectFailed": "Failed to connect WhatsApp: {message}",
+      "connectionFailed": "WhatsApp connection failed",
+      "disconnectFailed": "Failed to disconnect WhatsApp",
+      "timeout": "Connection timeout. Please try again."
     }
   }
 }

@@ -1,48 +1,64 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppStore } from "@/store";
 import { SubscriptionPlan, Payment } from "@/types/database";
 import toast from "react-hot-toast";
 
+const FETCH_TIMEOUT = 15000; // 15 seconds
+
 export function useSubscriptions() {
-  const supabase = createClient();
-  // useMemo(() => createClient(), []);
+  // Stable client — must not be recreated on every render
+  const [supabase] = useState(() => createClient());
   const { company } = useAuth();
-  // create loading state here
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
     subscriptionPlans,
     setSubscriptionPlans,
     payments,
     setPayments,
-    // loading,
-    // setLoading,
     errors,
     setError,
   } = useAppStore();
 
-  const fetchPlans = 
-  useCallback(async (forceRefresh = false) => {
-    // Return cached data if available and not forcing refresh
-    if (subscriptionPlans.length > 0 && !forceRefresh) {
-      setLoading( false);
+  // Use refs to access latest values inside callbacks without adding them to deps
+  const subscriptionPlansRef = useRef(subscriptionPlans);
+  subscriptionPlansRef.current = subscriptionPlans;
+  const paymentsRef = useRef(payments);
+  paymentsRef.current = payments;
 
-      return subscriptionPlans;
-    }
+  const fetchPlans = useCallback(
+    async (forceRefresh = false) => {
+      if (subscriptionPlansRef.current.length > 0 && !forceRefresh) {
+        setLoading(false);
+        return subscriptionPlansRef.current;
+      }
 
-    try {
-      setLoading( true);
-      setError("subscriptionPlans", null);
+      try {
+        setLoading(true);
+        setError("subscriptionPlans", null);
 
-      // Fetch subscription plans with their features
-      const { data: plansData, error: plansError } = await supabase
-        .from("subscription_plans")
-        .select(
-          `
+        // Clear existing timeout
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+
+        // Create timeout promise
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          timeoutRef.current = setTimeout(() => {
+            reject(new Error("Request timeout. Please check your connection."));
+          }, FETCH_TIMEOUT);
+        });
+
+        // Fetch with timeout
+        const fetchPromise = supabase
+          .from("subscription_plans")
+          .select(
+            `
           *,
           subscription_features (
             id,
@@ -50,55 +66,74 @@ export function useSubscriptions() {
             feature_fr
           )
         `
-        )
-        .order("price_monthly", { ascending: true });
-        
-      if (plansError) throw plansError;
+          )
+          .order("price_monthly", { ascending: true });
 
-      // Transform the data to match our interface
-      const transformedPlans: SubscriptionPlan[] =
-        plansData?.map(
-          (plan: SubscriptionPlan & { subscription_features?: string[] }) => ({
+        const { data: plansData, error: plansError } = await Promise.race([
+          fetchPromise,
+          timeoutPromise,
+        ]);
+
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+
+        if (plansError) throw plansError;
+
+        const transformedPlans: SubscriptionPlan[] =
+          plansData?.map((plan: any) => ({
             ...plan,
             features: plan.subscription_features || [],
-          })
-        ) || [];
+          })) || [];
 
-      setSubscriptionPlans(transformedPlans);
-      console.log("Fetched subscription plans:", transformedPlans);
-      setLoading( false);
-      return transformedPlans;
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Failed to fetch subscription plans";
+        setSubscriptionPlans(transformedPlans);
+        setLoading(false);
+        return transformedPlans;
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch subscription plans";
 
-      console.log("error", errorMessage);
-
-      setError("subscriptionPlans", errorMessage);
-      setLoading( false);
-      toast.error(errorMessage);
-      return [];
-    } finally {
-      setLoading( false);
-    }
-  }, [setError, setLoading, setSubscriptionPlans, subscriptionPlans, supabase]);
+        setError("subscriptionPlans", errorMessage);
+        setLoading(false);
+        toast.error(errorMessage);
+        return [];
+      } finally {
+        setLoading(false);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+      }
+    },
+    [setError, setSubscriptionPlans, supabase]
+  );
 
   const fetchPayments = useCallback(
     async (forceRefresh = false) => {
       if (!company?.id) return;
 
-      // Return cached data if available and not forcing refresh
-      if (payments.length > 0 && !forceRefresh) {
-        return payments;
+      if (paymentsRef.current.length > 0 && !forceRefresh) {
+        return paymentsRef.current;
       }
 
       try {
         setLoading(true);
         setError("payments", null);
 
-        const { data: paymentsData, error: paymentsError } = await supabase
+        // Clear existing timeout
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+
+        // Create timeout promise
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          timeoutRef.current = setTimeout(() => {
+            reject(new Error("Request timeout. Please check your connection."));
+          }, FETCH_TIMEOUT);
+        });
+
+        const fetchPromise = supabase
           .from("payments")
           .select(
             `
@@ -113,15 +148,21 @@ export function useSubscriptions() {
           .eq("company_id", company.id)
           .order("created_at", { ascending: false });
 
+        const { data: paymentsData, error: paymentsError } = await Promise.race(
+          [fetchPromise, timeoutPromise]
+        );
+
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+
         if (paymentsError) throw paymentsError;
 
         const transformedPayments: Payment[] =
-          paymentsData?.map(
-            (payment: Payment & { subscription_plans?: SubscriptionPlan }) => ({
-              ...payment,
-              plan: payment.subscription_plans,
-            })
-          ) || [];
+          paymentsData?.map((payment: any) => ({
+            ...payment,
+            plan: payment.subscription_plans,
+          })) || [];
 
         setPayments(transformedPayments);
         return transformedPayments;
@@ -130,35 +171,40 @@ export function useSubscriptions() {
           error instanceof Error ? error.message : "Failed to fetch payments";
         setError("payments", errorMessage);
         toast.error(errorMessage);
-
         return [];
       } finally {
-        setLoading( false);
+        setLoading(false);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
       }
     },
-    [company?.id, payments, setPayments, setLoading, setError, supabase]
+    [company?.id, setPayments, setError, supabase]
   );
 
-  // Auto-fetch on mount if no data
+  // Run once on mount (or when company becomes available) — refs handle the cache check
   useEffect(() => {
-    if (subscriptionPlans.length === 0 && !loading) {
-      console.log("Fetching subscription plan:", subscriptionPlans);
-
-      fetchPlans();
-    }
-  }, [subscriptionPlans, loading, fetchPlans]);
+    fetchPlans();
+  }, [fetchPlans]);
 
   useEffect(() => {
-    if (company?.id && payments.length === 0 && !loading) {
-      console.log("Fetching payments for company:", company.id);
+    if (company?.id) {
       fetchPayments();
     }
-  }, [company?.id, payments.length, loading, fetchPayments]);
+  }, [company?.id, fetchPayments]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return {
     plans: subscriptionPlans,
     payments,
-    loading: loading || loading,
+    loading,
     error: errors.subscriptionPlans || errors.payments,
     refetchPlans: () => fetchPlans(true),
     refetchPayments: () => fetchPayments(true),

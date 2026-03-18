@@ -77,7 +77,7 @@ export default function SettingsPage() {
                     color={option.buttonColor}
                     onClick={option.action}
                     disabled={loading}
-                    className={`min-w-32 ${option.buttonColor === 'primary' ? 'bg-[#328E6E] text-white hover:bg-[#15803d]' : ''}`}
+                    className={`min-w-32 ${option.buttonColor === 'primary' ? 'bg-[#091413] text-white hover:bg-[#15803d]' : ''}`}
                   >
                     {option.buttonText}
                   </Button>

@@ -105,11 +105,14 @@ export function useProducts() {
 
   const editProduct = useCallback(
     async (productId: string, productData: Partial<Product>) => {
+      const companyId = company?.id;
+      if (!companyId) return null;
       try {
         const { data, error } = await supabase
           .from("products")
           .update(productData)
           .eq("id", productId)
+          .eq("company_id", companyId)
           .select()
           .single();
 
@@ -125,16 +128,19 @@ export function useProducts() {
         return null;
       }
     },
-    [supabase, t, updateProduct]
+    [company?.id, supabase, t, updateProduct]
   );
 
   const deleteProduct = useCallback(
     async (productId: string) => {
+      const companyId = company?.id;
+      if (!companyId) return false;
       try {
         const { error } = await supabase
           .from("products")
           .delete()
-          .eq("id", productId);
+          .eq("id", productId)
+          .eq("company_id", companyId);
 
         if (error) throw error;
 
@@ -148,7 +154,7 @@ export function useProducts() {
         return false;
       }
     },
-    [removeProduct, supabase, t]
+    [company?.id, removeProduct, supabase, t]
   );
 
   // Store fetchProducts in a ref to avoid dependency issues

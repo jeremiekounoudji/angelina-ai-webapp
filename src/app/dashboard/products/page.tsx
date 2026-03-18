@@ -87,7 +87,7 @@ export default function ProductsPage() {
           </p>
         </div>
         <Button
-          className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+          className="bg-[#091413] text-white hover:bg-[#15803d]"
           startContent={<PlusIcon className="w-4 h-4" />}
           onPress={addModal.onOpen}
           isDisabled={Boolean(limits && !limits.can_add_products)}
@@ -105,7 +105,7 @@ export default function ProductsPage() {
               {t('empty.description')}
             </p>
             <Button
-              className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+              className="bg-[#091413] text-white hover:bg-[#15803d]"
               startContent={<PlusIcon className="w-4 h-4" />}
               onPress={addModal.onOpen}
               isDisabled={Boolean(limits && !limits.can_add_products)}

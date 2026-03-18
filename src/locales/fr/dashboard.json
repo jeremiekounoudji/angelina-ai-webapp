@@ -5,7 +5,7 @@
     "products": "Produits",
     "users": "Utilisateurs",
     "subscription": "Abonnement",
-    "status": "Statut",
+    "status": "Status",
     "settings": "Paramètres",
     "support": "Support",
     "logout": "Déconnexion"
@@ -53,6 +53,8 @@
       "phonePlaceholder": "Saisissez le numéro de téléphone",
       "email": "Email",
       "emailPlaceholder": "Saisissez l'adresse email",
+      "emailInvalid": "Adresse email invalide",
+      "nameRequired": "Le nom de l'entreprise est requis",
       "website": "Site Web",
       "websitePlaceholder": "Saisissez l'URL du site web",
       "hours": "Heures d'Ouverture",
@@ -439,7 +441,11 @@
       "failed": "Échoué"
     },
     "billing": {
-      "saveDiscount": "Économisez {percent}% avec la facturation annuelle"
+      "saveDiscount": "Économisez {percent}% avec la facturation annuelle",
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "yearly": "Annuel",
+      "savePercent": "Économisez jusqu'à 20%"
     }
   },
   "status": {

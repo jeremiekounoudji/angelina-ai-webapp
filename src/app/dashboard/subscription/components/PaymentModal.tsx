@@ -270,7 +270,7 @@ export default function PaymentModal({
               <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-gray-900">{t('modal.totalAmount')}</span>
-                  <span className="text-xl font-bold text-[#328E6E]">
+                  <span className="text-xl font-bold text-[#091413]">
                     {calculateAmount().toLocaleString()} XOF
                   </span>
                 </div>
@@ -290,7 +290,7 @@ export default function PaymentModal({
                 onChange={(e) => setProvider(e.target.value)}
                 isRequired
                 classNames={{
-                  trigger: "border-gray-300 bg-white hover:border-[#328E6E]",
+                  trigger: "border-gray-300 bg-white hover:border-[#091413]",
                   label: "text-gray-700",
                   value: "text-gray-900"
                 }}
@@ -313,7 +313,7 @@ export default function PaymentModal({
                 classNames={{
                   input: "text-gray-900",
                   label: "text-gray-700",
-                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]",
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]",
                   description: "text-gray-600"
                 }}
               />
@@ -441,7 +441,7 @@ export default function PaymentModal({
                 {t('modal.cancel')}
               </Button>
               <Button
-                className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+                className="bg-[#091413] text-white hover:bg-[#15803d]"
                 onPress={handlePayment}
                 isDisabled={!phoneNumber || !provider || loading}
                 isLoading={loading}
@@ -461,7 +461,7 @@ export default function PaymentModal({
                 {t('modal.close')}
               </Button>
               <Button
-                className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+                className="bg-[#091413] text-white hover:bg-[#15803d]"
                 onPress={() => {
                   setPaymentStatus("idle");
                   setErrorMessage("");

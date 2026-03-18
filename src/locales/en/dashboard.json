@@ -53,6 +53,8 @@
       "phonePlaceholder": "Enter phone number",
       "email": "Email",
       "emailPlaceholder": "Enter email address",
+      "emailInvalid": "Invalid email address",
+      "nameRequired": "Company name is required",
       "website": "Website",
       "websitePlaceholder": "Enter website URL",
       "hours": "Operating Hours",
@@ -444,7 +446,11 @@
       "failed": "Failed"
     },
     "billing": {
-      "saveDiscount": "Save {percent}% with yearly billing"
+      "saveDiscount": "Save {percent}% with yearly billing",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "yearly": "Yearly",
+      "savePercent": "Save up to 20%"
     }
   },
   "status": {

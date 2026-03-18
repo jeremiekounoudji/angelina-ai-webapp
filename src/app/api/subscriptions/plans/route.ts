@@ -17,7 +17,7 @@ export async function GET() {
       .order('price_monthly', { ascending: true })
 
     if (error) {
-      console.error('Error fetching subscription plans:', error)
+      console.error('Error fetching subscription plans:', error.message)
       return NextResponse.json(
         { error: 'Failed to fetch subscription plans' },
         { status: 500 }
@@ -31,8 +31,7 @@ export async function GET() {
     })) || []
 
     return NextResponse.json({ plans: transformedPlans })
-  } catch (error) {
-    console.error('Unexpected error:', error)
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

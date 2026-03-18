@@ -92,7 +92,7 @@ export default function UsersPage() {
           </p>
         </div>
         <Button
-          className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+          className="bg-[#091413] text-white hover:bg-[#15803d]"
           startContent={<PlusIcon className="w-4 h-4" />}
           onPress={addModal.onOpen}
           isDisabled={Boolean(limits && !limits.can_add_users)}
@@ -110,7 +110,7 @@ export default function UsersPage() {
               {t('empty.description')}
             </p>
             <Button
-              className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+              className="bg-[#091413] text-white hover:bg-[#15803d]"
               startContent={<PlusIcon className="w-4 h-4" />}
               onPress={addModal.onOpen}
               isDisabled={Boolean(limits && !limits.can_add_users)}
@@ -143,7 +143,7 @@ export default function UsersPage() {
                       src={user.avatar_url}
                       name={user.full_name || user.email || 'User'}
                       size="md"
-                      className="bg-green-100 text-[#328E6E]"
+                      className="bg-green-100 text-[#091413]"
                     />
                     <div>
                       <h3 className="font-medium text-gray-900">

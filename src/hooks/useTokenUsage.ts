@@ -4,6 +4,12 @@ import { useCallback, useEffect, useRef, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAppStore } from "@/store";
 import toast from 'react-hot-toast';
+import { createTranslationFunction, DEFAULT_LOCALE, type Locale } from "@/locales";
+
+function getT() {
+  const locale = (typeof window !== 'undefined' ? localStorage.getItem('locale') : null) as Locale | null;
+  return createTranslationFunction(locale ?? DEFAULT_LOCALE);
+}
 
 export function useTokenUsage(companyId?: string) {
   const supabase = useMemo(() => createClient(), []);
@@ -14,7 +20,6 @@ export function useTokenUsage(companyId?: string) {
   // Use selectors to get stable references
   const tokenUsage = useAppStore((state) => state.tokenUsage);
   const tokenPurchases = useAppStore((state) => state.tokenPurchases);
-  const addTokenPurchase = useAppStore((state) => state.addTokenPurchase);
   const loading = useAppStore((state) => state.loading.tokenUsage);
   const error = useAppStore((state) => state.errors.tokenUsage);
 
@@ -92,69 +97,25 @@ export function useTokenUsage(companyId?: string) {
       if (error) throw error;
 
       if (data) {
-        // Refresh usage data
         await fetchTokenUsage(true);
-        toast.success(`${tokensToConsume} tokens consumed`);
+        toast.success(getT()('hooks.tokens.success.consumed', { count: tokensToConsume }));
         return true;
       }
-      
-      toast.error('Not enough tokens available');
-      return false; // Not enough tokens
+
+      toast.error(getT()('hooks.tokens.errors.notEnough'));
+      return false;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to consume tokens';
+      const errorMessage = error instanceof Error ? error.message : getT()('hooks.tokens.errors.consumeFailed');
       toast.error(errorMessage);
       return false;
     }
   }, [companyId, supabase, fetchTokenUsage]);
 
-  const purchaseTokens = useCallback(async (tokenAmount: number, paymentData: {
-    amount: number;
-    currency?: string;
-    transactionId?: string;
-  }) => {
-    if (!companyId) return false;
-
-    try {
-      const { data, error } = await supabase
-        .from("token_purchases")
-        .insert({
-          company_id: companyId,
-          tokens_purchased: tokenAmount,
-          amount_paid: paymentData.amount,
-          currency: paymentData.currency || 'USD',
-          transaction_id: paymentData.transactionId,
-          payment_status: 'completed'
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      addTokenPurchase(data);
-
-      // Update current usage with purchased tokens
-      if (tokenUsage) {
-        const { error: updateError } = await supabase
-          .from("token_usage")
-          .update({
-            tokens_purchased: tokenUsage.tokens_purchased + tokenAmount,
-            tokens_remaining: tokenUsage.tokens_remaining + tokenAmount
-          })
-          .eq("id", tokenUsage.id);
-
-        if (updateError) throw updateError;
-      }
-
-      // Refresh data
-      await fetchTokenUsage(true);
-      toast.success(`${tokenAmount.toLocaleString()} tokens purchased successfully`);
-      return true;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to purchase tokens';
-      toast.error(errorMessage);
-      return false;
-    }
-  }, [companyId, supabase, tokenUsage, addTokenPurchase, fetchTokenUsage]);
+  // Token purchases are recorded server-side only (via FedaPay webhook).
+  // This client method only refreshes the local cache after a confirmed payment.
+  const refreshAfterPurchase = useCallback(async () => {
+    await fetchTokenUsage(true);
+  }, [fetchTokenUsage]);
 
   // Store fetchTokenUsage in a ref to avoid dependency issues
   const fetchTokenUsageRef = useRef(fetchTokenUsage);
@@ -188,7 +149,7 @@ export function useTokenUsage(companyId?: string) {
     loading,
     error,
     consumeTokens,
-    purchaseTokens,
+    refreshAfterPurchase,
     refetch: () => fetchTokenUsage(true),
   };
 }

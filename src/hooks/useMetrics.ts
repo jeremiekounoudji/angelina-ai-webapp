@@ -74,7 +74,9 @@ export function useMetrics() {
   );
 
   const updateMetrics = useCallback(
-    async (companyId: string, updates: Partial<Metrics>) => {
+    async (updates: Partial<Metrics>) => {
+      const companyId = company?.id;
+      if (!companyId) return null;
       try {
         const { data, error } = await supabase
           .from("metrics")
@@ -86,21 +88,20 @@ export function useMetrics() {
         if (error) throw error;
 
         useAppStore.getState().setMetrics(data);
-        toast.success("Metrics updated successfully");
+        toast.success(t("success.updated"));
         return data;
       } catch (error) {
         const errorMessage =
-          error instanceof Error ? error.message : "Failed to update metrics";
+          error instanceof Error ? error.message : t("errors.updateFailed");
         toast.error(errorMessage);
         return null;
       }
     },
-    [supabase]
+    [company?.id, supabase, t]
   );
 
   const incrementMetric = useCallback(
     async (
-      companyId: string,
       metric: keyof Pick<
         Metrics,
         | "messages_sent_total"
@@ -110,6 +111,8 @@ export function useMetrics() {
       >,
       increment = 1
     ) => {
+      const companyId = company?.id;
+      if (!companyId) return false;
       try {
         const { data, error } = await supabase.rpc("increment_metric", {
           company_uuid: companyId,
@@ -119,8 +122,7 @@ export function useMetrics() {
 
         if (error) throw error;
 
-        // Refresh metrics after increment
-        await fetchMetrics(companyId, true);
+        await fetchMetrics(undefined, true);
         return data;
       } catch (error) {
         const errorMessage =
@@ -131,7 +133,7 @@ export function useMetrics() {
         return false;
       }
     },
-    [fetchMetrics, supabase]
+    [company?.id, fetchMetrics, supabase]
   );
 
   // Store fetchMetrics in a ref to avoid dependency issues

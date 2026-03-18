@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -28,14 +28,23 @@ import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { TranslationFunction } from "@/locales";
 import { createClient } from "@/lib/supabase/client";
 import toast from 'react-hot-toast';
+import { createTranslationFunction, DEFAULT_LOCALE, type Locale } from "@/locales";
+
+function getT() {
+  const locale = (typeof window !== 'undefined' ? localStorage.getItem('locale') : null) as Locale | null;
+  return createTranslationFunction(locale ?? DEFAULT_LOCALE);
+}
 
 const createStep1Schema = (t: TranslationFunction) => z
   .object({
-    firstName: z.string().min(1, t('errors.weakPassword')),
-    lastName: z.string().min(1, t('errors.weakPassword')),
+    firstName: z.string().min(1, t('errors.fieldRequired')),
+    lastName: z.string().min(1, t('errors.fieldRequired')),
     email: z.string().email(t('errors.emailExists')),
     phone: z.string().min(8, 'WhatsApp number is required (min 8 digits)'),
-    password: z.string().min(6, t('errors.weakPassword')),
+    password: z.string()
+      .min(8, t('errors.weakPassword'))
+      .regex(/[A-Z]/, t('errors.passwordNeedsUppercase'))
+      .regex(/[0-9]/, t('errors.passwordNeedsNumber')),
     confirmPassword: z.string(),
     acceptTerms: z.boolean().refine((val) => val === true, {
       message: t('errors.termsNotAccepted'),
@@ -95,6 +104,8 @@ export default function RegisterPage() {
   } | null>(null);
   const [isResendingOtp, setIsResendingOtp] = useState(false);
   const [otpCountdown, setOtpCountdown] = useState(0);
+  const [otpReadOnly, setOtpReadOnly] = useState(false);
+  const otpClearRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
   const { signUp, verifyOtp, resendOtp } = useAuthActions();
@@ -124,6 +135,36 @@ export default function RegisterPage() {
     { value: "other", label: "Other" },
   ];
 
+  // Defeat browser autofill on the OTP field:
+  // 1. readOnly for 300ms so the browser can't inject a value on mount
+  // 2. Poll-clear every 100ms for 3s to wipe anything the browser sneaks in
+  useEffect(() => {
+    if (currentStep !== 2) return;
+
+    otpForm.reset({ otp: '' });
+    setOtpReadOnly(true);
+
+    const readOnlyTimer = setTimeout(() => setOtpReadOnly(false), 300);
+
+    // Aggressively clear for 3 seconds to cover all autofill timing windows
+    otpClearRef.current = setInterval(() => {
+      const current = otpForm.getValues('otp');
+      if (current && !/^\d{1,6}$/.test(current)) {
+        otpForm.setValue('otp', '', { shouldValidate: false });
+      }
+    }, 100);
+
+    const stopClear = setTimeout(() => {
+      if (otpClearRef.current) clearInterval(otpClearRef.current);
+    }, 3000);
+
+    return () => {
+      clearTimeout(readOnlyTimer);
+      clearTimeout(stopClear);
+      if (otpClearRef.current) clearInterval(otpClearRef.current);
+    };
+  }, [currentStep]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const onStep1Submit = async (data: Step1FormData) => {
     const result = await signUp(data);
     if (result.success) {
@@ -137,9 +178,6 @@ export default function RegisterPage() {
       otpForm.reset({ otp: '' });
       setCurrentStep(2);
       startOtpCountdown();
-      // Defeat delayed browser autofill (browsers inject values ~1s after render)
-      setTimeout(() => otpForm.setValue('otp', ''), 500);
-      setTimeout(() => otpForm.setValue('otp', ''), 1500);
     }
   };
 
@@ -173,20 +211,6 @@ export default function RegisterPage() {
         return;
       }
 
-      console.log("Calling RPC to finalize registration with company info", {
-        p_auth_user_id: user.id,
-        p_email: userCredentials.email,
-        p_first_name: userCredentials.firstName,
-        p_last_name: userCredentials.lastName,
-        p_phone: userCredentials.phone,
-        p_company_name: data.companyName,
-        p_company_type: data.companyType,
-        p_company_address: data.address || null,
-        p_company_phone: data.phone || null,
-        p_company_email: data.companyEmail || null,
-        p_company_description: data.description || null,
-      });
-
       // Call RPC function to create company and user record atomically
       const { data: rpcData, error: rpcError } = await supabase.rpc(
         "register_user_and_company",
@@ -205,8 +229,6 @@ export default function RegisterPage() {
         }
       );
 
-      console.log("RPC result", rpcData, rpcError);
-
       if (rpcError) {
         const errorMessage = "Registration failed: " + rpcError.message;
         toast.error(errorMessage);
@@ -219,7 +241,7 @@ export default function RegisterPage() {
         return;
       }
 
-      toast.success('Account created successfully!');
+      toast.success(getT()('hooks.auth.success.accountCreated'));
       router.push("/plan-list");
     } catch (err) {
       console.error("Unexpected error:", err);
@@ -520,13 +542,20 @@ export default function RegisterPage() {
                   label={t('form.otpCode')}
                   placeholder={t('form.otpCodePlaceholder')}
                   variant="bordered"
-                  {...otpForm.register("otp")}
+                  {...otpForm.register("otp", {
+                    onChange: (e) => {
+                      // Strip non-digits and cap at 6 characters
+                      const digits = e.target.value.replace(/\D/g, '').slice(0, 6);
+                      otpForm.setValue('otp', digits, { shouldValidate: false });
+                    }
+                  })}
                   isInvalid={!!otpForm.formState.errors.otp}
                   errorMessage={otpForm.formState.errors.otp?.message}
                   isRequired
                   maxLength={6}
-                  autoComplete="off"
-                  name="otp-code"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  readOnly={otpReadOnly}
                   classNames={{
                     input: "text-white text-center text-lg tracking-widest",
                     label: "text-gray-50",

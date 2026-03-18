@@ -10,7 +10,8 @@ export function usePayments() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const { company } = useAuth()
-  const supabase = createClient()
+  // Stable ref — createClient() must not be in the dep array
+  const supabaseRef = useState(() => createClient())[0]
 
   const fetchPayments = useCallback(async () => {
     if (!company?.id) {
@@ -22,7 +23,7 @@ export function usePayments() {
       setLoading(true)
       setError(null)
 
-      const { data: paymentsData, error: paymentsError } = await supabase
+      const { data: paymentsData, error: paymentsError } = await supabaseRef
         .from('payments')
         .select(`
           *,
@@ -50,7 +51,7 @@ export function usePayments() {
     } finally {
       setLoading(false)
     }
-  }, [company?.id, supabase])
+  }, [company?.id, supabaseRef])
 
   useEffect(() => {
     fetchPayments()

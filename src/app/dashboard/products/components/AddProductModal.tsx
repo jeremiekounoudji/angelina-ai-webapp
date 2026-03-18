@@ -72,6 +72,7 @@ export function AddProductModal({
   const { limits, canAddProduct } = usePlanLimits(company?.id);
   const { t } = useTranslationNamespace('dashboard.products');
   const { t: tCommon } = useTranslationNamespace('common');
+  const { t: tHooks } = useTranslationNamespace('hooks.products');
 
   const productSchema = createProductSchema(t);
 
@@ -116,9 +117,7 @@ export function AddProductModal({
       // Check if product can be added
       const canAdd = await canAddProduct();
       if (!canAdd) {
-        toast.error(
-          "You have reached the maximum number of products for your current plan. Please upgrade to add more products."
-        );
+        toast.error(tHooks("errors.planLimitReached"));
         return;
       }
 

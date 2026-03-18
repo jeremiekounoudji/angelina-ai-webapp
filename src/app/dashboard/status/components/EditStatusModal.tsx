@@ -218,7 +218,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
               maxRows={4}
               variant="bordered"
               classNames={{
-                inputWrapper: "border-gray-300 data-[hover=true]:border-[#328E6E] group-data-[focus=true]:border-[#328E6E]",
+                inputWrapper: "border-gray-300 data-[hover=true]:border-[#091413] group-data-[focus=true]:border-[#091413]",
               }}
             />
           </div>
@@ -227,7 +227,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">{t('media')}</label>
             {!mediaPreview ? (
-              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-[#328E6E] transition-all duration-200">
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-[#091413] transition-all duration-200">
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <PhotoIcon className="w-10 h-10 text-gray-400 mb-2" />
                   <p className="text-sm text-gray-500">{t('mediaHint')}</p>
@@ -266,7 +266,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
               min="1"
               variant="bordered"
               classNames={{
-                inputWrapper: "border-gray-300 data-[hover=true]:border-[#328E6E] group-data-[focus=true]:border-[#328E6E]",
+                inputWrapper: "border-gray-300 data-[hover=true]:border-[#091413] group-data-[focus=true]:border-[#091413]",
               }}
             />
             <Select
@@ -275,7 +275,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
               onSelectionChange={(keys) => setScheduleType(Array.from(keys)[0] as "datetime" | "frequency")}
               variant="bordered"
               classNames={{
-                trigger: "border-gray-300 data-[hover=true]:border-[#328E6E]",
+                trigger: "border-gray-300 data-[hover=true]:border-[#091413]",
               }}
             >
               <SelectItem key="frequency">
@@ -296,7 +296,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
               onValueChange={setPublishmentDatetime}
               variant="bordered"
               classNames={{
-                inputWrapper: "border-gray-300 data-[hover=true]:border-[#328E6E] group-data-[focus=true]:border-[#328E6E]",
+                inputWrapper: "border-gray-300 data-[hover=true]:border-[#091413] group-data-[focus=true]:border-[#091413]",
               }}
             />
           )}
@@ -320,7 +320,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
                       key={day.value}
                       value={day.value}
                       classNames={{
-                        base: "inline-flex m-0 bg-gray-100 hover:bg-gray-200 items-center justify-center rounded-xl border border-gray-200 data-[selected=true]:bg-[#328E6E] data-[selected=true]:border-[#328E6E] cursor-pointer px-3 py-2 transition-colors",
+                        base: "inline-flex m-0 bg-gray-100 hover:bg-gray-200 items-center justify-center rounded-xl border border-gray-200 data-[selected=true]:bg-[#091413] data-[selected=true]:border-[#091413] cursor-pointer px-3 py-2 transition-colors",
                         label: "text-sm font-medium text-gray-700 group-data-[selected=true]:text-white",
                         wrapper: "hidden",
                       }}
@@ -339,7 +339,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
                 onValueChange={setRecurringTime}
                 variant="bordered"
                 classNames={{
-                  inputWrapper: "border-gray-300 data-[hover=true]:border-[#328E6E] group-data-[focus=true]:border-[#328E6E]",
+                  inputWrapper: "border-gray-300 data-[hover=true]:border-[#091413] group-data-[focus=true]:border-[#091413]",
                 }}
               />
             </div>
@@ -351,7 +351,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
             {t('cancel')}
           </Button>
           <Button
-            className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+            className="bg-[#091413] text-white hover:bg-[#15803d]"
             onPress={handleSubmit}
             isLoading={loading || uploading}
           >

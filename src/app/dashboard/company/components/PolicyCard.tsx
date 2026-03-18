@@ -7,10 +7,12 @@ import { useCompany } from "@/hooks/useCompany";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import toast from "react-hot-toast";
+import { useTranslationNamespace } from "@/contexts/TranslationContext";
 
 export function PolicyCard() {
   const { company } = useAuth();
   const { updateCompany } = useCompany();
+  const { t } = useTranslationNamespace("hooks.company");
   const [policy, setPolicy] = useState(company?.policy || "");
   const [isLoading, setIsLoading] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -35,10 +37,10 @@ export function PolicyCard() {
       setShowSaveConfirm(false);
       await updateCompany({ policy });
       setIsDirty(false);
-      toast.success("Company policy updated successfully");
+      toast.success(t("success.policyUpdated"));
     } catch (error) {
       console.error("Error updating policy:", error);
-      toast.error("Failed to update company policy");
+      toast.error(t("errors.policyUpdateFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -69,9 +71,9 @@ export function PolicyCard() {
   ];
 
   return (
-    <Card className="bg-white border border-gray-200 shadow-sm h-full flex flex-col">
+    <Card className=" bg-white border border-gray-200 shadow-sm h-full hidden">
       <CardHeader className="flex gap-3 border-b border-gray-100">
-        <DocumentTextIcon className="w-6 h-6 text-[#328E6E]" />
+        <DocumentTextIcon className="w-6 h-6 text-[#091413]" />
         <div className="flex flex-col">
           <h3 className="text-lg font-semibold text-gray-900">Company Policy</h3>
           <p className="text-sm text-gray-600">
@@ -91,7 +93,7 @@ export function PolicyCard() {
             classNames={{
               base: "flex-1",
               input: "!text-gray-900 bg-white !bg-white",
-              inputWrapper: "border-gray-300 bg-white !bg-white hover:border-[#328E6E] focus-within:border-[#328E6E] h-full",
+              inputWrapper: "border-gray-300 bg-white !bg-white hover:border-[#091413] focus-within:border-[#091413] h-full",
               description: "!text-gray-600 !bg-transparent",
               innerWrapper: "bg-white !bg-white",
               helperWrapper: "!bg-transparent"
@@ -109,7 +111,7 @@ export function PolicyCard() {
               </span>
             </div>
             <Button
-              className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+              className="bg-[#091413] text-white hover:bg-[#15803d]"
               onPress={handleSaveClick}
               isLoading={isLoading}
               size="sm"

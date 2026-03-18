@@ -1,7 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
+
+const ALLOWED_MIME_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'video/mp4',
+]
+const MAX_FILE_SIZE_MB = 10
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
 interface UploadOptions {
   bucket: string
@@ -17,16 +27,28 @@ interface UploadResult {
 
 export function useUpload() {
   const [uploading, setUploading] = useState(false)
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
   const upload = async ({ bucket, files, path = '' }: UploadOptions): Promise<UploadResult> => {
+    // Validate all files before uploading any
+    for (const file of files) {
+      if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+        return { success: false, urls: [], error: `File type not allowed: ${file.type}` }
+      }
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        return { success: false, urls: [], error: `File too large. Maximum size is ${MAX_FILE_SIZE_MB}MB.` }
+      }
+    }
+
     setUploading(true)
     const urls: string[] = []
 
     try {
       for (const file of files) {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
+        // Sanitize extension — strip anything that isn't alphanumeric
+        const rawExt = file.name.split('.').pop() ?? 'bin'
+        const safeExt = rawExt.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${safeExt}`
         const filePath = path ? `${path}/${fileName}` : fileName
 
         const { data, error } = await supabase.storage
@@ -44,11 +66,10 @@ export function useUpload() {
 
       return { success: true, urls }
     } catch (error) {
-      console.error('Upload error:', error)
-      return { 
-        success: false, 
-        urls: [], 
-        error: error instanceof Error ? error.message : 'Upload failed' 
+      return {
+        success: false,
+        urls: [],
+        error: error instanceof Error ? error.message : 'Upload failed',
       }
     } finally {
       setUploading(false)
@@ -57,21 +78,13 @@ export function useUpload() {
 
   const deleteFile = async (bucket: string, path: string): Promise<boolean> => {
     try {
-      const { error } = await supabase.storage
-        .from(bucket)
-        .remove([path])
-
+      const { error } = await supabase.storage.from(bucket).remove([path])
       if (error) throw error
       return true
-    } catch (error) {
-      console.error('Delete error:', error)
+    } catch {
       return false
     }
   }
 
-  return {
-    upload,
-    deleteFile,
-    uploading
-  }
+  return { upload, deleteFile, uploading }
 }

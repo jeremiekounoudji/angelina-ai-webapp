@@ -79,6 +79,7 @@ export function ProductModal({
   const { limits, canAddProduct } = usePlanLimits(company?.id);
   const { t } = useTranslationNamespace('dashboard.products');
   const { t: tCommon } = useTranslationNamespace('common');
+  const { t: tHooks } = useTranslationNamespace('hooks.products');
 
   const isEditMode = !!product;
   const productSchema = createProductSchema(t);
@@ -160,9 +161,7 @@ export function ProductModal({
       if (!isEditMode) {
         const canAdd = await canAddProduct();
         if (!canAdd) {
-          toast.error(
-            "You have reached the maximum number of products for your current plan. Please upgrade to add more products."
-          );
+          toast.error(tHooks("errors.planLimitReached"));
           return;
         }
       }
@@ -307,7 +306,7 @@ export function ProductModal({
                     <Button
                       isIconOnly
                       size="sm"
-                      className="absolute -bottom-1 -right-1 bg-[#328E6E] text-white hover:bg-[#15803d]"
+                      className="absolute -bottom-1 -right-1 bg-[#091413] text-white hover:bg-[#15803d]"
                       onPress={() => fileInputRef.current?.click()}
                       isDisabled={uploading}
                     >
@@ -346,7 +345,7 @@ export function ProductModal({
                 classNames={{
                   input: "text-gray-900",
                   label: "text-gray-700",
-                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                 }}
               />
 
@@ -362,7 +361,7 @@ export function ProductModal({
                 classNames={{
                   input: "text-gray-900",
                   label: "text-gray-700",
-                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                 }}
               />
 
@@ -379,7 +378,7 @@ export function ProductModal({
                 classNames={{
                   input: "text-gray-900",
                   label: "text-gray-700",
-                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                 }}
               />
 
@@ -413,7 +412,7 @@ export function ProductModal({
                     classNames={{
                       input: "text-gray-900",
                       label: "text-gray-700",
-                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                     }}
                   />
                 ) : (
@@ -435,7 +434,7 @@ export function ProductModal({
                       classNames={{
                         input: "text-gray-900",
                         label: "text-gray-700",
-                        inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                        inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                       }}
                     />
                     <Input
@@ -455,7 +454,7 @@ export function ProductModal({
                       classNames={{
                         input: "text-gray-900",
                         label: "text-gray-700",
-                        inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                        inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                       }}
                     />
                   </div>
@@ -472,7 +471,7 @@ export function ProductModal({
                   {tCommon('modals.cancel') || 'Cancel'}
                 </Button>
                 <Button
-                  className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+                  className="bg-[#091413] text-white hover:bg-[#15803d]"
                   type="submit"
                   isLoading={isLoading || uploading}
                   isDisabled={!isDirty || (!isEditMode && Boolean(limits && !limits.can_add_products))}

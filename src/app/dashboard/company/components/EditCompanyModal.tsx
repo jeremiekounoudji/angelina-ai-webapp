@@ -214,7 +214,7 @@ export function EditCompanyModal({
                       <Button
                         isIconOnly
                         size="sm"
-                        className="absolute -bottom-1 -right-1 bg-[#328E6E] text-white hover:bg-[#15803d]"
+                        className="absolute -bottom-1 -right-1 bg-[#091413] text-white hover:bg-[#15803d]"
                         onPress={() => fileInputRef.current?.click()}
                         isDisabled={uploading}
                       >
@@ -252,7 +252,7 @@ export function EditCompanyModal({
                     classNames={{
                       input: "text-gray-900",
                       label: "text-gray-700",
-                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                     }}
                   />
 
@@ -270,7 +270,7 @@ export function EditCompanyModal({
                     errorMessage={errors.type?.message}
                     isRequired
                     classNames={{
-                      trigger: "border-gray-300 bg-white hover:border-[#328E6E]",
+                      trigger: "border-gray-300 bg-white hover:border-[#091413]",
                       label: "text-gray-700",
                       value: "text-gray-900"
                     }}
@@ -294,7 +294,7 @@ export function EditCompanyModal({
                     classNames={{
                       input: "text-gray-900",
                       label: "text-gray-700",
-                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                     }}
                   />
 
@@ -309,7 +309,7 @@ export function EditCompanyModal({
                     classNames={{
                       input: "text-gray-900",
                       label: "text-gray-700",
-                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                     }}
                   />
 
@@ -325,7 +325,7 @@ export function EditCompanyModal({
                     classNames={{
                       input: "text-gray-900",
                       label: "text-gray-700",
-                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                     }}
                   />
 
@@ -341,7 +341,7 @@ export function EditCompanyModal({
                     classNames={{
                       input: "text-gray-900",
                       label: "text-gray-700",
-                      inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                      inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                     }}
                   />
                 </div>
@@ -356,7 +356,7 @@ export function EditCompanyModal({
                     Cancel
                   </Button>
                   <Button
-                    className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+                    className="bg-[#091413] text-white hover:bg-[#15803d]"
                     type="submit"
                     isLoading={isLoading}
                     isDisabled={!isDirty}

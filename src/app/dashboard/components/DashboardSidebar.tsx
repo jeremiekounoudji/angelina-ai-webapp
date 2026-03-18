@@ -13,25 +13,26 @@ import {
   Bars3Icon,
   XMarkIcon,
   ChatBubbleBottomCenterTextIcon,
-  QuestionMarkCircleIcon,
   DocumentTextIcon,
   ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSubscriptionGuard } from '@/contexts/SubscriptionGuardContext'
 import { useTranslationNamespace, useTranslation } from '@/contexts/TranslationContext'
-import { SupportModal } from '@/components/SupportModal'
 
 export function DashboardSidebar() {
   const pathname = usePathname()
   const { user, company, signOut } = useAuth()
   const { isExpired, expiryDate } = useSubscriptionGuard()
   const [isOpen, setIsOpen] = useState(false)
-  const [supportOpen, setSupportOpen] = useState(false)
   const { t } = useTranslationNamespace('dashboard.sidebar')
-  const { t: tSupport } = useTranslationNamespace('dashboard.support')
   const { t: tLegal } = useTranslationNamespace('dashboard.legal')
   const { locale, setLocale } = useTranslation()
+
+  // Derive display name from auth metadata
+  const firstName = user?.user_metadata?.first_name || ''
+  const lastName  = user?.user_metadata?.last_name  || ''
+  const displayName = [firstName, lastName].filter(Boolean).join(' ') || user?.email || 'Admin'
 
   const navigation = [
     { name: t('company'),      href: '/dashboard/company',      icon: BuildingOfficeIcon },
@@ -41,13 +42,17 @@ export function DashboardSidebar() {
     { name: t('settings'),     href: '/dashboard/settings',      icon: CogIcon },
   ]
 
-  // Derive account status from expiry date
+  const legalLinks = [
+    { name: tLegal('terms'),   href: '/terms',   icon: DocumentTextIcon },
+    { name: tLegal('privacy'), href: '/privacy', icon: ShieldCheckIcon },
+  ]
+
   const accountStatus = (() => {
     if (!expiryDate) return { label: company?.subscription_status ?? 'inactive', color: 'default' as const }
     const now = new Date()
     const daysLeft = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-    if (isExpired)        return { label: 'expired',  color: 'danger'  as const }
-    if (daysLeft <= 3)    return { label: 'expiring', color: 'warning' as const }
+    if (isExpired)     return { label: 'expired',  color: 'danger'  as const }
+    if (daysLeft <= 3) return { label: 'expiring', color: 'warning' as const }
     return { label: 'active', color: 'success' as const }
   })()
 
@@ -69,7 +74,7 @@ export function DashboardSidebar() {
   }, [isOpen])
 
   const SidebarContent = () => (
-    <div className="bg-[#328E6E] h-full flex flex-col overflow-y-auto">
+    <div className="bg-[#091413] h-full flex flex-col overflow-y-auto">
       {/* Mobile close */}
       <div className="lg:hidden flex justify-end p-4">
         <Button isIconOnly variant="light" size="sm" onPress={() => setIsOpen(false)} className="text-white/70 hover:text-white">
@@ -78,8 +83,8 @@ export function DashboardSidebar() {
       </div>
 
       {/* Company header */}
-      <div className="p-4 border-b border-white">
-        <div className="flex items-center space-x-3 bg-white rounded-lg p-3">
+      <div className="p-4 border-b border-white/20">
+        <div className="flex items-center space-x-3 bg-slate-100 rounded-lg p-3">
           <Avatar src={company?.avatar_url} name={company?.name || 'Company'} size="md" className="bg-gray-300" />
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold text-black truncate">{company?.name || 'Loading...'}</h3>
@@ -108,7 +113,7 @@ export function DashboardSidebar() {
               key={item.name}
               href={item.href}
               className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
-                isActive ? 'bg-white text-[#328E6E] shadow-md' : 'text-white hover:bg-white/10'
+                isActive ? 'bg-white text-[#091413] shadow-md' : 'text-white hover:bg-white/10'
               }`}
             >
               <Icon className="w-5 h-5 mr-3" />
@@ -116,83 +121,63 @@ export function DashboardSidebar() {
             </Link>
           )
         })}
+
+        {/* Legal links — same weight as nav items */}
+        <div className="pt-2">
+          {legalLinks.map((item) => {
+            const Icon = item.icon
+            return (
+              <a
+                key={item.name}
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all text-white hover:bg-white/10 cursor-pointer"
+              >
+                <Icon className="w-5 h-5 mr-3" />
+                {item.name}
+              </a>
+            )
+          })}
+        </div>
+
+        {/* Logout — same weight as nav items */}
+        <button
+          onClick={() => { signOut() }}
+          className="w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all text-white hover:bg-white/10 cursor-pointer"
+        >
+          <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3" />
+          {t('logout')}
+        </button>
       </nav>
 
-      {/* Legal section */}
-      <div className="px-4 pb-2">
-        <p className="text-[10px] font-semibold uppercase tracking-widest text-white/40 mb-1 px-1">
-          {tLegal('title')}
-        </p>
-        <a
-          href="/terms"
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center px-4 py-2 text-xs text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-        >
-          <DocumentTextIcon className="w-4 h-4 mr-2 flex-shrink-0" />
-          {tLegal('terms')}
-        </a>
-        <a
-          href="/privacy"
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center px-4 py-2 text-xs text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-        >
-          <ShieldCheckIcon className="w-4 h-4 mr-2 flex-shrink-0" />
-          {tLegal('privacy')}
-        </a>
-      </div>
-
-      {/* Footer */}
+      {/* Footer: user info + compact language switcher */}
       <div className="p-4 border-t border-white/10">
-        {/* Language switcher */}
-        <div className="mb-3 flex justify-center">
-          <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-1">
+        <div className="flex items-center space-x-3 mb-3">
+          <Avatar name={displayName} size="sm" className="bg-white/20 text-white flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-white truncate">{displayName}</p>
+            <p className="text-xs text-white/60">Admin</p>
+          </div>
+        </div>
+
+        {/* Compact language switcher */}
+        <div className="flex justify-end">
+          <div className="flex items-center bg-white/10 rounded-md p-0.5 gap-0.5">
             {(['en', 'fr'] as const).map((lang) => (
               <button
                 key={lang}
                 onClick={() => setLocale(lang)}
-                className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors ${
-                  locale === lang ? 'bg-white text-[#328E6E] shadow-sm' : 'text-white hover:bg-white/10'
+                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors cursor-pointer ${
+                  locale === lang ? 'bg-white text-[#091413]' : 'text-white/70 hover:text-white'
                 }`}
                 aria-label={`Switch to ${lang.toUpperCase()}`}
               >
-                <span className="text-base">{lang === 'en' ? '🇺🇸' : '🇫🇷'}</span>
-                <span className="text-xs font-medium">{lang.toUpperCase()}</span>
+                {lang.toUpperCase()}
               </button>
             ))}
           </div>
         </div>
-
-        <div className="flex items-center space-x-3 mb-3">
-          <Avatar name={user?.email || 'User'} size="sm" className="bg-white/10" />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white truncate">{user?.email}</p>
-            <p className="text-xs text-white/70">Admin</p>
-          </div>
-        </div>
-
-        {/* Support */}
-        <Button
-          variant="light"
-          size="sm"
-          className="w-full justify-start text-white hover:bg-white/10 mb-1"
-          startContent={<QuestionMarkCircleIcon className="w-4 h-4" />}
-          onPress={() => setSupportOpen(true)}
-        >
-          {t('support')}
-        </Button>
-
-        {/* Sign out */}
-        <Button
-          variant="light"
-          size="sm"
-          className="w-full justify-start text-white hover:bg-white/10"
-          startContent={<ArrowRightOnRectangleIcon className="w-4 h-4" />}
-          onPress={signOut}
-        >
-          {t('logout')}
-        </Button>
       </div>
     </div>
   )
@@ -206,7 +191,7 @@ export function DashboardSidebar() {
         variant="flat"
         size="sm"
         onPress={() => setIsOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 bg-[#328E6E] text-white hover:bg-[#15803d] shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 bg-[#091413] text-white hover:bg-[#15803d] shadow-lg"
       >
         <Bars3Icon className="w-5 h-5" />
       </Button>
@@ -230,8 +215,6 @@ export function DashboardSidebar() {
       >
         <SidebarContent />
       </aside>
-
-      <SupportModal isOpen={supportOpen} onClose={() => setSupportOpen(false)} />
     </>
   )
 }

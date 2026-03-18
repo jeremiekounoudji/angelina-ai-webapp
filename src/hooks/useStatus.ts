@@ -86,6 +86,7 @@ export function useStatus(companyId?: string) {
 
   const updateStatus = useCallback(
     async (id: string, updates: Partial<Status>) => {
+      if (!companyId) return null;
       try {
         setLoading(true);
 
@@ -93,6 +94,7 @@ export function useStatus(companyId?: string) {
           .from("status")
           .update({ ...updates, updated_at: new Date().toISOString() })
           .eq("id", id)
+          .eq("company_id", companyId)
           .select()
           .single();
 
@@ -109,7 +111,7 @@ export function useStatus(companyId?: string) {
         setLoading(false);
       }
     },
-    [supabase, t, fetchStatuses]
+    [companyId, supabase, t, fetchStatuses]
   );
 
   const deleteStatus = useCallback(
@@ -122,7 +124,8 @@ export function useStatus(companyId?: string) {
         const { error: deleteError } = await supabase
           .from("status")
           .delete()
-          .eq("id", id);
+          .eq("id", id)
+          .eq("company_id", companyId);
 
         if (deleteError) throw deleteError;
 

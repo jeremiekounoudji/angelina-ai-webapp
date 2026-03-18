@@ -6,6 +6,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useAppStore } from "@/store";
 import { User } from "@/types/database";
 import toast from 'react-hot-toast';
+import { createTranslationFunction, DEFAULT_LOCALE, type Locale } from "@/locales";
+
+function getT() {
+  const locale = (typeof window !== 'undefined' ? localStorage.getItem('locale') : null) as Locale | null;
+  return createTranslationFunction(locale ?? DEFAULT_LOCALE);
+}
 
 export function useUsers() {
   const supabase = useMemo(() => createClient(), []);
@@ -66,7 +72,7 @@ export function useUsers() {
 
   const createUser = useCallback(async (userData: Omit<User, 'id' | 'created_at' | 'company_id'>) => {
     if (!company?.id) {
-      toast.error('No company selected');
+      toast.error(getT()('hooks.users.errors.noCompany'));
       return null;
     }
 
@@ -83,54 +89,60 @@ export function useUsers() {
       if (error) throw error;
 
       addUser(data);
-      toast.success('User created successfully');
+      toast.success(getT()('hooks.users.success.created'));
       return data;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create user';
+      const errorMessage = error instanceof Error ? error.message : getT()('hooks.users.errors.createFailed');
       toast.error(errorMessage);
       return null;
     }
   }, [company?.id, supabase, addUser]);
 
   const editUser = useCallback(async (userId: string, userData: Partial<User>) => {
+    const companyId = company?.id;
+    if (!companyId) return null;
     try {
       const { data, error } = await supabase
         .from('users')
         .update(userData)
         .eq('id', userId)
+        .eq('company_id', companyId)
         .select()
         .single();
 
       if (error) throw error;
 
       updateUser(userId, data);
-      toast.success('User updated successfully');
+      toast.success(getT()('hooks.users.success.updated'));
       return data;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to update user';
+      const errorMessage = error instanceof Error ? error.message : getT()('hooks.users.errors.updateFailed');
       toast.error(errorMessage);
       return null;
     }
-  }, [supabase, updateUser]);
+  }, [company?.id, supabase, updateUser]);
 
   const deleteUser = useCallback(async (userId: string) => {
+    const companyId = company?.id;
+    if (!companyId) return false;
     try {
       const { error } = await supabase
         .from('users')
         .delete()
-        .eq('id', userId);
+        .eq('id', userId)
+        .eq('company_id', companyId);
 
       if (error) throw error;
 
       removeUser(userId);
-      toast.success('User deleted successfully');
+      toast.success(getT()('hooks.users.success.deleted'));
       return true;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete user';
+      const errorMessage = error instanceof Error ? error.message : getT()('hooks.users.errors.deleteFailed');
       toast.error(errorMessage);
       return false;
     }
-  }, [supabase, removeUser]);
+  }, [company?.id, supabase, removeUser]);
 
   // Store fetchUsers in a ref to avoid dependency issues
   const fetchUsersRef = useRef(fetchUsers);

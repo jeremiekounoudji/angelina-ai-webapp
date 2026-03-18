@@ -27,6 +27,7 @@ export default function CompanyPage() {
   const { 
     whatsappInstance, 
     connectionStatus, 
+    connectWhatsApp,
     disconnectWhatsApp 
   } = useWhatsAppConnect();
 
@@ -70,7 +71,7 @@ export default function CompanyPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
         <Button
-          className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+          className="bg-[#091413] text-white hover:bg-[#15803d]"
           startContent={<PencilIcon className="w-4 h-4" />}
           onPress={onOpen}
         >
@@ -88,7 +89,7 @@ export default function CompanyPage() {
                 src={company.avatar_url}
                 name={company.name}
                 size="lg"
-                className="w-16 h-16 bg-green-100 text-[#328E6E]"
+                className="w-16 h-16 bg-green-100 text-[#091413]"
               />
               <div className="flex flex-col">
                 <h2 className="text-xl font-semibold text-gray-900">{company.name}</h2>
@@ -214,6 +215,9 @@ export default function CompanyPage() {
       <WhatsAppConnectModal
         isOpen={isWhatsAppOpen}
         onOpenChange={onWhatsAppOpenChange}
+        connectWhatsApp={connectWhatsApp}
+        connectionStatus={connectionStatus}
+        whatsappInstance={whatsappInstance}
       />
     </div>
   )

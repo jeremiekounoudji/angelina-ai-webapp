@@ -57,6 +57,7 @@ export function AddUserModal({
   const { limits, canAddUser } = usePlanLimits(company?.id);
   const { t } = useTranslationNamespace('dashboard.users');
   const { t: tCommon } = useTranslationNamespace('common');
+  const { t: tHooks } = useTranslationNamespace('hooks.users');
 
   const {
     register,
@@ -103,7 +104,7 @@ export function AddUserModal({
       // Check if user can be added
       const canAdd = await canAddUser();
       if (!canAdd) {
-        toast.error("You have reached the maximum number of users for your current plan. Please upgrade to add more users.");
+        toast.error(tHooks('errors.planLimitReached'));
         return;
       }
 
@@ -211,12 +212,12 @@ export function AddUserModal({
                     src={avatarUrl}
                     name={watch("full_name") || "User"}
                     size="lg"
-                    className="w-24 h-24 bg-green-100 text-[#328E6E]"
+                    className="w-24 h-24 bg-green-100 text-[#091413]"
                   />
                   <Button
                     isIconOnly
                     size="sm"
-                    className="absolute -bottom-1 -right-1 bg-[#328E6E] text-white hover:bg-[#15803d]"
+                    className="absolute -bottom-1 -right-1 bg-[#091413] text-white hover:bg-[#15803d]"
                     onPress={() => fileInputRef.current?.click()}
                     isDisabled={uploading}
                   >
@@ -249,7 +250,7 @@ export function AddUserModal({
                 classNames={{
                   input: "text-gray-900",
                   label: "text-gray-700",
-                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                 }}
               />
 
@@ -266,7 +267,7 @@ export function AddUserModal({
                 classNames={{
                   input: "text-gray-900",
                   label: "text-gray-700",
-                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                 }}
               />
 
@@ -282,7 +283,7 @@ export function AddUserModal({
                 classNames={{
                   input: "text-gray-900",
                   label: "text-gray-700",
-                  inputWrapper: "border-gray-300 bg-white hover:border-[#328E6E] focus-within:border-[#328E6E]"
+                  inputWrapper: "border-gray-300 bg-white hover:border-[#091413] focus-within:border-[#091413]"
                 }}
               />
 
@@ -300,7 +301,7 @@ export function AddUserModal({
                 errorMessage={errors.role?.message}
                 isRequired
                 classNames={{
-                  trigger: "border-gray-300 bg-white hover:border-[#328E6E]",
+                  trigger: "border-gray-300 bg-white hover:border-[#091413]",
                   label: "text-gray-700",
                   value: "text-gray-900"
                 }}
@@ -322,7 +323,7 @@ export function AddUserModal({
                 {t('form.cancel')}
               </Button>
               <Button
-                className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+                className="bg-[#091413] text-white hover:bg-[#15803d]"
                 type="submit"
                 isLoading={isLoading || uploading}
                 isDisabled={!isDirty || Boolean(limits && !limits.can_add_users)}

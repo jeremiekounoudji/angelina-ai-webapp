@@ -18,9 +18,11 @@ interface AuthContextType {
   user: User | null;
   company: Company | null;
   loading: boolean;
+  error: string | null;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
   setCompany: (company: Company | null) => void;
+  retry: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,108 +30,71 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [company, setCompany] = useState<Company | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const supabase = useMemo(() => createClient(), []);
   const { clearAll } = useAppStore();
   const initRef = useRef(false);
 
   const refreshUser = useCallback(async () => {
-    console.log("Refreshing user");
-    
+    setLoading(true);
     try {
-      setLoading(true);
-      
-      // First check if there's a session
-      const { data: { session } } = await supabase.auth.getSession();
-      
+      // 1. Get session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) throw sessionError;
+
       if (!session) {
-        console.log("No session found");
         setUser(null);
         setCompany(null);
         return;
       }
 
-      const {
-        data: { user: currentUser },
-        error,
-      } = await supabase.auth.getUser();
+      // 2. Fetch user + company in parallel
+      const [userRes, companyRes] = await Promise.all([
+        supabase.auth.getUser(),
+        supabase.from("companies").select("*").eq("user_id", session.user.id).single(),
+      ]);
 
-      if (error) {
-        console.error("Error getting user:", error);
-        setUser(null);
-        setCompany(null);
-        return;
-      }
+      if (userRes.error) throw userRes.error;
 
-      setUser(currentUser);
-      if (currentUser) {
-        console.log("User found:", currentUser.id);
-        console.log("Fetching user's company");
-
-        const { data: companyData, error: companyError } = await supabase
-          .from("companies")
-          .select("*")
-          .eq("user_id", currentUser.id)
-          .single();
-
-        if (companyError) {
-          console.error("Error fetching company:", companyError);
-          setCompany(null);
-        } else if (companyData) {
-          console.log("Company found:", companyData.id);
-          setCompany(companyData);
-        } else {
-          setCompany(null);
-        }
-      } else {
-        setCompany(null);
-      }
-    } catch (error) {
-      console.error("Error refreshing user:", error);
-      setUser(null);
-      setCompany(null);
+      setUser(userRes.data.user);
+      setCompany(companyRes.data ?? null);
+      setError(null);
+    } catch (err: unknown) {
+      // Don't log the full error object — it may contain sensitive session data
+      console.error("Auth refresh failed");
+      setError("Erreur de connexion au serveur");
+      // Don't reset user on transient network errors
     } finally {
       setLoading(false);
     }
   }, [supabase]);
 
+  const retry = useCallback(() => {
+    setError(null);
+    refreshUser();
+  }, [refreshUser]);
+
   useEffect(() => {
-    const initializeAuth = async () => {
-      if (initRef.current) return;
+    if (!initRef.current) {
       initRef.current = true;
+      refreshUser();
+    }
 
-      try {
-        console.log("Starting auth initialization");
-        await refreshUser();
-      } catch (error) {
-        console.error("Error initializing auth:", error);
-        setUser(null);
-        setCompany(null);
-      } finally {
-        console.log("Auth initialization complete");
-        setLoading(false);
-      }
-    };
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
 
-    initializeAuth();
-
-    // Listen for auth state changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event: string, session: { user: User } | null) => {
-      console.log("Auth state change:", event, session?.user?.id);
-      
-      if (event === "SIGNED_IN" && session?.user) {
-        // Skip refreshUser during registration flow — the register page manages its own
-        // step progression and will call refreshUser after company setup is complete.
-        const isRegistering = typeof window !== "undefined" &&
-          window.location.pathname.startsWith("/register");
-        if (isRegistering) {
-          // Just set the user, don't fetch company (it doesn't exist yet)
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+        if (session?.user) {
+          // During registration, just set the user — company doesn't exist yet
+          const isRegistering = typeof window !== "undefined" &&
+            window.location.pathname.startsWith("/register");
+          if (isRegistering) {
+            setUser(session.user);
+            return;
+          }
           setUser(session.user);
-          return;
+          refreshUser();
         }
-        await refreshUser();
       } else if (event === "SIGNED_OUT") {
         setUser(null);
         setCompany(null);
@@ -137,10 +102,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [supabase, clearAll, refreshUser]);
+    return () => subscription.unsubscribe();
+  }, [supabase, refreshUser, clearAll]);
 
   const signOut = useCallback(async () => {
     try {
@@ -148,14 +111,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       setCompany(null);
       clearAll();
-
-      // Redirect to login page
       if (typeof window !== "undefined") {
         window.location.href = "/login";
       }
-    } catch (error) {
-      console.error("Error signing out:", error);
-      // Still redirect even if there's an error
+    } catch {
+      // Redirect to login regardless of error
       if (typeof window !== "undefined") {
         window.location.href = "/login";
       }
@@ -164,7 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, company, loading, signOut, refreshUser, setCompany }}
+      value={{ user, company, loading, error, signOut, refreshUser, setCompany, retry }}
     >
       {children}
     </AuthContext.Provider>

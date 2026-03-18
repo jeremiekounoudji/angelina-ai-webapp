@@ -30,6 +30,8 @@ import {
 import { useTokenUsage } from "@/hooks/useTokenUsage";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 
+import { LoadingErrorState } from "@/components/LoadingErrorState";
+
 export default function SubscriptionPage() {
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(
     null
@@ -38,7 +40,7 @@ export default function SubscriptionPage() {
   const [isBuyTokensOpen, setIsBuyTokensOpen] = useState<boolean>(false);
   const [isAnnual, setIsAnnual] = useState(false);
   const { company,user } = useAuth();
-  const { plans, loading, error } = useSubscriptionContext();
+  const { plans, loading, error, refetchPlans } = useSubscriptionContext();
   const { usage, loading: tokenLoading } = useTokenUsage(company?.id);
   const { t, locale } = useTranslationNamespace("dashboard.subscription");
 
@@ -81,15 +83,11 @@ export default function SubscriptionPage() {
   if (error) {
     return (
       <div className="p-6 bg-white min-h-screen">
-        <Card className="border-red-200 bg-red-50">
-          <CardBody className="text-center py-8">
-            <ExclamationTriangleIcon className="w-12 h-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-red-700 mb-2">
-              {t("error")}
-            </h3>
-            <p className="text-red-600">{error}</p>
-          </CardBody>
-        </Card>
+        <LoadingErrorState 
+          error={error} 
+          onRetry={refetchPlans}
+          title="Failed to load subscription data"
+        />
       </div>
     );
   }
@@ -141,7 +139,7 @@ export default function SubscriptionPage() {
             <CardBody className="p-6">
               <div className="flex items-center space-x-3 mb-2">
                 <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <BanknotesIcon className="w-6 h-6 text-[#328E6E]" />
+                  <BanknotesIcon className="w-6 h-6 text-[#091413]" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">{t('billing.monthlyCost')}</p>
@@ -218,7 +216,7 @@ export default function SubscriptionPage() {
                 <CardBody className="p-6">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                      <span className="text-[#328E6E] text-lg font-bold">R</span>
+                      <span className="text-[#091413] text-lg font-bold">R</span>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">{t('tokens.remaining')}</p>
@@ -283,7 +281,7 @@ export default function SubscriptionPage() {
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div
-                      className="bg-[#328E6E] h-3 rounded-full transition-all duration-300"
+                      className="bg-[#091413] h-3 rounded-full transition-all duration-300"
                       style={{
                         width: `${Math.min(
                           100,
@@ -299,7 +297,7 @@ export default function SubscriptionPage() {
                   {currentPlan.can_buy_extra_tokens && (
                     <div className="mt-4 flex justify-end">
                       <Button
-                        className="bg-[#328E6E] text-white hover:bg-[#15803d]"
+                        className="bg-[#091413] text-white hover:bg-[#15803d]"
                         size="sm"
                         onPress={() => setIsBuyTokensOpen(true)}
                       >
@@ -335,7 +333,7 @@ export default function SubscriptionPage() {
           <button
             onClick={() => setIsAnnual(!isAnnual)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              isAnnual ? "bg-[#328E6E]" : "bg-gray-300"
+              isAnnual ? "bg-[#091413]" : "bg-gray-300"
             }`}
           >
             <span
@@ -365,13 +363,13 @@ export default function SubscriptionPage() {
             key={plan.id}
             className={`relative ${
               currentPlan?.id === plan.id
-                ? "border-2 border-[#328E6E] bg-green-50"
+                ? "border-2 border-[#091413] bg-green-50"
                 : "border border-gray-200 bg-white"
             } shadow-sm hover:shadow-md transition-shadow`}
           >
             {plan.yearly_discount_percent > 10 && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <Chip className="bg-[#328E6E] text-white" size="sm">
+                <Chip className="bg-[#091413] text-white" size="sm">
                   {t('plans.mostPopular')}
                 </Chip>
               </div>
@@ -394,7 +392,7 @@ export default function SubscriptionPage() {
                   <span className="text-gray-600">{t('plans.perMonth')}</span>
                   {isAnnual && plan.yearly_discount_percent > 0 && (
                     <div className="mt-1">
-                      <span className="text-[#328E6E] text-sm font-semibold">
+                      <span className="text-[#091413] text-sm font-semibold">
                         {getDiscountLabel(plan.yearly_discount_percent)}{" "}
                         {t('plans.annually')}
                       </span>
@@ -408,7 +406,7 @@ export default function SubscriptionPage() {
               <ul className="space-y-3 mb-6">
                 {plan.features?.map((feature, index) => (
                   <li key={index} className="flex items-center space-x-3">
-                    <CheckIcon className="w-5 h-5 text-[#328E6E] flex-shrink-0" />
+                    <CheckIcon className="w-5 h-5 text-[#091413] flex-shrink-0" />
                     <span className="text-sm text-gray-700">
                       {getFeatureText(feature)}
                     </span>
@@ -420,7 +418,7 @@ export default function SubscriptionPage() {
                 className={`w-full text-white ${
                   currentPlan?.id === plan.id
                     ? "bg-gray-400"
-                    : "bg-[#328E6E] hover:bg-[#15803d]"
+                    : "bg-[#091413] hover:bg-[#15803d]"
                 }`}
                 onPress={() => handleSelectPlan(plan)}
                 isDisabled={Boolean(currentPlan?.id === plan.id)}

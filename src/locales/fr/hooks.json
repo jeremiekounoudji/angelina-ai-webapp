@@ -16,7 +16,8 @@
       "imageUploadFailed": "Échec du téléchargement de l'image du produit",
       "invalidData": "Données du produit invalides",
       "duplicateName": "Un produit avec ce nom existe déjà",
-      "insufficientStock": "Stock insuffisant disponible"
+      "insufficientStock": "Stock insuffisant disponible",
+      "planLimitReached": "Vous avez atteint le nombre maximum de produits pour votre plan actuel. Veuillez mettre à niveau pour en ajouter davantage."
     }
   },
   "subscriptions": {
@@ -54,8 +55,12 @@
     }
   },
   "metrics": {
+    "success": {
+      "updated": "Métriques mises à jour avec succès"
+    },
     "errors": {
       "loadFailed": "Échec du chargement des métriques",
+      "updateFailed": "Échec de la mise à jour des métriques",
       "dataUnavailable": "Les données de métriques sont actuellement indisponibles",
       "calculationError": "Erreur de calcul des métriques",
       "invalidDateRange": "Plage de dates sélectionnée invalide"
@@ -65,13 +70,15 @@
     "success": {
       "updated": "Informations de l'entreprise mises à jour avec succès",
       "logoUploaded": "Logo de l'entreprise téléchargé avec succès",
-      "settingsSaved": "Paramètres de l'entreprise enregistrés avec succès"
+      "settingsSaved": "Paramètres de l'entreprise enregistrés avec succès",
+      "policyUpdated": "Politique de l'entreprise mise à jour avec succès"
     },
     "errors": {
       "updateFailed": "Échec de la mise à jour des informations de l'entreprise",
       "logoUploadFailed": "Échec du téléchargement du logo de l'entreprise",
       "settingsSaveFailed": "Échec de l'enregistrement des paramètres de l'entreprise",
-      "invalidCompanyData": "Données d'entreprise invalides fournies"
+      "invalidCompanyData": "Données d'entreprise invalides fournies",
+      "policyUpdateFailed": "Échec de la mise à jour de la politique de l'entreprise"
     }
   },
   "users": {
@@ -83,25 +90,44 @@
       "statusChanged": "Statut de l'utilisateur changé avec succès"
     },
     "errors": {
+      "noCompany": "Aucune entreprise sélectionnée",
       "createFailed": "Échec de la création de l'utilisateur",
       "updateFailed": "Échec de la mise à jour de l'utilisateur",
       "deleteFailed": "Échec de la suppression de l'utilisateur",
+      "fetchFailed": "Échec du chargement des utilisateurs",
       "roleChangeFailed": "Échec du changement de rôle de l'utilisateur",
       "statusChangeFailed": "Échec du changement de statut de l'utilisateur",
       "emailExists": "Un utilisateur avec cet email existe déjà",
-      "invalidUserData": "Données utilisateur invalides fournies"
+      "invalidUserData": "Données utilisateur invalides fournies",
+      "planLimitReached": "Vous avez atteint le nombre maximum d'utilisateurs pour votre plan actuel. Veuillez mettre à niveau pour en ajouter davantage."
     }
   },
   "auth": {
     "success": {
       "loginSuccess": "Connexion réussie",
       "logoutSuccess": "Déconnexion réussie",
+      "signedIn": "Connexion réussie !",
+      "signedOut": "Déconnexion réussie",
+      "verificationSent": "Code de vérification envoyé à votre email !",
+      "emailVerified": "Email vérifié avec succès !",
+      "codeSent": "Code de vérification envoyé !",
+      "passwordUpdated": "Mot de passe mis à jour avec succès !",
+      "passwordResetSent": "Email de réinitialisation envoyé !",
+      "accountCreated": "Compte créé avec succès !",
       "passwordChanged": "Mot de passe changé avec succès",
       "profileUpdated": "Profil mis à jour avec succès"
     },
     "errors": {
       "loginFailed": "Échec de la connexion",
       "logoutFailed": "Échec de la déconnexion",
+      "unexpectedError": "Une erreur inattendue s'est produite",
+      "signInTimeout": "Délai de connexion dépassé après 30 secondes",
+      "createAccountFailed": "Échec de la création du compte",
+      "verifyEmailFailed": "Échec de la vérification de l'email",
+      "resendFailed": "Échec du renvoi du code de vérification",
+      "passwordResetFailed": "Échec de l'envoi de l'email de réinitialisation",
+      "passwordUpdateFailed": "Échec de la mise à jour du mot de passe",
+      "invalidResetLink": "Lien de réinitialisation invalide ou expiré. Veuillez en demander un nouveau.",
       "passwordChangeFailed": "Échec du changement de mot de passe",
       "profileUpdateFailed": "Échec de la mise à jour du profil",
       "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
@@ -120,6 +146,32 @@
       "deleteFailed": "Échec de la suppression du statut",
       "fetchFailed": "Échec du chargement des statuts",
       "limitReached": "Limite de statuts atteinte pour votre plan"
+    }
+  },
+  "tokens": {
+    "success": {
+      "consumed": "{count} tokens consommés",
+      "purchased": "{count} tokens achetés avec succès"
+    },
+    "errors": {
+      "notEnough": "Pas assez de tokens disponibles",
+      "fetchFailed": "Échec du chargement de l'utilisation des tokens",
+      "consumeFailed": "Échec de la consommation des tokens",
+      "purchaseFailed": "Échec de l'achat des tokens",
+      "genericError": "Une erreur s'est produite. Veuillez réessayer."
+    }
+  },
+  "whatsapp": {
+    "success": {
+      "connected": "WhatsApp connecté avec succès !",
+      "disconnected": "WhatsApp déconnecté avec succès",
+      "instanceCreated": "Instance créée ! Scannez le QR code pour vous connecter."
+    },
+    "errors": {
+      "connectFailed": "Échec de la connexion WhatsApp : {message}",
+      "connectionFailed": "Échec de la connexion WhatsApp",
+      "disconnectFailed": "Échec de la déconnexion WhatsApp",
+      "timeout": "Délai de connexion dépassé. Veuillez réessayer."
     }
   }
 }

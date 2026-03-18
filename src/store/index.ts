@@ -242,16 +242,12 @@ export const useAppStore = create<AppState>()(
     {
       name: 'angelina-ai-storage',
       storage: createJSONStorage(() => localStorage),
+      // Only persist non-sensitive, slow-changing data.
+      // Users, payments, tokenUsage, tokenPurchases, metrics and companies
+      // contain PII / financial data and must NOT be stored in localStorage.
       partialize: (state) => ({
-        users: state.users,
-        products: state.products,
-        companies: state.companies,
         subscriptionPlans: state.subscriptionPlans,
-        payments: state.payments,
-        tokenUsage: state.tokenUsage,
-        tokenPurchases: state.tokenPurchases,
         planLimits: state.planLimits,
-        metrics: state.metrics,
       }),
     }
   )
