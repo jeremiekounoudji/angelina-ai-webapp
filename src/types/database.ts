@@ -203,8 +203,14 @@ export interface PlanLimits {
 export interface Status {
   id: string
   company_id: string
+  status_type: 'text' | 'image' | 'audio'
   media_url?: string
   text?: string
+  caption?: string
+  background_color?: string
+  font?: number
+  all_contacts: boolean
+  status_jid_list?: string[]
   publishment_datetime?: string
   position: number
   frequency?: number[]

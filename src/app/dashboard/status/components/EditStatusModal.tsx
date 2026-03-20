@@ -2,18 +2,9 @@
 
 import { useState, useEffect } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Input,
-  Textarea,
-  Select,
-  SelectItem,
-  Checkbox,
-  CheckboxGroup,
+  Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,
+  Button, Input, Textarea, Select, SelectItem,
+  Checkbox, CheckboxGroup,
 } from "@heroui/react";
 import { useStatus } from "@/hooks/useStatus";
 import { useUpload } from "@/hooks/useUpload";
@@ -21,6 +12,7 @@ import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { Status } from "@/types/database";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
+import { StatusTextFields } from "./StatusTextFields";
 
 interface EditStatusModalProps {
   isOpen: boolean;
@@ -33,8 +25,16 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
   const { t } = useTranslationNamespace('dashboard.status');
   const { updateStatus } = useStatus(status.company_id);
   const { upload, uploading } = useUpload();
-  
+
+  const [statusType, setStatusType] = useState<"text" | "image" | "audio">(status.status_type);
   const [text, setText] = useState(status.text || "");
+  const [caption, setCaption] = useState(status.caption || "");
+  const [backgroundColor, setBackgroundColor] = useState(status.background_color || "#008000");
+  const [font, setFont] = useState(status.font?.toString() || "1");
+  // const [allContacts, setAllContacts] = useState(status.all_contacts ?? true); // Commented out - always true
+  const [statusJidList] = useState<string[]>(
+    status.status_jid_list?.length ? status.status_jid_list : [""]
+  );
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState(status.media_url || "");
   const [position, setPosition] = useState(status.position.toString());
@@ -52,18 +52,14 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
   );
   const [loading, setLoading] = useState(false);
 
-  const weekDays = [
-    { value: "1", label: t('days.monday'), short: "Mo" },
-    { value: "2", label: t('days.tuesday'), short: "Tu" },
-    { value: "3", label: t('days.wednesday'), short: "We" },
-    { value: "4", label: t('days.thursday'), short: "Th" },
-    { value: "5", label: t('days.friday'), short: "Fr" },
-    { value: "6", label: t('days.saturday'), short: "Sa" },
-    { value: "7", label: t('days.sunday'), short: "Su" },
-  ];
-
   useEffect(() => {
+    setStatusType(status.status_type);
     setText(status.text || "");
+    setCaption(status.caption || "");
+    setBackgroundColor(status.background_color || "#008000");
+    setFont(status.font?.toString() || "1");
+    // setAllContacts(status.all_contacts ?? true); // Commented out - always true
+    setMediaFile(null);
     setMediaPreview(status.media_url || "");
     setPosition(status.position.toString());
     setScheduleType(status.publishment_datetime ? "datetime" : "frequency");
@@ -74,122 +70,77 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
     setRecurringTime(status.recurring_time ? status.recurring_time.slice(0, 5) : "");
   }, [status]);
 
-  const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const isImage = file.type.startsWith('image/');
-    const isVideo = file.type.startsWith('video/');
-    
-    if (!isImage && !isVideo) {
-      toast.error(t('errors.invalidFileType'));
-      return;
-    }
-
-    if (isVideo) {
-      const video = document.createElement('video');
-      video.preload = 'metadata';
-      
-      video.onloadedmetadata = () => {
-        window.URL.revokeObjectURL(video.src);
-        if (video.duration > 60) {
-          toast.error(t('errors.videoTooLong'));
-          return;
-        }
-        setMediaFile(file);
-        setMediaPreview(URL.createObjectURL(file));
-      };
-      
-      video.src = URL.createObjectURL(file);
-    } else {
-      setMediaFile(file);
-      setMediaPreview(URL.createObjectURL(file));
-    }
-  };
-
-  const clearMedia = () => {
-    setMediaFile(null);
-    setMediaPreview("");
-  };
+  const weekDays = [
+    { value: "1", label: t('days.monday') },
+    { value: "2", label: t('days.tuesday') },
+    { value: "3", label: t('days.wednesday') },
+    { value: "4", label: t('days.thursday') },
+    { value: "5", label: t('days.friday') },
+    { value: "6", label: t('days.saturday') },
+    { value: "7", label: t('days.sunday') },
+  ];
 
   const handleSubmit = async () => {
-    if (!text && !mediaPreview) {
-      toast.error(t('errors.textOrMediaRequired'));
-      return;
-    }
-
-    if (scheduleType === "datetime" && !publishmentDatetime) {
-      toast.error(t('errors.datetimeRequired'));
-      return;
-    }
-
+    const allContacts = true; // Always true - switch commented out
+    if (statusType === "text" && !text) { toast.error(t('errors.textOrMediaRequired')); return; }
+    if (statusType !== "text" && !mediaPreview && !mediaFile) { toast.error(t('errors.mediaRequired')); return; }
+    // if (!allContacts && statusJidList.filter(j => j.trim()).length === 0) {
+    //   toast.error(t('errors.jidListRequired')); return;
+    // }
+    if (scheduleType === "datetime" && !publishmentDatetime) { toast.error(t('errors.datetimeRequired')); return; }
     if (scheduleType === "frequency") {
-      if (selectedDays.length === 0) {
-        toast.error(t('errors.frequencyRequired'));
-        return;
-      }
-      if (!recurringTime) {
-        toast.error((t('errors.timeRequired') as string) || 'Time is required for recurring schedule');
-        return;
-      }
+      if (selectedDays.length === 0) { toast.error(t('errors.frequencyRequired')); return; }
+      if (!recurringTime) { toast.error((t('errors.timeRequired') as string) || 'Time is required'); return; }
     }
 
     try {
       setLoading(true);
-
-      let mediaUrl = status.media_url;
+      let mediaUrl = mediaPreview && !mediaFile ? status.media_url : undefined;
       if (mediaFile) {
         const uploadResult = await upload({ bucket: "status", files: [mediaFile] });
-        if (!uploadResult.success || uploadResult.urls.length === 0) {
-          toast.error(t('errors.uploadFailed'));
-          return;
-        }
+        if (!uploadResult.success || uploadResult.urls.length === 0) { toast.error(t('errors.uploadFailed')); return; }
         mediaUrl = uploadResult.urls[0];
       }
 
       let nextPostAt: string | null = null;
-      
       if (scheduleType === "datetime") {
         nextPostAt = new Date(publishmentDatetime).toISOString();
       } else if (scheduleType === "frequency" && selectedDays.length > 0 && recurringTime) {
-        const currentDate = new Date();
-        const sortedDays = selectedDays.map(d => parseInt(d)).sort((a,b) => a - b);
-        const currentDay = currentDate.getDay() === 0 ? 7 : currentDate.getDay();
-        
+        const now = new Date();
+        const sortedDays = selectedDays.map(d => parseInt(d)).sort((a, b) => a - b);
+        const currentDay = now.getDay() === 0 ? 7 : now.getDay();
         const [hours, minutes] = recurringTime.split(':').map(Number);
-        const todayPostTime = new Date(currentDate);
-        todayPostTime.setHours(hours, minutes, 0, 0);
-        
+        const todayPost = new Date(now);
+        todayPost.setHours(hours, minutes, 0, 0);
         let daysToAdd = 0;
-        if (sortedDays.includes(currentDay) && todayPostTime > currentDate) {
+        if (sortedDays.includes(currentDay) && todayPost > now) {
           daysToAdd = 0;
         } else {
           const nextDay = sortedDays.find(d => d > currentDay) || sortedDays[0];
           daysToAdd = nextDay > currentDay ? nextDay - currentDay : (7 - currentDay) + nextDay;
         }
-        
-        const nextDate = new Date(currentDate.getTime() + (daysToAdd * 24 * 60 * 60 * 1000));
+        const nextDate = new Date(now.getTime() + daysToAdd * 86400000);
         nextDate.setHours(hours, minutes, 0, 0);
         nextPostAt = nextDate.toISOString();
       }
 
-      // If media was cleared
-      if (!mediaPreview && !mediaFile) {
-        mediaUrl = undefined;
-      }
-
-      const updates = {
-        text: text || undefined,
+      await updateStatus(status.id, {
+        status_type: statusType,
+        text: statusType === "text" ? text || undefined : undefined,
+        caption: statusType !== "text" ? caption || undefined : undefined,
         media_url: mediaUrl || undefined,
+        background_color: statusType === "text" ? backgroundColor : undefined,
+        font: statusType === "text" ? parseInt(font) : undefined,
+        all_contacts: allContacts,
+        status_jid_list: !allContacts ? statusJidList.filter(j => j.trim()) : [],
         position: parseInt(position),
         publishment_datetime: scheduleType === "datetime" ? publishmentDatetime : undefined,
         frequency: scheduleType === "frequency" ? selectedDays.map(d => parseInt(d)) : undefined,
         recurring_time: scheduleType === "frequency" ? recurringTime + ":00" : undefined,
         next_post_at: nextPostAt || undefined,
-        publishing_status: "pending" as const,
-      };
+        publishing_status: "pending",
+      });
 
-      await updateStatus(status.id, updates);
       onUpdated?.();
       onClose();
     } catch (error) {
@@ -198,6 +149,9 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
       setLoading(false);
     }
   };
+
+  const inputClass = { inputWrapper: "border-gray-300 data-[hover=true]:border-[#091413] group-data-[focus=true]:border-[#091413]" };
+  const selectClass = { trigger: "border-gray-300 data-[hover=true]:border-[#091413]" };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="2xl" scrollBehavior="inside">
@@ -208,152 +162,172 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
         </ModalHeader>
 
         <ModalBody className="space-y-5 py-4">
-          {/* Text Content */}
-          <div className="space-y-1.5">
-            <Textarea
-              label={t('text')}
-              placeholder={t('textPlaceholder')}
-              value={text}
-              onValueChange={setText}
-              maxRows={4}
-              variant="bordered"
-              classNames={{
-                inputWrapper: "border-gray-300 data-[hover=true]:border-[#091413] group-data-[focus=true]:border-[#091413]",
-              }}
-            />
-          </div>
+          {/* Status Type */}
+          <Select
+            label={t('statusType')}
+            selectedKeys={[statusType]}
+            onSelectionChange={(keys) => {
+              const val = Array.from(keys)[0] as "text" | "image" | "audio";
+              setStatusType(val);
+              if (val === "text") { setMediaFile(null); setMediaPreview(""); }
+            }}
+            variant="bordered"
+            classNames={selectClass}
+          >
+            <SelectItem key="text">{t('typeText')}</SelectItem>
+            <SelectItem key="image">{t('typeImage')}</SelectItem>
+            <SelectItem key="audio">{t('typeAudio')}</SelectItem>
+          </Select>
 
-          {/* Media Upload */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">{t('media')}</label>
-            {!mediaPreview ? (
-              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-[#091413] transition-all duration-200">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <PhotoIcon className="w-10 h-10 text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-500">{t('mediaHint')}</p>
-                </div>
-                <input
-                  type="file"
-                  accept="image/*,video/*"
-                  onChange={handleMediaChange}
-                  className="hidden"
-                />
-              </label>
-            ) : (
-              <div className="relative w-full h-48 bg-gray-100 rounded-xl overflow-hidden group">
-                {(mediaFile?.type.startsWith('image/') || mediaPreview.match(/\.(jpg|jpeg|png|gif|webp)$/i)) ? (
-                  <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
-                ) : (
-                  <video src={mediaPreview} className="w-full h-full object-cover" controls />
-                )}
-                <button
-                  onClick={clearMedia}
-                  className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-black/80 rounded-full text-white transition-colors"
-                >
-                  <XMarkIcon className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Position & Schedule Row */}
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              type="number"
-              label={t('position')}
-              value={position}
-              onValueChange={setPosition}
-              min="1"
-              variant="bordered"
-              classNames={{
-                inputWrapper: "border-gray-300 data-[hover=true]:border-[#091413] group-data-[focus=true]:border-[#091413]",
-              }}
-            />
-            <Select
-              label={t('scheduleType')}
-              selectedKeys={[scheduleType]}
-              onSelectionChange={(keys) => setScheduleType(Array.from(keys)[0] as "datetime" | "frequency")}
-              variant="bordered"
-              classNames={{
-                trigger: "border-gray-300 data-[hover=true]:border-[#091413]",
-              }}
-            >
-              <SelectItem key="frequency">
-                {t('recurring')}
-              </SelectItem>
-              <SelectItem key="datetime">
-                {t('oneTime')}
-              </SelectItem>
-            </Select>
-          </div>
-
-          {/* Datetime Picker */}
-          {scheduleType === "datetime" && (
-            <Input
-              type="datetime-local"
-              label={t('publishmentDatetime')}
-              value={publishmentDatetime}
-              onValueChange={setPublishmentDatetime}
-              variant="bordered"
-              classNames={{
-                inputWrapper: "border-gray-300 data-[hover=true]:border-[#091413] group-data-[focus=true]:border-[#091413]",
-              }}
+          {/* Text type: textarea + live preview + color picker + font picker */}
+          {statusType === "text" && (
+            <StatusTextFields
+              text={text}
+              onTextChange={setText}
+              backgroundColor={backgroundColor}
+              onColorChange={setBackgroundColor}
+              font={font}
+              onFontChange={setFont}
             />
           )}
 
-          {/* Frequency Selector */}
+          {/* Image / Audio type — media is locked after save */}
+          {(statusType === "image" || statusType === "audio") && (
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-gray-700">{t('media')}</label>
+              {mediaPreview ? (
+                <div className="relative w-full h-48 bg-gray-100 rounded-xl overflow-hidden">
+                  {statusType === "audio" ? (
+                    <div className="flex items-center justify-center h-full px-4">
+                      <audio src={mediaPreview} controls className="w-full" />
+                    </div>
+                  ) : statusType === "image" ? (
+                    <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <video src={mediaPreview} className="w-full h-full object-cover" controls />
+                  )}
+                  {/* Locked badge */}
+                  <div className="absolute bottom-2 right-2 px-2 py-0.5 bg-black/50 rounded-full text-white text-xs">
+                    {t('media')}
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full h-40 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center bg-gray-50">
+                  <PhotoIcon className="w-10 h-10 text-gray-300" />
+                </div>
+              )}
+              <Textarea
+                label={t('caption')}
+                placeholder={t('captionPlaceholder')}
+                value={caption}
+                onValueChange={setCaption}
+                maxRows={3}
+                variant="bordered"
+                classNames={inputClass}
+              />
+            </div>
+          )}
+
+          {/* Audience - Commented out, always sends to all contacts */}
+          {/* <div className="space-y-3 p-3 bg-gray-50 rounded-xl border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-700">{t('allContacts')}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{t('allContactsHint')}</p>
+              </div>
+              <Switch isSelected={allContacts} onValueChange={setAllContacts} color="success" />
+            </div>
+            {!allContacts && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">{t('statusJidList')}</label>
+                {statusJidList.map((jid, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Input
+                      placeholder="5512345678901@s.whatsapp.net"
+                      value={jid}
+                      onValueChange={(v) => handleJidChange(index, v)}
+                      variant="bordered"
+                      size="sm"
+                      classNames={inputClass}
+                    />
+                    {statusJidList.length > 1 && (
+                      <Button
+                        isIconOnly size="sm" variant="flat"
+                        onPress={() => setStatusJidList(statusJidList.filter((_, i) => i !== index))}
+                      >
+                        <TrashIcon className="w-4 h-4 text-red-500" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <Button
+                  size="sm" variant="flat"
+                  startContent={<PlusIcon className="w-4 h-4" />}
+                  onPress={() => setStatusJidList([...statusJidList, ""])}
+                >
+                  {t('addContact')}
+                </Button>
+              </div>
+            )}
+          </div> */}
+
+          {/* Position & Schedule */}
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              type="number" label={t('position')} value={position}
+              onValueChange={setPosition} min="1" variant="bordered" classNames={inputClass}
+            />
+            <Select
+              label={t('scheduleType')} selectedKeys={[scheduleType]}
+              onSelectionChange={(keys) => setScheduleType(Array.from(keys)[0] as "datetime" | "frequency")}
+              variant="bordered" classNames={selectClass}
+            >
+              <SelectItem key="frequency">{t('recurring')}</SelectItem>
+              <SelectItem key="datetime">{t('oneTime')}</SelectItem>
+            </Select>
+          </div>
+
+          {scheduleType === "datetime" && (
+            <Input
+              type="datetime-local" label={t('publishmentDatetime')}
+              value={publishmentDatetime} onValueChange={setPublishmentDatetime}
+              variant="bordered" classNames={inputClass}
+            />
+          )}
+
           {scheduleType === "frequency" && (
             <div className="space-y-4">
-              {/* Day Buttons Grid */}
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">{t('selectDays')}</label>
                 <CheckboxGroup
-                  value={selectedDays}
-                  onValueChange={setSelectedDays}
-                  orientation="horizontal"
-                  classNames={{
-                    wrapper: "gap-2 flex-wrap",
-                  }}
+                  value={selectedDays} onValueChange={setSelectedDays}
+                  orientation="horizontal" classNames={{ wrapper: "gap-2 flex-wrap" }}
                 >
                   {weekDays.map((day) => (
-                    <Checkbox
-                      key={day.value}
-                      value={day.value}
-                      classNames={{
-                        base: "inline-flex m-0 bg-gray-100 hover:bg-gray-200 items-center justify-center rounded-xl border border-gray-200 data-[selected=true]:bg-[#091413] data-[selected=true]:border-[#091413] cursor-pointer px-3 py-2 transition-colors",
-                        label: "text-sm font-medium text-gray-700 group-data-[selected=true]:text-white",
-                        wrapper: "hidden",
-                      }}
-                    >
+                    <Checkbox key={day.value} value={day.value} classNames={{
+                      base: "inline-flex m-0 bg-gray-100 hover:bg-gray-200 items-center justify-center rounded-xl border border-gray-200 data-[selected=true]:bg-[#091413] data-[selected=true]:border-[#091413] cursor-pointer px-3 py-2 transition-colors",
+                      label: "text-sm font-medium text-gray-700 group-data-[selected=true]:text-white",
+                      wrapper: "hidden",
+                    }}>
                       {day.label}
                     </Checkbox>
                   ))}
                 </CheckboxGroup>
               </div>
-
-              {/* Time Input */}
               <Input
-                type="time"
-                label={(t('recurringTime') as string) || 'Time to post'}
-                value={recurringTime}
-                onValueChange={setRecurringTime}
-                variant="bordered"
-                classNames={{
-                  inputWrapper: "border-gray-300 data-[hover=true]:border-[#091413] group-data-[focus=true]:border-[#091413]",
-                }}
+                type="time" label={(t('recurringTime') as string) || 'Time to post'}
+                value={recurringTime} onValueChange={setRecurringTime}
+                variant="bordered" classNames={inputClass}
               />
             </div>
           )}
         </ModalBody>
 
         <ModalFooter className="pt-2 gap-2">
-          <Button variant="flat" onPress={onClose} className="text-gray-600">
-            {t('cancel')}
-          </Button>
+          <Button variant="flat" onPress={onClose} className="text-gray-600">{t('cancel')}</Button>
           <Button
             className="bg-[#091413] text-white hover:bg-[#15803d]"
-            onPress={handleSubmit}
-            isLoading={loading || uploading}
+            onPress={handleSubmit} isLoading={loading || uploading}
           >
             {t('save')}
           </Button>

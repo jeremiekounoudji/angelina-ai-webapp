@@ -108,11 +108,12 @@ export default function StatusPage() {
           </p>
         </div>
         <Button
-          className="bg-[#091413] text-white hover:bg-[#15803d]"
-          startContent={<PlusIcon className="w-4 h-4" />}
+          className="bg-[#091413] text-white hover:bg-[#15803d] sm:min-w-fit min-w-0"
+          startContent={<PlusIcon className="w-4 h-4 shrink-0" />}
           onPress={handleAddClick}
+          isIconOnly={false}
         >
-          {t('addStatus')}
+          <span className="hidden sm:inline">{t('addStatus')}</span>
         </Button>
       </div>
 
@@ -155,7 +156,11 @@ export default function StatusPage() {
                 <div className="relative bg-gray-100">
                   {status.media_url ? (
                     <>
-                      {status.media_url.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+                      {status.status_type === "audio" ? (
+                        <div className="w-full h-[100px] flex items-center justify-center px-4">
+                          <audio src={status.media_url} controls className="w-full" />
+                        </div>
+                      ) : status.status_type === "image" ? (
                         <img
                           src={status.media_url}
                           alt="Status media"

@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
               // 'unsafe-inline' required by Next.js inline scripts; 'unsafe-eval' removed
               "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: blob: https://images.unsplash.com",
+              `img-src 'self' data: blob: https://images.unsplash.com ${process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''}`,
               // Evolution API is server-side only — no client connect needed
               `connect-src 'self' ${process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''}`,
               "frame-ancestors 'none'",
