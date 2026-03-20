@@ -346,7 +346,11 @@
       "select": "Sélectionner le Plan",
       "mostPopular": "Le Plus Populaire",
       "perMonth": "/mois",
-      "annually": "annuellement"
+      "annually": "annuellement",
+      "changeWarningTitle": "Changer de Plan",
+      "changeWarningMessage": "Votre plan actuel ({current}) sera annulé immédiatement et remplacé par {next}. Le nouveau plan démarre dès que le paiement est confirmé.",
+      "changeWarningCancel": "Garder le Plan Actuel",
+      "changeWarningConfirm": "Oui, Changer de Plan"
     }
   },
   "settings": {
@@ -505,12 +509,15 @@
       "mediaRequired": "Veuillez télécharger un fichier média",
       "jidListRequired": "Veuillez ajouter au moins un JID de contact",
       "datetimeRequired": "Veuillez sélectionner une date et une heure",
+      "pastDatetime": "Veuillez sélectionner une date et une heure dans le futur",
       "frequencyRequired": "Veuillez sélectionner au moins un jour",
       "timeRequired": "L'heure est requise pour les publications récurrentes",
       "invalidFileType": "Veuillez télécharger un fichier image, vidéo ou audio",
       "videoTooLong": "La vidéo doit durer 1 minute 30 secondes ou moins",
       "uploadFailed": "Échec du téléchargement du média"
-    }
+    },
+    "editWarning": "Les modifications ne s'appliqueront pas aux statuts déjà publiés.",
+    "lockedField": "non modifiable"
   },
   "subscriptionExpired": {
     "title": "Abonnement Expiré",

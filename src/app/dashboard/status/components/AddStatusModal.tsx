@@ -87,6 +87,9 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
     //   toast.error(t('errors.jidListRequired')); return;
     // }
     if (scheduleType === "datetime" && !publishmentDatetime) { toast.error(t('errors.datetimeRequired')); return; }
+    if (scheduleType === "datetime" && publishmentDatetime && new Date(publishmentDatetime) <= new Date()) {
+      toast.error(t('errors.pastDatetime')); return;
+    }
     if (scheduleType === "frequency") {
       if (selectedDays.length === 0) { toast.error(t('errors.frequencyRequired')); return; }
       if (!recurringTime) { toast.error((t('errors.timeRequired') as string) || 'Time is required'); return; }
@@ -131,7 +134,7 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
         text: statusType === "text" ? text || undefined : undefined,
         caption: statusType !== "text" ? caption || undefined : undefined,
         media_url: mediaUrl || undefined,
-        background_color: statusType === "text" ? backgroundColor : undefined,
+        background_color: statusType === "text" ? (backgroundColor || "#008000") : undefined,
         font: statusType === "text" ? parseInt(font) : undefined,
         all_contacts: allContacts,
         status_jid_list: !allContacts ? statusJidList.filter(j => j.trim()) : [],
@@ -222,10 +225,10 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
                     <div className="flex items-center justify-center h-full px-4">
                       <audio src={mediaPreview} controls className="w-full" />
                     </div>
-                  ) : (mediaFile?.type.startsWith('image/') || mediaUploaded) ? (
-                    <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
-                  ) : (
+                  ) : mediaFile?.type.startsWith('video/') ? (
                     <video src={mediaPreview} className="w-full h-full object-cover" controls />
+                  ) : (
+                    <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
                   )}
                   {/* Only allow clearing before upload */}
                   {!mediaUploaded && (

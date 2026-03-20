@@ -10,7 +10,7 @@ import { useStatus } from "@/hooks/useStatus";
 import { useUpload } from "@/hooks/useUpload";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { Status } from "@/types/database";
-import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { PhotoIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import { StatusTextFields } from "./StatusTextFields";
 
@@ -88,6 +88,9 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
     //   toast.error(t('errors.jidListRequired')); return;
     // }
     if (scheduleType === "datetime" && !publishmentDatetime) { toast.error(t('errors.datetimeRequired')); return; }
+    if (scheduleType === "datetime" && publishmentDatetime && new Date(publishmentDatetime) <= new Date()) {
+      toast.error(t('errors.pastDatetime')); return;
+    }
     if (scheduleType === "frequency") {
       if (selectedDays.length === 0) { toast.error(t('errors.frequencyRequired')); return; }
       if (!recurringTime) { toast.error((t('errors.timeRequired') as string) || 'Time is required'); return; }
@@ -162,22 +165,20 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
         </ModalHeader>
 
         <ModalBody className="space-y-5 py-4">
-          {/* Status Type */}
-          <Select
-            label={t('statusType')}
-            selectedKeys={[statusType]}
-            onSelectionChange={(keys) => {
-              const val = Array.from(keys)[0] as "text" | "image" | "audio";
-              setStatusType(val);
-              if (val === "text") { setMediaFile(null); setMediaPreview(""); }
-            }}
-            variant="bordered"
-            classNames={selectClass}
-          >
-            <SelectItem key="text">{t('typeText')}</SelectItem>
-            <SelectItem key="image">{t('typeImage')}</SelectItem>
-            <SelectItem key="audio">{t('typeAudio')}</SelectItem>
-          </Select>
+          {/* Warning: changes won't apply to already-posted statuses */}
+          <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl">
+            <ExclamationTriangleIcon className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-amber-700">{t('editWarning')}</p>
+          </div>
+
+          {/* Status Type — locked on edit */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">{t('statusType')}</label>
+            <div className="px-3 py-2 border border-gray-200 rounded-xl bg-gray-50 text-sm text-gray-500">
+              {statusType === "text" ? t('typeText') : statusType === "image" ? t('typeImage') : t('typeAudio')}
+              <span className="ml-2 text-xs text-gray-400">({t('lockedField')})</span>
+            </div>
+          </div>
 
           {/* Text type: textarea + live preview + color picker + font picker */}
           {statusType === "text" && (
@@ -191,25 +192,22 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
             />
           )}
 
-          {/* Image / Audio type — media is locked after save */}
+          {/* Image / Audio type — media is locked on edit */}
           {(statusType === "image" || statusType === "audio") && (
             <div className="space-y-3">
-              <label className="text-sm font-medium text-gray-700">{t('media')}</label>
+              <label className="text-sm font-medium text-gray-700">
+                {t('media')}
+                <span className="ml-2 text-xs text-gray-400">({t('lockedField')})</span>
+              </label>
               {mediaPreview ? (
                 <div className="relative w-full h-48 bg-gray-100 rounded-xl overflow-hidden">
                   {statusType === "audio" ? (
                     <div className="flex items-center justify-center h-full px-4">
                       <audio src={mediaPreview} controls className="w-full" />
                     </div>
-                  ) : statusType === "image" ? (
-                    <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
                   ) : (
-                    <video src={mediaPreview} className="w-full h-full object-cover" controls />
+                    <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
                   )}
-                  {/* Locked badge */}
-                  <div className="absolute bottom-2 right-2 px-2 py-0.5 bg-black/50 rounded-full text-white text-xs">
-                    {t('media')}
-                  </div>
                 </div>
               ) : (
                 <div className="w-full h-40 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center bg-gray-50">

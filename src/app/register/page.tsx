@@ -426,10 +426,12 @@ export default function RegisterPage() {
                   isInvalid={!!step1Form.formState.errors.phone}
                   errorMessage={step1Form.formState.errors.phone?.message}
                   isRequired
+                  description={t('form.phoneCountryHint')}
                   classNames={{
                     input: "text-white",
                     label: "text-gray-50",
-                    inputWrapper: "border-secondary bg-background"
+                    inputWrapper: "border-secondary bg-background",
+                    description: "text-gray-400"
                   }}
                 />
 
@@ -663,10 +665,12 @@ export default function RegisterPage() {
                   isInvalid={!!step2Form.formState.errors.phone}
                   errorMessage={step2Form.formState.errors.phone?.message}
                   isRequired
+                  description={t('form.phoneCountryHint')}
                   classNames={{
                     input: "text-white",
                     label: "text-gray-50",
-                    inputWrapper: "border-secondary bg-background"
+                    inputWrapper: "border-secondary bg-background",
+                    description: "text-gray-400"
                   }}
                 />
 

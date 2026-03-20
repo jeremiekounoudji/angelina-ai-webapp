@@ -8,6 +8,11 @@ import {
   Button,
   Chip,
   Spinner,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@heroui/react";
 import {
   CheckIcon,
@@ -33,11 +38,11 @@ import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { LoadingErrorState } from "@/components/LoadingErrorState";
 
 export default function SubscriptionPage() {
-  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(
-    null
-  );
+  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(null);
+  const [pendingPlan, setPendingPlan] = useState<SubscriptionPlan | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isBuyTokensOpen, setIsBuyTokensOpen] = useState<boolean>(false);
+  const [isChangePlanWarningOpen, setIsChangePlanWarningOpen] = useState(false);
   const [isAnnual, setIsAnnual] = useState(false);
   const { company,user } = useAuth();
   const { plans, loading, error, refetchPlans } = useSubscriptionContext();
@@ -64,8 +69,20 @@ export default function SubscriptionPage() {
   };
 
   const handleSelectPlan = (plan: SubscriptionPlan) => {
+    // If user already has an active/trial plan, show warning first
+    if (currentPlan && company?.subscription_status && ['active', 'trial'].includes(company.subscription_status)) {
+      setPendingPlan(plan);
+      setIsChangePlanWarningOpen(true);
+      return;
+    }
     setSelectedPlan(plan);
-    console.log("Selected plan:", plan);
+    setIsOpen(true);
+  };
+
+  const handleConfirmPlanChange = () => {
+    setIsChangePlanWarningOpen(false);
+    setSelectedPlan(pendingPlan);
+    setPendingPlan(null);
     setIsOpen(true);
   };
 
@@ -432,6 +449,32 @@ export default function SubscriptionPage() {
 
       {/* Payment History */}
       <PaymentHistory />
+
+      {/* Plan change warning modal */}
+      <Modal isOpen={isChangePlanWarningOpen} onClose={() => { setIsChangePlanWarningOpen(false); setPendingPlan(null); }} size="sm">
+        <ModalContent>
+          <ModalHeader className="flex items-center gap-2">
+            <ExclamationTriangleIcon className="w-5 h-5 text-amber-500" />
+            {t('plans.changeWarningTitle')}
+          </ModalHeader>
+          <ModalBody>
+            <p className="text-sm text-gray-700">
+              {t('plans.changeWarningMessage', {
+                current: currentPlan ? getPlanTitle(currentPlan) : '',
+                next: pendingPlan ? getPlanTitle(pendingPlan) : '',
+              })}
+            </p>
+          </ModalBody>
+          <ModalFooter className="gap-2">
+            <Button variant="flat" className="text-gray-600" onPress={() => { setIsChangePlanWarningOpen(false); setPendingPlan(null); }}>
+              {t('plans.changeWarningCancel')}
+            </Button>
+            <Button className="bg-[#091413] text-white" onPress={handleConfirmPlanChange}>
+              {t('plans.changeWarningConfirm')}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       <PaymentModal
         isOpen={isOpen}

@@ -94,13 +94,19 @@ export default function PaymentHistory() {
             {currentPayments.map((payment) => (
               <div
                 key={payment.id}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
               >
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-medium text-gray-900">
-                      {payment.plan?.title || t('history.unknownPlan')}
-                    </h4>
+                {/* Top row: plan name + provider (top-right on mobile) */}
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <h4 className="font-medium text-gray-900">
+                    {payment.plan?.title || t('history.unknownPlan')}
+                  </h4>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {payment.provider && (
+                      <span className="text-xs text-gray-500 capitalize bg-gray-100 px-2 py-0.5 rounded-full">
+                        {payment.provider}
+                      </span>
+                    )}
                     <Chip
                       size="sm"
                       color={getStatusColor(payment.payment_status)}
@@ -109,32 +115,24 @@ export default function PaymentHistory() {
                       {getStatusLabel(payment.payment_status, t)}
                     </Chip>
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <span>{formatAmount(payment.amount, payment.currency)}</span>
-                    <span>•</span>
-                    <span>{formatDate(payment.created_at)}</span>
-                    {payment.provider && (
-                      <>
-                        <span>•</span>
-                        <span className="capitalize">{payment.provider}</span>
-                      </>
-                    )}
-                  </div>
+                </div>
+
+                {/* Middle row: date + ID on same line */}
+                <div className="flex items-center gap-3 text-sm text-gray-600 mb-2 flex-wrap">
+                  <span>{formatDate(payment.created_at)}</span>
                   {payment.transaction_id && (
-                    <p className="text-xs text-gray-500 mt-1 font-mono">
-                      ID: {payment.transaction_id.split('_')[3] || payment.transaction_id}
-                    </p>
+                    <>
+                      <span>•</span>
+                      <span className="font-mono text-xs text-gray-500">
+                        {payment.transaction_id.split('_')[3] || payment.transaction_id}
+                      </span>
+                    </>
                   )}
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-semibold text-gray-900">
-                    {formatAmount(payment.amount, payment.currency)}
-                  </div>
-                  {payment.plan?.price_monthly && (
-                    <div className="text-sm text-gray-600">
-                      {payment.plan.price_monthly}/month
-                    </div>
-                  )}
+
+                {/* Bottom row: amount */}
+                <div className="text-lg font-semibold text-gray-900">
+                  {formatAmount(payment.amount, payment.currency)}
                 </div>
               </div>
             ))}

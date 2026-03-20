@@ -351,7 +351,11 @@
       "select": "Select Plan",
       "mostPopular": "Most Popular",
       "perMonth": "/month",
-      "annually": "annually"
+      "annually": "annually",
+      "changeWarningTitle": "Change Plan",
+      "changeWarningMessage": "Your current plan ({current}) will be cancelled immediately and replaced by {next}. The new plan starts as soon as payment is confirmed.",
+      "changeWarningCancel": "Keep Current Plan",
+      "changeWarningConfirm": "Yes, Change Plan"
     }
   },
   "settings": {
@@ -510,12 +514,15 @@
       "mediaRequired": "Please upload a media file",
       "jidListRequired": "Please add at least one contact JID",
       "datetimeRequired": "Please select a date and time",
+      "pastDatetime": "Please select a future date and time",
       "frequencyRequired": "Please select at least one day",
       "timeRequired": "Time is required for recurring schedule",
       "invalidFileType": "Please upload an image, video or audio file",
       "videoTooLong": "Video must be 1 minute 30 seconds or less",
       "uploadFailed": "Failed to upload media"
-    }
+    },
+    "editWarning": "Changes will not apply to statuses that have already been posted.",
+    "lockedField": "cannot be changed"
   },
   "subscriptionExpired": {
     "title": "Subscription Expired",
