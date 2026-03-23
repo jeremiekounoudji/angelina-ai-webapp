@@ -20,64 +20,33 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useSubscriptionGuard } from '@/contexts/SubscriptionGuardContext'
 import { useTranslationNamespace, useTranslation } from '@/contexts/TranslationContext'
 
-export function DashboardSidebar() {
-  const pathname = usePathname()
-  const { user, company, signOut } = useAuth()
-  const { isExpired, expiryDate } = useSubscriptionGuard()
-  const [isOpen, setIsOpen] = useState(false)
-  const { t } = useTranslationNamespace('dashboard.sidebar')
-  const { t: tLegal } = useTranslationNamespace('dashboard.legal')
-  const { locale, setLocale } = useTranslation()
+interface SidebarContentProps {
+  company: ReturnType<typeof useAuth>['company']
+  displayName: string
+  navigation: { name: string; href: string; icon: React.ElementType }[]
+  legalLinks: { name: string; href: string; icon: React.ElementType }[]
+  accountStatus: { label: string; color: 'default' | 'danger' | 'warning' | 'success' }
+  expiryDate: Date | null
+  isExpired: boolean
+  locale: string
+  pathname: string
+  onClose: () => void
+  onSignOut: () => void
+  onSetLocale: (lang: 'en' | 'fr') => void
+  t: (key: string) => string
+  tLegal: (key: string) => string
+}
 
-  // Derive display name from auth metadata
-  const firstName = user?.user_metadata?.first_name || ''
-  const lastName  = user?.user_metadata?.last_name  || ''
-  const displayName = [firstName, lastName].filter(Boolean).join(' ') || user?.email || 'Admin'
-
-  const navigation = [
-    { name: t('company'),      href: '/dashboard/company',      icon: BuildingOfficeIcon },
-    { name: t('users'),        href: '/dashboard/users',         icon: UsersIcon },
-    { name: t('subscription'), href: '/dashboard/subscription',  icon: CreditCardIcon },
-    { name: t('status'),       href: '/dashboard/status',        icon: ChatBubbleBottomCenterTextIcon },
-    { name: t('settings'),     href: '/dashboard/settings',      icon: CogIcon },
-  ]
-
-  const legalLinks = [
-    { name: tLegal('terms'),   href: '/terms',   icon: DocumentTextIcon },
-    { name: tLegal('privacy'), href: '/privacy', icon: ShieldCheckIcon },
-  ]
-
-  const accountStatus = (() => {
-    if (!expiryDate) return { label: company?.subscription_status ?? 'inactive', color: 'default' as const }
-    const now = new Date()
-    const daysLeft = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-    if (isExpired)     return { label: 'expired',  color: 'danger'  as const }
-    if (daysLeft <= 3) return { label: 'expiring', color: 'warning' as const }
-    return { label: 'active', color: 'success' as const }
-  })()
-
-  useEffect(() => { setIsOpen(false) }, [pathname])
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const sidebar = document.getElementById('mobile-sidebar')
-      const toggle  = document.getElementById('sidebar-toggle')
-      if (isOpen && sidebar && !sidebar.contains(e.target as Node) &&
-          toggle && !toggle.contains(e.target as Node)) {
-        setIsOpen(false)
-      }
-    }
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-      return () => document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isOpen])
-
-  const SidebarContent = () => (
+function SidebarContent({
+  company, displayName, navigation, legalLinks, accountStatus,
+  expiryDate, isExpired, locale, pathname,
+  onClose, onSignOut, onSetLocale, t, tLegal,
+}: SidebarContentProps) {
+  return (
     <div className="bg-[#091413] h-full flex flex-col overflow-y-auto">
       {/* Mobile close */}
       <div className="lg:hidden flex justify-end p-4">
-        <Button isIconOnly variant="light" size="sm" onPress={() => setIsOpen(false)} className="text-white/70 hover:text-white">
+        <Button isIconOnly variant="light" size="sm" onPress={onClose} className="text-white/70 hover:text-white">
           <XMarkIcon className="w-5 h-5" />
         </Button>
       </div>
@@ -122,7 +91,6 @@ export function DashboardSidebar() {
           )
         })}
 
-        {/* Legal links — same weight as nav items */}
         <div className="pt-2">
           {legalLinks.map((item) => {
             const Icon = item.icon
@@ -141,9 +109,8 @@ export function DashboardSidebar() {
           })}
         </div>
 
-        {/* Logout — same weight as nav items */}
         <button
-          onClick={() => { signOut() }}
+          onClick={onSignOut}
           className="w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all text-white hover:bg-white/10 cursor-pointer"
         >
           <ArrowRightOnRectangleIcon className="w-5 h-5 mr-3" />
@@ -151,7 +118,7 @@ export function DashboardSidebar() {
         </button>
       </nav>
 
-      {/* Footer: user info + compact language switcher */}
+      {/* Footer */}
       <div className="p-4 border-t border-white/10">
         <div className="flex items-center space-x-3 mb-3">
           <Avatar name={displayName} size="sm" className="bg-white/20 text-white flex-shrink-0" />
@@ -160,14 +127,12 @@ export function DashboardSidebar() {
             <p className="text-xs text-white/60">Admin</p>
           </div>
         </div>
-
-        {/* Compact language switcher */}
         <div className="flex justify-end">
           <div className="flex items-center bg-white/10 rounded-md p-0.5 gap-0.5">
             {(['en', 'fr'] as const).map((lang) => (
               <button
                 key={lang}
-                onClick={() => setLocale(lang)}
+                onClick={() => onSetLocale(lang)}
                 className={`px-2 py-0.5 rounded text-xs font-medium transition-colors cursor-pointer ${
                   locale === lang ? 'bg-white text-[#091413]' : 'text-white/70 hover:text-white'
                 }`}
@@ -181,10 +146,72 @@ export function DashboardSidebar() {
       </div>
     </div>
   )
+}
+
+export function DashboardSidebar() {
+  const pathname = usePathname()
+  const { user, company, signOut } = useAuth()
+  const { isExpired, expiryDate } = useSubscriptionGuard()
+  const [isOpen, setIsOpen] = useState(false)
+  const { t } = useTranslationNamespace('dashboard.sidebar')
+  const { t: tLegal } = useTranslationNamespace('dashboard.legal')
+  const { locale, setLocale } = useTranslation()
+
+  const firstName = user?.user_metadata?.first_name || ''
+  const lastName  = user?.user_metadata?.last_name  || ''
+  const displayName = [firstName, lastName].filter(Boolean).join(' ') || user?.email || 'Admin'
+
+  const navigation = [
+    { name: t('company'),      href: '/dashboard/company',      icon: BuildingOfficeIcon },
+    { name: t('users'),        href: '/dashboard/users',         icon: UsersIcon },
+    { name: t('subscription'), href: '/dashboard/subscription',  icon: CreditCardIcon },
+    { name: t('status'),       href: '/dashboard/status',        icon: ChatBubbleBottomCenterTextIcon },
+    { name: t('settings'),     href: '/dashboard/settings',      icon: CogIcon },
+  ]
+
+  const legalLinks = [
+    { name: tLegal('terms'),   href: '/terms',   icon: DocumentTextIcon },
+    { name: tLegal('privacy'), href: '/privacy', icon: ShieldCheckIcon },
+  ]
+
+  const accountStatus = (() => {
+    if (!expiryDate) return { label: company?.subscription_status ?? 'inactive', color: 'default' as const }
+    const now = new Date()
+    const daysLeft = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+    if (isExpired)     return { label: 'expired',  color: 'danger'  as const }
+    if (daysLeft <= 3) return { label: 'expiring', color: 'warning' as const }
+    return { label: 'active', color: 'success' as const }
+  })()
+
+  useEffect(() => { setIsOpen(false) }, [pathname])
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const sidebar = document.getElementById('mobile-sidebar')
+      const toggle  = document.getElementById('sidebar-toggle')
+      if (isOpen && sidebar && !sidebar.contains(e.target as Node) &&
+          toggle && !toggle.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen])
+
+  const sharedProps = {
+    company, displayName, navigation, legalLinks, accountStatus,
+    expiryDate, isExpired, locale, pathname,
+    onClose: () => setIsOpen(false),
+    onSignOut: signOut,
+    onSetLocale: setLocale,
+    t: t as (key: string) => string,
+    tLegal: tLegal as (key: string) => string,
+  }
 
   return (
     <>
-      {/* Mobile toggle */}
       <Button
         id="sidebar-toggle"
         isIconOnly
@@ -196,24 +223,21 @@ export function DashboardSidebar() {
         <Bars3Icon className="w-5 h-5" />
       </Button>
 
-      {/* Desktop sidebar */}
       <aside className="hidden lg:block fixed left-0 top-0 w-64 h-screen z-40">
-        <SidebarContent />
+        <SidebarContent {...sharedProps} />
       </aside>
 
-      {/* Mobile overlay */}
       {isOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setIsOpen(false)} />
       )}
 
-      {/* Mobile drawer */}
       <aside
         id="mobile-sidebar"
         className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <SidebarContent />
+        <SidebarContent {...sharedProps} />
       </aside>
     </>
   )
