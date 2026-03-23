@@ -34,6 +34,7 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
   const [statusJidList] = useState<string[]>([""]);
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState("");
+  const [mediaType, setMediaType] = useState<"image" | "video" | "audio" | null>(null);
   const [mediaUploaded, setMediaUploaded] = useState(false); // locks media once uploaded to Supabase
   const [position, setPosition] = useState("1");
   const [scheduleType, setScheduleType] = useState<"datetime" | "frequency">("frequency");
@@ -66,18 +67,20 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
         window.URL.revokeObjectURL(video.src);
         if (video.duration > 90) { toast.error(t('errors.videoTooLong')); return; }
         setMediaFile(file);
+        setMediaType('video');
         setMediaPreview(URL.createObjectURL(file));
         setStatusType('image');
       };
       video.src = URL.createObjectURL(file);
     } else {
       setMediaFile(file);
+      setMediaType(isAudio ? 'audio' : 'image');
       setMediaPreview(URL.createObjectURL(file));
       setStatusType(isAudio ? 'audio' : 'image');
     }
   };
 
-  const clearMedia = () => { setMediaFile(null); setMediaPreview(""); setMediaUploaded(false); setStatusType("text"); };
+  const clearMedia = () => { setMediaFile(null); setMediaPreview(""); setMediaType(null); setMediaUploaded(false); setStatusType("text"); };
 
   const handleSubmit = async () => {
     const allContacts = true; // Always true - switch commented out
@@ -158,7 +161,7 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
   const handleClose = () => {
     setStatusType("text"); setText(""); setCaption(""); setBackgroundColor("#008000");
     setFont("1"); /* setAllContacts(true); */
-    setMediaFile(null); setMediaPreview(""); setMediaUploaded(false); setPosition("1");
+    setMediaFile(null); setMediaPreview(""); setMediaType(null); setMediaUploaded(false); setPosition("1");
     setScheduleType("frequency"); setPublishmentDatetime(""); setSelectedDays([]); setRecurringTime("");
     onClose();
   };
@@ -225,7 +228,7 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
                     <div className="flex items-center justify-center h-full px-4">
                       <audio src={mediaPreview} controls className="w-full" />
                     </div>
-                  ) : mediaFile?.type.startsWith('video/') ? (
+                  ) : mediaType === 'video' ? (
                     <video src={mediaPreview} className="w-full h-full object-cover" controls />
                   ) : (
                     <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />

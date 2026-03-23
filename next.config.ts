@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
               "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
               `img-src 'self' data: blob: https://images.unsplash.com ${process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''}`,
+              "media-src 'self' blob:",
               // Evolution API is server-side only — no client connect needed
               `connect-src 'self' ${process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''}`,
               "frame-ancestors 'none'",

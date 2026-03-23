@@ -198,7 +198,7 @@ export function WhatsAppConnectModal({ isOpen, onOpenChange, connectWhatsApp, co
                     {company?.phone && (
                       <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/30 rounded-lg">
                         <PhoneIcon className="w-4 h-4 text-primary" />
-                        <span className="text-sm text-white font-medium">+{company.phone}</span>
+                        <span className="text-sm text-white font-medium">{company.phone}</span>
                       </div>
                     )}
                   </div>

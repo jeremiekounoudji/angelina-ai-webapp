@@ -59,62 +59,63 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    // Webhook from FedaPay — verify HMAC signature before processing
-    const signature = request.headers.get('x-fedapay-signature') ?? '';
-    const rawBody = await request.text();
+// export async function POST(request: NextRequest) {
+//   try {
+//     // Webhook from FedaPay — verify HMAC signature before processing
+//     const signature = request.headers.get('x-fedapay-signature') ?? '';
+//     const rawBody = await request.text();
 
-    const webhookSecret = process.env.FEDAPAY_WEBHOOK_SECRET;
-    if (webhookSecret) {
-      const { createHmac, timingSafeEqual } = await import('crypto');
-      const expected = createHmac('sha256', webhookSecret).update(rawBody).digest('hex');
-      const sigBuffer = Buffer.from(signature);
-      const expBuffer = Buffer.from(expected);
-      const signaturesMatch =
-        sigBuffer.length === expBuffer.length &&
-        timingSafeEqual(sigBuffer, expBuffer);
+//     const webhookSecret = process.env.FEDAPAY_WEBHOOK_SECRET;
+//     if (webhookSecret) {
+//       const { createHmac, timingSafeEqual } = await import('crypto');
+//       const expected = createHmac('sha256', webhookSecret).update(rawBody).digest('hex');
+//       const sigBuffer = Buffer.from(signature);
+//       const expBuffer = Buffer.from(expected);
+//       const signaturesMatch =
+//         sigBuffer.length === expBuffer.length &&
+//         timingSafeEqual(sigBuffer, expBuffer);
 
-      if (!signaturesMatch) {
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-      }
-    }
+//       if (!signaturesMatch) {
+//         return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+//       }
+//     }
 
-    const body = JSON.parse(rawBody);
-    const { transaction_id, status } = body;
+//     const body = JSON.parse(rawBody);
+//     const { transaction_id, status } = body;
 
-    if (!transaction_id || !status) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
+//     if (!transaction_id || !status) {
+//       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+//     }
 
-    const supabase = await createClient();
+//     // Use admin client to bypass RLS for webhook updates
+//     const supabase = createAdminClient();
 
-    // Idempotency check — skip if already completed
-    const { data: existing } = await supabase
-      .from('payments')
-      .select('payment_status')
-      .eq('transaction_id', transaction_id)
-      .single();
+//     // Idempotency check — skip if already completed
+//     const { data: existing } = await supabase
+//       .from('payments')
+//       .select('payment_status')
+//       .eq('transaction_id', transaction_id)
+//       .single();
 
-    if (existing?.payment_status === 'completed') {
-      return NextResponse.json({ status: 'already_processed' });
-    }
+//     if (existing?.payment_status === 'completed') {
+//       return NextResponse.json({ status: 'already_processed' });
+//     }
 
-    // Update payment status
-    const { error: updateError } = await supabase
-      .from('payments')
-      .update({ payment_status: status === 'approved' ? 'completed' : 'failed' })
-      .eq('transaction_id', transaction_id);
+//     // Update payment status
+//     const { error: updateError } = await supabase
+//       .from('payments')
+//       .update({ payment_status: status === 'approved' ? 'completed' : 'failed' })
+//       .eq('transaction_id', transaction_id);
 
-    if (updateError) {
-      console.error('Webhook update error:', updateError.message);
-      return NextResponse.json({ error: 'Failed to update payment' }, { status: 500 });
-    }
+//     if (updateError) {
+//       console.error('Webhook update error:', updateError.message);
+//       return NextResponse.json({ error: 'Failed to update payment' }, { status: 500 });
+//     }
 
-    return NextResponse.json({ received: true });
+//     return NextResponse.json({ received: true });
 
-  } catch (error) {
-    console.error('Webhook error:', error instanceof Error ? error.message : 'Unknown error');
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
-}
+//   } catch (error) {
+//     console.error('Webhook error:', error instanceof Error ? error.message : 'Unknown error');
+//     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+//   }
+// }

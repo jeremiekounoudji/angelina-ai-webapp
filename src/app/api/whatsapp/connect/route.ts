@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { encrypt } from "@/lib/encryption";
 import { z } from "zod";
 
 const EVOLUTION_API_URL = process.env.NEXT_PUBLIC_EVOLUTION_API_URL;
@@ -113,7 +114,11 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 5. Save to DB
+    // 5. Save to DB — encrypt the API key before persisting
+    const encryptedApiKey = instanceData.hash
+      ? await encrypt(instanceData.hash)
+      : null;
+
     const { data: savedInstance, error: dbError } = await supabase
       .from("whatsapp_instances")
       .insert({
@@ -123,7 +128,7 @@ export async function POST(req: NextRequest) {
         phone_number: phoneNumber,
         status: "connecting",
         pairing_code: pairingCode,
-        api_key: instanceData.hash,
+        api_key: encryptedApiKey,
       })
       .select()
       .single();
