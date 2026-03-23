@@ -26,7 +26,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
   const { updateStatus } = useStatus(status.company_id);
   const { upload, uploading } = useUpload();
 
-  const [statusType, setStatusType] = useState<"text" | "image" | "audio">(status.status_type);
+  const [statusType, setStatusType] = useState<"text" | "image" | "video" | "audio">(status.status_type);
   const [text, setText] = useState(status.text || "");
   const [caption, setCaption] = useState(status.caption || "");
   const [backgroundColor, setBackgroundColor] = useState(status.background_color || "#008000");
@@ -175,7 +175,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">{t('statusType')}</label>
             <div className="px-3 py-2 border border-gray-200 rounded-xl bg-gray-50 text-sm text-gray-500">
-              {statusType === "text" ? t('typeText') : statusType === "image" ? t('typeImage') : t('typeAudio')}
+              {statusType === "text" ? t('typeText') : statusType === "image" ? t('typeImage') : statusType === "video" ? t('typeVideo') : t('typeAudio')}
               <span className="ml-2 text-xs text-gray-400">({t('lockedField')})</span>
             </div>
           </div>
@@ -193,7 +193,7 @@ export function EditStatusModal({ isOpen, onClose, status, onUpdated }: EditStat
           )}
 
           {/* Image / Audio type — media is locked on edit */}
-          {(statusType === "image" || statusType === "audio") && (
+          {(statusType === "image" || statusType === "audio" || statusType === "video") && (
             <div className="space-y-3">
               <label className="text-sm font-medium text-gray-700">
                 {t('media')}
