@@ -61,10 +61,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setCompany(companyRes.data ?? null);
       setError(null);
     } catch (err: unknown) {
-      // Don't log the full error object — it may contain sensitive session data
+      const authErr = err as { code?: string; status?: number };
+      // Invalid/expired refresh token — clear local session so user gets a clean login
+      if (authErr?.code === 'refresh_token_not_found' || authErr?.status === 400) {
+        await supabase.auth.signOut();
+        setUser(null);
+        setCompany(null);
+        clearAll();
+        return;
+      }
       console.error("Auth refresh failed");
       setError("Erreur de connexion au serveur");
-      // Don't reset user on transient network errors
     } finally {
       setLoading(false);
     }

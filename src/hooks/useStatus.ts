@@ -65,11 +65,6 @@ export function useStatus(companyId?: string) {
 
         if (insertError) throw insertError;
 
-        // Update metrics
-        await supabase.rpc("increment_status_count", {
-          company_uuid: companyId
-        });
-
         toast.success(t('success.created'));
         await fetchStatuses();
         return data;
@@ -128,11 +123,6 @@ export function useStatus(companyId?: string) {
           .eq("company_id", companyId);
 
         if (deleteError) throw deleteError;
-
-        // Decrement metrics
-        await supabase.rpc("decrement_status_count", {
-          company_uuid: companyId
-        });
 
         toast.success(t('success.deleted'));
         await fetchStatuses();

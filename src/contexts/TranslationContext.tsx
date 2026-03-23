@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, ReactNode } from 'react';
 import { 
   Locale, 
   TranslationFunction, 
@@ -30,9 +30,8 @@ interface TranslationProviderProps {
 
 export function TranslationProvider({ children, initialLocale }: TranslationProviderProps) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale || DEFAULT_LOCALE);
-  const [t, setT] = useState<TranslationFunction>(() => createTranslationFunction(locale));
 
-  // Initialize locale from localStorage or browser detection
+  // Initialize locale from localStorage or browser detection — runs once
   useEffect(() => {
     if (!initialLocale) {
       const savedLocale = localStorage.getItem('locale') as Locale;
@@ -41,29 +40,26 @@ export function TranslationProvider({ children, initialLocale }: TranslationProv
     }
   }, [initialLocale]);
 
-  // Update translation function when locale changes
-  useEffect(() => {
-    setT(() => createTranslationFunction(locale));
-  }, [locale]);
+  // Derive t directly from locale — no separate state, no extra render cycle
+  const t = useMemo(() => createTranslationFunction(locale), [locale]);
 
-  const setLocale = (newLocale: Locale) => {
+  const setLocale = useCallback((newLocale: Locale) => {
     setLocaleState(newLocale);
     localStorage.setItem('locale', newLocale);
-    
-    // Update document language
     if (typeof document !== 'undefined') {
       document.documentElement.lang = newLocale;
     }
-  };
+  }, []);
 
-  const contextValue: TranslationContextType = {
+  // Stable context value — only changes when locale changes
+  const contextValue = useMemo<TranslationContextType>(() => ({
     locale,
     setLocale,
     t,
     formatCurrency: (amount: number) => formatCurrency(amount, locale),
     formatDate: (date: Date) => formatDate(date, locale),
     formatRelativeTime: (date: Date) => formatRelativeTime(date, locale),
-  };
+  }), [locale, setLocale, t]);
 
   return (
     <TranslationContext.Provider value={contextValue}>

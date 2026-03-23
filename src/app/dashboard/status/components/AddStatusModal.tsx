@@ -9,9 +9,10 @@ import {
 import { useStatus } from "@/hooks/useStatus";
 import { useUpload } from "@/hooks/useUpload";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
-import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { PhotoIcon, XMarkIcon, PlayIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import { StatusTextFields } from "./StatusTextFields";
+import { MediaPreviewModal } from "./VideoPlayerModal";
 
 interface AddStatusModalProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ interface AddStatusModalProps {
 export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddStatusModalProps) {
   const { t } = useTranslationNamespace('dashboard.status');
   const { createStatus } = useStatus(companyId);
-  const { upload, uploading } = useUpload();
+  const { upload, uploading, progress, generateThumbnail } = useUpload();
 
   const [statusType, setStatusType] = useState<"text" | "image" | "audio">("text");
   const [text, setText] = useState("");
@@ -35,7 +36,8 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState("");
   const [mediaType, setMediaType] = useState<"image" | "video" | "audio" | null>(null);
-  const [mediaUploaded, setMediaUploaded] = useState(false); // locks media once uploaded to Supabase
+  const [mediaUploaded, setMediaUploaded] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [position, setPosition] = useState("1");
   const [scheduleType, setScheduleType] = useState<"datetime" | "frequency">("frequency");
   const [publishmentDatetime, setPublishmentDatetime] = useState("");
@@ -63,15 +65,22 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
     if (isVideo) {
       const video = document.createElement('video');
       video.preload = 'metadata';
+      const objectUrl = URL.createObjectURL(file);
       video.onloadedmetadata = () => {
-        window.URL.revokeObjectURL(video.src);
-        if (video.duration > 90) { toast.error(t('errors.videoTooLong')); return; }
+        if (video.duration > 90) { toast.error(t('errors.videoTooLong')); URL.revokeObjectURL(objectUrl); return; }
         setMediaFile(file);
         setMediaType('video');
-        setMediaPreview(URL.createObjectURL(file));
+        setMediaPreview(objectUrl);
+        setStatusType('image'); // "image" type covers both image and video
+      };
+      video.onerror = () => {
+        // fallback: still show it
+        setMediaFile(file);
+        setMediaType('video');
+        setMediaPreview(objectUrl);
         setStatusType('image');
       };
-      video.src = URL.createObjectURL(file);
+      video.src = objectUrl;
     } else {
       setMediaFile(file);
       setMediaType(isAudio ? 'audio' : 'image');
@@ -83,7 +92,7 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
   const clearMedia = () => { setMediaFile(null); setMediaPreview(""); setMediaType(null); setMediaUploaded(false); setStatusType("text"); };
 
   const handleSubmit = async () => {
-    const allContacts = true; // Always true - switch commented out
+    const allContacts = true;
     if (statusType === "text" && !text) { toast.error(t('errors.textOrMediaRequired')); return; }
     if (statusType !== "text" && !mediaFile) { toast.error(t('errors.mediaRequired')); return; }
     // if (!allContacts && statusJidList.filter(j => j.trim()).length === 0) {
@@ -101,12 +110,29 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
     try {
       setLoading(true);
       let mediaUrl = "";
+      let thumbnailUrl = "";
+      
       if (mediaFile) {
         const uploadResult = await upload({ bucket: "status", files: [mediaFile] });
         if (!uploadResult.success || uploadResult.urls.length === 0) { toast.error(t('errors.uploadFailed')); return; }
         mediaUrl = uploadResult.urls[0];
         setMediaPreview(mediaUrl);
         setMediaUploaded(true);
+        
+        // Generate and upload thumbnail for videos
+        if (mediaType === 'video') {
+          try {
+            const thumbnailBlob = await generateThumbnail(mediaFile, 2);
+            const thumbnailFile = new File([thumbnailBlob], `thumb-${Date.now()}.jpg`, { type: 'image/jpeg' });
+            const thumbResult = await upload({ bucket: "status", files: [thumbnailFile], path: "thumbnails" });
+            if (thumbResult.success && thumbResult.urls.length > 0) {
+              thumbnailUrl = thumbResult.urls[0];
+            }
+          } catch (error) {
+            console.error('Thumbnail generation failed:', error);
+            // Continue without thumbnail - not critical
+          }
+        }
       }
 
       let nextPostAt: string | undefined;
@@ -133,10 +159,11 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
 
       await createStatus({
         company_id: companyId,
-        status_type: statusType,
+        status_type: mediaType === 'video' ? 'video' : statusType,
         text: statusType === "text" ? text || undefined : undefined,
         caption: statusType !== "text" ? caption || undefined : undefined,
         media_url: mediaUrl || undefined,
+        thumbnail_url: thumbnailUrl || undefined,
         background_color: statusType === "text" ? (backgroundColor || "#008000") : undefined,
         font: statusType === "text" ? parseInt(font) : undefined,
         all_contacts: allContacts,
@@ -161,7 +188,7 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
   const handleClose = () => {
     setStatusType("text"); setText(""); setCaption(""); setBackgroundColor("#008000");
     setFont("1"); /* setAllContacts(true); */
-    setMediaFile(null); setMediaPreview(""); setMediaType(null); setMediaUploaded(false); setPosition("1");
+    setMediaFile(null); setMediaPreview(""); setMediaType(null); setMediaUploaded(false); setPreviewOpen(false); setPosition("1");
     setScheduleType("frequency"); setPublishmentDatetime(""); setSelectedDays([]); setRecurringTime("");
     onClose();
   };
@@ -170,7 +197,8 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
   const selectClass = { trigger: "border-gray-300 data-[hover=true]:border-[#091413]" };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="2xl" scrollBehavior="inside">
+    <>
+      <Modal isOpen={isOpen} onClose={handleClose} size="2xl" scrollBehavior="inside">
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1 pb-2">
           <h3 className="text-lg font-semibold">{t('addStatus')}</h3>
@@ -185,13 +213,13 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
             onSelectionChange={(keys) => {
               const val = Array.from(keys)[0] as "text" | "image" | "audio";
               setStatusType(val);
-              if (val === "text") { setMediaFile(null); setMediaPreview(""); }
+              if (val === "text") { setMediaFile(null); setMediaPreview(""); setMediaType(null); }
             }}
             variant="bordered"
             classNames={selectClass}
           >
             <SelectItem key="text">{t('typeText')}</SelectItem>
-            <SelectItem key="image">{t('typeImage')}</SelectItem>
+            <SelectItem key="image">Image / Vidéo</SelectItem>
             <SelectItem key="audio">{t('typeAudio')}</SelectItem>
           </Select>
 
@@ -207,11 +235,11 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
             />
           )}
 
-          {/* Image / Audio type */}
-          {(statusType === "image" || statusType === "audio") && (
+          {/* Image / Video / Audio type */}
+          {statusType !== "text" && (
             <div className="space-y-3">
               <label className="text-sm font-medium text-gray-700">{t('media')}</label>
-              {!mediaPreview ? (
+              {!mediaFile ? (
                 <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-[#091413] transition-all">
                   <PhotoIcon className="w-10 h-10 text-gray-400 mb-2" />
                   <p className="text-sm text-gray-500">{t('mediaHint')}</p>
@@ -222,22 +250,58 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
                     className="hidden"
                   />
                 </label>
-              ) : (
-                <div className="relative w-full h-48 bg-gray-100 rounded-xl overflow-hidden">
-                  {statusType === "audio" ? (
-                    <div className="flex items-center justify-center h-full px-4">
-                      <audio src={mediaPreview} controls className="w-full" />
-                    </div>
-                  ) : mediaType === 'video' ? (
-                    <video src={mediaPreview} className="w-full h-full object-cover" controls />
-                  ) : (
-                    <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
-                  )}
-                  {/* Only allow clearing before upload */}
+              ) : mediaType === "audio" ? (
+                /* Audio player */
+                <div className="flex items-center justify-center h-24 px-4 bg-gray-100 rounded-xl">
+                  <audio src={mediaPreview} controls className="w-full" />
+                </div>
+              ) : mediaType === "video" ? (
+                /* Video: file card with play button */
+                <div className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (mediaPreview) {
+                        setPreviewOpen(true);
+                      }
+                    }}
+                    className="shrink-0 w-10 h-10 rounded-full bg-[#091413] flex items-center justify-center hover:bg-[#15803d] transition-colors"
+                  >
+                    <PlayIcon className="w-5 h-5 text-white ml-0.5" />
+                  </button>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-800 truncate">{mediaFile.name}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Vidéo · {mediaFile.size < 1024 * 1024
+                        ? `${(mediaFile.size / 1024).toFixed(0)} KB`
+                        : `${(mediaFile.size / (1024 * 1024)).toFixed(1)} MB`}
+                    </p>
+                  </div>
                   {!mediaUploaded && (
                     <button
+                      type="button"
                       onClick={clearMedia}
-                      className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-black/80 rounded-full text-white"
+                      className="shrink-0 p-1.5 hover:bg-gray-200 rounded-full text-gray-500 transition-colors"
+                    >
+                      <XMarkIcon className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              ) : (
+                /* Image: show preview with click to open modal */
+                <div className="relative bg-gray-100 rounded-xl overflow-hidden">
+                  <div className="h-48 flex items-center justify-center bg-black cursor-pointer" onClick={() => setPreviewOpen(true)}>
+                    <img
+                      src={mediaPreview}
+                      alt="Preview"
+                      className="h-full w-auto object-contain"
+                    />
+                  </div>
+                  {!mediaUploaded && (
+                    <button
+                      type="button"
+                      onClick={clearMedia}
+                      className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-black/80 rounded-full text-white z-10"
                     >
                       <XMarkIcon className="w-4 h-4" />
                     </button>
@@ -356,12 +420,23 @@ export function AddStatusModal({ isOpen, onClose, companyId, onCreated }: AddSta
           <Button variant="flat" onPress={handleClose} className="text-gray-600">{t('cancel')}</Button>
           <Button
             className="bg-[#091413] text-white hover:bg-[#15803d]"
-            onPress={handleSubmit} isLoading={loading || uploading}
+            onPress={handleSubmit}
+            isLoading={loading || uploading}
+            spinner={uploading ? undefined : <></>}
           >
-            {t('create')}
+            {uploading ? `${progress}%` : t('create')}
           </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
+
+    {/* Full-screen media preview */}
+    <MediaPreviewModal
+      isOpen={previewOpen && !!mediaPreview && (mediaType === 'image' || mediaType === 'video')}
+      onClose={() => setPreviewOpen(false)}
+      src={mediaPreview || ""}
+      type={mediaType === 'video' ? 'video' : 'image'}
+    />
+    </>
   );
 }

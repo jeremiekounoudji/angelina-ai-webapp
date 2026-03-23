@@ -8,13 +8,14 @@ import {
   Chip,
   Spinner,
 } from "@heroui/react";
-import { PlusIcon, PencilIcon, TrashIcon, ChatBubbleBottomCenterTextIcon, ClockIcon, CalendarIcon, PhotoIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, PencilIcon, TrashIcon, ChatBubbleBottomCenterTextIcon, ClockIcon, CalendarIcon, PhotoIcon, PlayIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/contexts/AuthContext";
 import { useStatus } from "@/hooks/useStatus";
 import { usePlanLimits } from "@/hooks/usePlanLimits";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 import { AddStatusModal } from "./components/AddStatusModal";
 import { EditStatusModal } from "./components/EditStatusModal";
+import { MediaPreviewModal } from "./components/VideoPlayerModal";
 import { Status } from "@/types/database";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 
@@ -28,6 +29,8 @@ export default function StatusPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<Status | null>(null);
+  const [videoPlayerUrl, setVideoPlayerUrl] = useState<string | null>(null);
+  const [videoPlayerType, setVideoPlayerType] = useState<"image" | "video">("video");
 
   const handleAddClick = async () => {
     const canAdd = await canAddStatus();
@@ -157,25 +160,46 @@ export default function StatusPage() {
                   {status.media_url ? (
                     <>
                       {status.status_type === "audio" ? (
-                        <div className="w-full h-[100px] flex items-center justify-center px-4">
+                        <div className="w-full h-[200px] flex items-center justify-center px-4">
                           <audio src={status.media_url} controls className="w-full" />
                         </div>
-                      ) : status.status_type === "image" ? (
+                      ) : status.status_type === "video" ? (
+                        <div
+                          className="relative w-full h-[200px] cursor-pointer group bg-black"
+                          onClick={() => { setVideoPlayerUrl(status.media_url!); setVideoPlayerType('video'); }}
+                        >
+                          {status.thumbnail_url ? (
+                            <img
+                              src={status.thumbnail_url}
+                              alt="Video thumbnail"
+                              className="w-full h-full object-contain"
+                            />
+                          ) : (
+                            <video
+                              src={status.media_url}
+                              className="w-full h-full object-contain"
+                              muted
+                              playsInline
+                              preload="metadata"
+                            />
+                          )}
+                          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
+                              <PlayIcon className="w-6 h-6 text-gray-900 ml-0.5" />
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
                         <img
                           src={status.media_url}
                           alt="Status media"
-                          className="w-full h-[180px] object-cover"
-                        />
-                      ) : (
-                        <video
-                          src={status.media_url}
-                          className="w-full h-[180px] object-cover"
-                          controls
+                          className="w-full h-[200px] object-cover cursor-pointer"
+                          onClick={() => { setVideoPlayerUrl(status.media_url!); setVideoPlayerType('image'); }}
                         />
                       )}
                     </>
                   ) : (
-                    <div className="w-full h-[100px] flex flex-col items-center justify-center gap-1">
+                    <div className="w-full h-[200px] flex flex-col items-center justify-center gap-1">
                       <PhotoIcon className="w-8 h-8 text-gray-300" />
                       <span className="text-xs text-gray-400">{t('text')} only</span>
                     </div>
@@ -309,6 +333,13 @@ export default function StatusPage() {
         message={t('deleteConfirmMessage')}
         confirmText={t('delete')}
         cancelText={t('cancel')}
+      />
+
+      <MediaPreviewModal
+        isOpen={!!videoPlayerUrl}
+        onClose={() => setVideoPlayerUrl(null)}
+        src={videoPlayerUrl ?? ""}
+        type={videoPlayerType}
       />
     </div>
   );

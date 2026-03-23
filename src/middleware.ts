@@ -33,7 +33,23 @@ export async function middleware(request: NextRequest) {
 
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser()
+
+  // If the refresh token is invalid/expired, clear the session cookies so the
+  // browser doesn't get stuck in an infinite retry loop on every request.
+  if (authError && (authError as { code?: string }).code === 'refresh_token_not_found') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    const redirectResponse = NextResponse.redirect(url)
+    // Clear all auth-related cookies
+    request.cookies.getAll().forEach(({ name }) => {
+      if (name.includes('auth-token') || name.includes('sb-')) {
+        redirectResponse.cookies.delete(name)
+      }
+    })
+    return redirectResponse
+  }
 
   // Protect dashboard routes - redirect to login if not authenticated
   if (
