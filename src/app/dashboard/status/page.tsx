@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardBody,
@@ -13,47 +14,47 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useStatus } from "@/hooks/useStatus";
 import { usePlanLimits } from "@/hooks/usePlanLimits";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
-import { AddStatusModal } from "./components/AddStatusModal";
-import { EditStatusModal } from "./components/EditStatusModal";
 import { MediaPreviewModal } from "./components/VideoPlayerModal";
 import { Status } from "@/types/database";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 
+import { useAppStore } from "@/store";
+
 export default function StatusPage() {
+  const router = useRouter();
   const { company } = useAuth();
   const { t } = useTranslationNamespace('dashboard.status');
-  const { statuses, loading, deleteStatus, createStatus, updateStatus, refetch } = useStatus(company?.id);
+  const { statuses, loading, deleteStatus } = useStatus(company?.id);
   const { limits, canAddStatus } = usePlanLimits(company?.id);
+  const setSelectedStatus = useAppStore(s => s.setSelectedStatus);
   
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<Status | null>(null);
+  const [statusToDelete, setStatusToDelete] = useState<Status | null>(null);
   const [videoPlayerUrl, setVideoPlayerUrl] = useState<string | null>(null);
   const [videoPlayerType, setVideoPlayerType] = useState<"image" | "video">("video");
 
   const handleAddClick = async () => {
     const canAdd = await canAddStatus();
     if (canAdd) {
-      setIsAddModalOpen(true);
+      router.push("/dashboard/status/add");
     }
   };
 
   const handleEditClick = (status: Status) => {
     setSelectedStatus(status);
-    setIsEditModalOpen(true);
+    router.push(`/dashboard/status/edit/${status.id}`);
   };
 
   const handleDeleteClick = (status: Status) => {
-    setSelectedStatus(status);
+    setStatusToDelete(status);
     setIsDeleteModalOpen(true);
   };
 
   const handleDeleteConfirm = async () => {
-    if (selectedStatus) {
-      await deleteStatus(selectedStatus.id);
+    if (statusToDelete) {
+      await deleteStatus(statusToDelete.id);
       setIsDeleteModalOpen(false);
-      setSelectedStatus(null);
+      setStatusToDelete(null);
     }
   };
 
@@ -302,31 +303,11 @@ export default function StatusPage() {
         </div>
       )}
 
-      {/* Modals — pass callbacks from the single useStatus hook */}
-      <AddStatusModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        companyId={company?.id || ""}
-        onCreated={refetch}
-      />
-
-      {selectedStatus && (
-        <EditStatusModal
-          isOpen={isEditModalOpen}
-          onClose={() => {
-            setIsEditModalOpen(false);
-            setSelectedStatus(null);
-          }}
-          status={selectedStatus}
-          onUpdated={refetch}
-        />
-      )}
-
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={() => {
           setIsDeleteModalOpen(false);
-          setSelectedStatus(null);
+          setStatusToDelete(null);
         }}
         onConfirm={handleDeleteConfirm}
         title={t('deleteConfirmTitle')}

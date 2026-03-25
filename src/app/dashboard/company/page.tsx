@@ -27,6 +27,7 @@ export default function CompanyPage() {
   const { 
     whatsappInstance, 
     connectionStatus, 
+    isLoading: whatsappLoading,
     connectWhatsApp,
     disconnectWhatsApp 
   } = useWhatsAppConnect();
@@ -138,9 +139,9 @@ export default function CompanyPage() {
                 )}
 
                 {/* WhatsApp Connection */}
-                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 border border-gray-200 rounded-lg bg-gray-50">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shrink-0">
                       <PhoneIcon className="w-5 h-5 text-white" />
                     </div>
                     <div>
@@ -154,7 +155,7 @@ export default function CompanyPage() {
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 sm:shrink-0">
                     {whatsappInstance && (
                       <Chip
                         size="sm"
@@ -174,6 +175,7 @@ export default function CompanyPage() {
                         size="sm"
                         color="danger"
                         variant="light"
+                        isLoading={whatsappLoading}
                         onPress={disconnectWhatsApp}
                       >
                         {t('whatsapp.disconnect')}

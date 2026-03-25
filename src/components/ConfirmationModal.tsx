@@ -20,6 +20,7 @@ interface ConfirmationModalProps {
   cancelText?: string;
   isLoading?: boolean;
   variant?: "danger" | "warning" | "info";
+  children?: React.ReactNode;
 }
 
 export function ConfirmationModal({
@@ -32,6 +33,7 @@ export function ConfirmationModal({
   cancelText = "Cancel",
   isLoading = false,
   variant = "warning",
+  children,
 }: ConfirmationModalProps) {
   const getVariantStyles = () => {
     switch (variant) {
@@ -91,6 +93,7 @@ export function ConfirmationModal({
         </ModalHeader>
         <ModalBody>
           <p className="text-gray-600 leading-relaxed">{message}</p>
+          {children}
         </ModalBody>
         <ModalFooter>
           <Button

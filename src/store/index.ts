@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { User, Product, Company, SubscriptionPlan, Payment, TokenUsage, TokenPurchase, PlanLimits, Metrics } from '@/types/database';
+import { User, Product, Company, SubscriptionPlan, Payment, TokenUsage, TokenPurchase, PlanLimits, Metrics, Status } from '@/types/database';
 
 interface AppState {
   // Users
@@ -48,6 +48,17 @@ interface AppState {
   metrics: Metrics | null;
   setMetrics: (metrics: Metrics | null) => void;
 
+  // Selected Status (for edit page navigation)
+  selectedStatus: Status | null;
+  setSelectedStatus: (status: Status | null) => void;
+
+  // Statuses
+  statuses: Status[];
+  setStatuses: (statuses: Status[]) => void;
+  addStatus: (status: Status) => void;
+  updateStatus: (id: string, status: Partial<Status>) => void;
+  removeStatus: (id: string) => void;
+
   // Loading states
   loading: {
     users: boolean;
@@ -59,6 +70,7 @@ interface AppState {
     tokenPurchases: boolean;
     planLimits: boolean;
     metrics: boolean;
+    statuses: boolean;
   };
   setLoading: (key: keyof AppState['loading'], value: boolean) => void;
 
@@ -73,6 +85,7 @@ interface AppState {
     tokenPurchases: string | null;
     planLimits: string | null;
     metrics: string | null;
+    statuses: string | null;
   };
   setError: (key: keyof AppState['errors'], error: string | null) => void;
 
@@ -95,6 +108,8 @@ export const useAppStore = create<AppState>()(
       tokenPurchases: [],
       planLimits: null,
       metrics: null,
+      selectedStatus: null,
+      statuses: [],
 
       loading: {
         users: false,
@@ -106,6 +121,7 @@ export const useAppStore = create<AppState>()(
         tokenPurchases: false,
         planLimits: false,
         metrics: false,
+        statuses: false,
       } as const,
 
       errors: {
@@ -118,6 +134,7 @@ export const useAppStore = create<AppState>()(
         tokenPurchases: null,
         planLimits: null,
         metrics: null,
+        statuses: null,
       },
 
       // Users actions
@@ -182,6 +199,19 @@ export const useAppStore = create<AppState>()(
       // Metrics actions
       setMetrics: (metrics) => set({ metrics }),
 
+      // Selected Status actions
+      setSelectedStatus: (selectedStatus) => set({ selectedStatus }),
+
+      // Statuses actions
+      setStatuses: (statuses) => set({ statuses }),
+      addStatus: (status) => set((state) => ({ statuses: [...state.statuses, status] })),
+      updateStatus: (id, updated) =>
+        set((state) => ({
+          statuses: state.statuses.map((s) => s.id === id ? { ...s, ...updated } : s),
+        })),
+      removeStatus: (id) =>
+        set((state) => ({ statuses: state.statuses.filter((s) => s.id !== id) })),
+
       // Loading actions
       // Loading actions - bail out if value unchanged to prevent re-render loops
       setLoading: (key, value) =>
@@ -215,6 +245,8 @@ export const useAppStore = create<AppState>()(
           tokenPurchases: [],
           planLimits: null,
           metrics: null,
+          statuses: [],
+          selectedStatus: null,
           loading: {
             users: false,
             products: false,
@@ -225,6 +257,7 @@ export const useAppStore = create<AppState>()(
             tokenPurchases: false,
             planLimits: false,
             metrics: false,
+            statuses: false,
           },
           errors: {
             users: null,
@@ -236,6 +269,7 @@ export const useAppStore = create<AppState>()(
             tokenPurchases: null,
             planLimits: null,
             metrics: null,
+            statuses: null,
           },
         }),
     }),

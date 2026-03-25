@@ -22,17 +22,17 @@ export function WhatsAppSupportButton() {
       target="_blank"
       rel="noreferrer"
       aria-label={t('helpText') as string}
-      className="fixed bottom-6 right-6 z-[9990] flex items-center gap-2 group"
+      className="fixed bottom-6 left-6 z-[9990] flex items-center gap-2 group"
     >
-      {/* Label — slides in on hover */}
-      <span className="hidden group-hover:flex items-center bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap transition-all">
-        {t('helpText') as string}
-      </span>
-
       {/* Circle button */}
       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg hover:bg-[#1ebe5d] hover:scale-105 transition-all duration-200">
         <WhatsAppIcon className="w-7 h-7 text-white" />
       </div>
+
+      {/* Label — slides in on hover, appears to the right of the button */}
+      <span className="hidden group-hover:flex items-center bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap transition-all">
+        {t('helpText') as string}
+      </span>
     </a>
   )
 }

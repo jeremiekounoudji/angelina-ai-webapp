@@ -390,9 +390,11 @@
     "actions": {
       "edit": "Modifier les Détails",
       "contact": "Contacter le Support",
-      "delete": "Supprimer le Compte",
+      "delete": "Supprimer l'Entreprise",
+      "deleteAccount": "Supprimer le Compte",
       "cancel": "Annuler",
-      "deleting": "Suppression..."
+      "deleting": "Suppression...",
+      "requestSent": "Demande Envoyée"
     },
     "support": {
       "description": "Obtenez de l'aide avec votre compte ou signalez des problèmes"
@@ -401,6 +403,19 @@
       "description": "Supprimer définitivement votre compte d'entreprise et toutes les données associées",
       "confirmTitle": "Supprimer le Compte",
       "confirmMessage": "Êtes-vous sûr de vouloir supprimer votre compte d'entreprise ? Cette action ne peut pas être annulée et supprimera définitivement toutes vos données."
+    },
+    "deleteAccount": {
+      "sectionTitle": "Supprimer le Compte",
+      "description": "Demandez la suppression permanente de votre compte et de toutes les données associées. Un administrateur examinera et traitera votre demande.",
+      "confirmTitle": "Demander la Suppression du Compte",
+      "confirmMessage": "Êtes-vous sûr de vouloir demander la suppression de votre compte ? Votre compte restera actif jusqu'à ce qu'un administrateur traite la demande. Vous serez notifié une fois que ce sera fait.",
+      "reasonLabel": "Raison (optionnel)",
+      "reasonPlaceholder": "Dites-nous pourquoi vous souhaitez supprimer votre compte...",
+      "success": "Votre demande de suppression a été soumise. Un administrateur la traitera prochainement.",
+      "alreadyPending": "Vous avez déjà une demande de suppression en attente.",
+      "errors": {
+        "failed": "Échec de la soumission de la demande de suppression. Veuillez réessayer."
+      }
     }
   },
   "payment": {

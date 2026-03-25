@@ -395,9 +395,11 @@
     "actions": {
       "edit": "Edit Details",
       "contact": "Contact Support",
-      "delete": "Delete Account",
+      "delete": "Delete Company",
+      "deleteAccount": "Delete Account",
       "cancel": "Cancel",
-      "deleting": "Deleting..."
+      "deleting": "Deleting...",
+      "requestSent": "Request Sent"
     },
     "support": {
       "description": "Get help with your account or report issues"
@@ -406,6 +408,19 @@
       "description": "Permanently delete your company account and all associated data",
       "confirmTitle": "Delete Account",
       "confirmMessage": "Are you sure you want to delete your company account? This action cannot be undone and will permanently delete all your data."
+    },
+    "deleteAccount": {
+      "sectionTitle": "Delete Account",
+      "description": "Request permanent deletion of your account and all associated data. An admin will review and process your request.",
+      "confirmTitle": "Request Account Deletion",
+      "confirmMessage": "Are you sure you want to request account deletion? Your account will remain active until an admin processes the request. You will be notified once it is done.",
+      "reasonLabel": "Reason (optional)",
+      "reasonPlaceholder": "Tell us why you want to delete your account...",
+      "success": "Your deletion request has been submitted. An admin will process it shortly.",
+      "alreadyPending": "You already have a pending deletion request.",
+      "errors": {
+        "failed": "Failed to submit deletion request. Please try again."
+      }
     }
   },
   "payment": {

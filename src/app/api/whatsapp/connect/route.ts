@@ -49,13 +49,16 @@ export async function POST(req: NextRequest) {
       .from("whatsapp_instances")
       .select("instance_name")
       .eq("company_id", companyId);
+        console.log(existingInstances);
+
 
     if (existingInstances?.length) {
       for (const inst of existingInstances) {
+        
         await fetch(`${EVOLUTION_API_URL}/instance/delete/${inst.instance_name}`, {
           method: "DELETE",
           headers: { apikey: EVOLUTION_API_KEY },
-        }).catch(() => null);
+        }).catch((e) => null);
       }
       await supabase.from("whatsapp_instances").delete().eq("company_id", companyId);
     }

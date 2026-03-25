@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     await fetch(`${EVOLUTION_API_URL}/instance/delete/${instanceName}`, {
       method: "DELETE",
       headers: { apikey: EVOLUTION_API_KEY },
-    }).catch(() => null);
+    }).catch((e) => null);
 
     await supabase
       .from("whatsapp_instances")

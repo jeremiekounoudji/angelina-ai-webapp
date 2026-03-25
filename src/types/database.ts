@@ -223,6 +223,17 @@ export interface Status {
   updated_at: string
 }
 
+export interface AccountDeletionRequest {
+  id: string
+  user_id: string
+  company_id?: string
+  reason?: string
+  status: 'pending' | 'approved' | 'rejected'
+  requested_at: string
+  processed_at?: string
+  processed_by?: string
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -300,6 +311,11 @@ export interface Database {
         Row: Status
         Insert: Omit<Status, 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Omit<Status, 'id' | 'created_at' | 'updated_at'>>
+      }
+      account_deletion_requests: {
+        Row: AccountDeletionRequest
+        Insert: Omit<AccountDeletionRequest, 'id' | 'requested_at'>
+        Update: Partial<Omit<AccountDeletionRequest, 'id' | 'requested_at'>>
       }
     }
   }

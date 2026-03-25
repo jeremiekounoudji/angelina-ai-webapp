@@ -1,156 +1,188 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useCallback, useEffect, useRef, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useAppStore } from "@/store";
 import { Status } from "@/types/database";
 import toast from "react-hot-toast";
 import { useTranslationNamespace } from "@/contexts/TranslationContext";
 
 export function useStatus(companyId?: string) {
   const supabase = useMemo(() => createClient(), []);
-  const { t } = useTranslationNamespace('hooks.status');
-  const [statuses, setStatuses] = useState<Status[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { company } = useAuth();
+  const { t } = useTranslationNamespace("hooks.status");
 
-  const fetchStatuses = useCallback(async () => {
-    if (!companyId) return;
+  const resolvedCompanyId = companyId ?? company?.id;
 
-    try {
-      setLoading(true);
-      setError(null);
+  const hasFetchedRef = useRef(false);
+  const currentCompanyIdRef = useRef<string | null>(null);
+  const isFetchingRef = useRef(false);
 
-      const { data, error: fetchError } = await supabase
-        .from("status")
-        .select("*")
-        .eq("company_id", companyId)
-        .order("position", { ascending: true });
+  const statuses = useAppStore((s) => s.statuses);
+  const addStatusToStore = useAppStore((s) => s.addStatus);
+  const updateStatusInStore = useAppStore((s) => s.updateStatus);
+  const removeStatusFromStore = useAppStore((s) => s.removeStatus);
+  const loading = useAppStore((s) => s.loading.statuses);
+  const error = useAppStore((s) => s.errors.statuses);
 
-      if (fetchError) throw fetchError;
+  const fetchStatuses = useCallback(
+    async (forceRefresh = false) => {
+      if (!resolvedCompanyId) return;
 
-      setStatuses(data || []);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : t('errors.fetchFailed');
-      setError(errorMessage);
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, [companyId, supabase, t]);
+      if (!forceRefresh && hasFetchedRef.current && currentCompanyIdRef.current === resolvedCompanyId) {
+        return;
+      }
+
+      if (isFetchingRef.current) return;
+
+      try {
+        isFetchingRef.current = true;
+        useAppStore.getState().setLoading("statuses", true);
+        useAppStore.getState().setError("statuses", null);
+
+        const { data, error } = await supabase
+          .from("status")
+          .select("*")
+          .eq("company_id", resolvedCompanyId)
+          .order("position", { ascending: true });
+
+        if (error) throw error;
+
+        useAppStore.getState().setStatuses(data || []);
+        hasFetchedRef.current = true;
+        currentCompanyIdRef.current = resolvedCompanyId;
+        return data || [];
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : t("errors.fetchFailed");
+        useAppStore.getState().setError("statuses", msg);
+        toast.error(msg);
+        return [];
+      } finally {
+        isFetchingRef.current = false;
+        useAppStore.getState().setLoading("statuses", false);
+      }
+    },
+    [resolvedCompanyId, supabase, t]
+  );
 
   const createStatus = useCallback(
     async (statusData: Omit<Status, "id" | "created_at" | "updated_at">) => {
-      if (!companyId) return null;
+      if (!resolvedCompanyId) return null;
 
       try {
-        setLoading(true);
-
-        // Check if can add status
-        const { data: canAdd, error: checkError } = await supabase.rpc(
-          "can_add_status",
-          { company_uuid: companyId }
-        );
-
+        const { data: canAdd, error: checkError } = await supabase.rpc("can_add_status", {
+          company_uuid: resolvedCompanyId,
+        });
         if (checkError) throw checkError;
-        if (!canAdd) {
-          toast.error(t('errors.limitReached'));
-          return null;
-        }
+        if (!canAdd) { toast.error(t("errors.limitReached")); return null; }
 
-        const { data, error: insertError } = await supabase
+        const { data, error } = await supabase
           .from("status")
           .insert([statusData])
           .select()
           .single();
 
-        if (insertError) throw insertError;
+        if (error) throw error;
 
-        toast.success(t('success.created'));
-        await fetchStatuses();
+        addStatusToStore(data);
+        toast.success(t("success.created"));
+        // Force refetch to get server-computed fields (next_post_at, etc.)
+        await fetchStatuses(true);
         return data;
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : t('errors.createFailed');
-        toast.error(errorMessage);
+        const msg = err instanceof Error ? err.message : t("errors.createFailed");
+        toast.error(msg);
         return null;
-      } finally {
-        setLoading(false);
       }
     },
-    [companyId, supabase, t, fetchStatuses]
+    [resolvedCompanyId, supabase, t, addStatusToStore, fetchStatuses]
   );
 
   const updateStatus = useCallback(
     async (id: string, updates: Partial<Status>) => {
-      if (!companyId) return null;
-      try {
-        setLoading(true);
+      if (!resolvedCompanyId) return null;
 
-        const { data, error: updateError } = await supabase
+      try {
+        const { data, error } = await supabase
           .from("status")
           .update({ ...updates, updated_at: new Date().toISOString() })
           .eq("id", id)
-          .eq("company_id", companyId)
+          .eq("company_id", resolvedCompanyId)
           .select()
           .single();
 
-        if (updateError) throw updateError;
+        if (error) throw error;
 
-        toast.success(t('success.updated'));
-        await fetchStatuses();
+        updateStatusInStore(id, data);
+        toast.success(t("success.updated"));
         return data;
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : t('errors.updateFailed');
-        toast.error(errorMessage);
+        const msg = err instanceof Error ? err.message : t("errors.updateFailed");
+        toast.error(msg);
         return null;
-      } finally {
-        setLoading(false);
       }
     },
-    [companyId, supabase, t, fetchStatuses]
+    [resolvedCompanyId, supabase, t, updateStatusInStore]
   );
 
   const deleteStatus = useCallback(
     async (id: string) => {
-      if (!companyId) return false;
+      if (!resolvedCompanyId) return false;
 
       try {
-        setLoading(true);
-
-        const { error: deleteError } = await supabase
+        const { error } = await supabase
           .from("status")
           .delete()
           .eq("id", id)
-          .eq("company_id", companyId);
+          .eq("company_id", resolvedCompanyId);
 
-        if (deleteError) throw deleteError;
+        if (error) throw error;
 
-        toast.success(t('success.deleted'));
-        await fetchStatuses();
+        removeStatusFromStore(id);
+        toast.success(t("success.deleted"));
         return true;
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : t('errors.deleteFailed');
-        toast.error(errorMessage);
+        const msg = err instanceof Error ? err.message : t("errors.deleteFailed");
+        toast.error(msg);
         return false;
-      } finally {
-        setLoading(false);
       }
     },
-    [companyId, supabase, t, fetchStatuses]
+    [resolvedCompanyId, supabase, t, removeStatusFromStore]
   );
 
+  const fetchStatusesRef = useRef(fetchStatuses);
+  fetchStatusesRef.current = fetchStatuses;
+
+  // Reset tracking when company changes
   useEffect(() => {
-    if (companyId) {
-      fetchStatuses();
+    if (resolvedCompanyId !== currentCompanyIdRef.current) {
+      hasFetchedRef.current = false;
+      currentCompanyIdRef.current = null;
     }
-  }, [companyId, fetchStatuses]);
+  }, [resolvedCompanyId]);
+
+  // Fetch once per company
+  useEffect(() => {
+    if (resolvedCompanyId && !hasFetchedRef.current && !isFetchingRef.current) {
+      fetchStatusesRef.current();
+    }
+
+    return () => {
+      if (isFetchingRef.current) {
+        useAppStore.getState().setLoading("statuses", false);
+      }
+    };
+  }, [resolvedCompanyId]);
 
   return {
     statuses,
     loading,
     error,
+    fetchStatuses,
     createStatus,
     updateStatus,
     deleteStatus,
-    refetch: fetchStatuses,
+    refetch: () => fetchStatuses(true),
   };
 }
