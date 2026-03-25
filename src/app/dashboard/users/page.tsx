@@ -25,7 +25,7 @@ export default function UsersPage() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const { company, user: currentUser } = useAuth()
   const { users, loading, deleteUser } = useUsers()
-  const { limits } = usePlanLimits(company?.id)
+  const { limits } = usePlanLimits(company?.id || undefined)
   const { t } = useTranslationNamespace('dashboard.users')
 
   const addModal = useDisclosure()
