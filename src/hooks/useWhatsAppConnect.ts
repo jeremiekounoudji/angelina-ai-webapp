@@ -45,17 +45,20 @@ export function useWhatsAppConnect() {
   }, [company?.id, checkExistingInstance])
 
   const updateInstanceStatus = useCallback(async (
-    instanceId: string,
+    evolutionInstanceId: string,
     status: 'disconnected' | 'connecting' | 'connected' | 'error'
   ) => {
     const { data, error } = await supabase
       .from('whatsapp_instances')
       .update({ status, updated_at: new Date().toISOString() })
-      .eq('instance_id', instanceId)
+      .eq('instance_id', evolutionInstanceId)
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      // console.error('Failed to update instance status:', error)
+      return
+    }
     if (data) {
       setWhatsappInstance(data)
       setConnectionStatus(status)

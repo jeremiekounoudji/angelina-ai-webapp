@@ -61,56 +61,88 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Create new instance
-    const instanceName = `company_${companyId}}_MERRYELODJICK`;
-    const createRes = await fetch(`${EVOLUTION_API_URL}/instance/create`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", apikey: EVOLUTION_API_KEY },
-      body: JSON.stringify({ instanceName, integration: "WHATSAPP-BAILEYS", qrcode: true }),
-    });
+    const instanceName = `company_${companyId}_MERRYELODJICK`;
+    let createRes;
+    try {
+      createRes = await fetch(`${EVOLUTION_API_URL}/instance/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: EVOLUTION_API_KEY },
+        body: JSON.stringify({ instanceName, integration: "WHATSAPP-BAILEYS", qrcode: true }),
+        signal: AbortSignal.timeout(30000), // 30 second timeout
+      });
+    } catch (fetchError) {
+      console.error("Evolution API fetch error:", fetchError);
+      return NextResponse.json(
+        { error: "Evolution API unreachable. Please check if the service is running." },
+        { status: 503 }
+      );
+    }
 
     if (!createRes.ok) {
-      return NextResponse.json({ error: "Failed to create WhatsApp instance" }, { status: 502 });
+      const errorText = await createRes.text().catch(() => "No error details");
+      console.error(`Evolution API error (${createRes.status}):`, errorText);
+      return NextResponse.json(
+        { error: `Evolution API error: ${createRes.status}. ${errorText}` },
+        { status: 502 }
+      );
     }
 
     const instanceData = await createRes.json();
 
     // 3. Wait briefly then restart
     await new Promise((r) => setTimeout(r, 2000));
-    await fetch(`${EVOLUTION_API_URL}/instance/restart/${instanceName}`, {
-      method: "PUT",
-      headers: { apikey: EVOLUTION_API_KEY },
-    }).catch(() => null);
+    try {
+      await fetch(`${EVOLUTION_API_URL}/instance/restart/${instanceName}`, {
+        method: "PUT",
+        headers: { apikey: EVOLUTION_API_KEY },
+        signal: AbortSignal.timeout(15000),
+      }).catch(() => null);
+    } catch (err) {
+      console.warn("Instance restart failed (non-critical):", err);
+    }
 
     // 4. Poll for QR code (up to 10 attempts)
     let qrCodeData = "";
     let pairingCode = "";
     for (let i = 0; i < 10; i++) {
-      const connRes = await fetch(`${EVOLUTION_API_URL}/instance/connect/${instanceName}`, {
-        headers: { apikey: EVOLUTION_API_KEY },
-      });
-      if (connRes.ok) {
-        const connData = await connRes.json();
-        if (connData.code || connData.base64) {
-          qrCodeData = connData.code || connData.base64;
-          break;
+      try {
+        const connRes = await fetch(`${EVOLUTION_API_URL}/instance/connect/${instanceName}`, {
+          headers: { apikey: EVOLUTION_API_KEY },
+          signal: AbortSignal.timeout(10000),
+        });
+        if (connRes.ok) {
+          const connData = await connRes.json();
+          if (connData.code || connData.base64) {
+            qrCodeData = connData.code || connData.base64;
+            break;
+          }
+          if (connData.pairingCode) {
+            pairingCode = connData.pairingCode;
+            break;
+          }
         }
-        if (connData.pairingCode) {
-          pairingCode = connData.pairingCode;
-          break;
-        }
+      } catch (err) {
+        console.warn(`QR code poll attempt ${i + 1} failed:`, err);
       }
       await new Promise((r) => setTimeout(r, 1000 + i * 500));
     }
 
     // Fallback: try pairing code
     if (!qrCodeData && !pairingCode) {
-      const pairRes = await fetch(
-        `${EVOLUTION_API_URL}/instance/connect/${instanceName}?number=${phoneNumber}`,
-        { headers: { apikey: EVOLUTION_API_KEY } }
-      ).catch(() => null);
-      if (pairRes?.ok) {
-        const pairData = await pairRes.json();
-        pairingCode = pairData.pairingCode || "";
+      try {
+        const pairRes = await fetch(
+          `${EVOLUTION_API_URL}/instance/connect/${instanceName}?number=${phoneNumber}`,
+          { 
+            headers: { apikey: EVOLUTION_API_KEY },
+            signal: AbortSignal.timeout(10000),
+          }
+        );
+        if (pairRes?.ok) {
+          const pairData = await pairRes.json();
+          pairingCode = pairData.pairingCode || "";
+        }
+      } catch (err) {
+        console.warn("Pairing code fallback failed:", err);
       }
     }
 
@@ -144,7 +176,9 @@ export async function POST(req: NextRequest) {
       qrCodeData,
       pairingCode,
     });
-  } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch (error) {
+    console.error("WhatsApp connect error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
